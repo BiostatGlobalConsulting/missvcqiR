@@ -1,0 +1,22 @@
+Package: missvcqiR
+Title: Vaccination Coverage Quality Indicators for Missed Opportunity Surveys 
+Version: 0.0.0.9000
+Authors@R: c(
+    person("Dale", "Rhoda", ,"Dale.Rhoda@biostatglobal.com", 
+        role = "aut", 
+        comment = c(ORCID = "0000-0003-0948-1368")),
+    person("Caitlin", "Clary", ,"Caitlin.Clary@biostatglobal.com", 
+        role = c("aut", "cre"),
+        comment = c(ORCID = "0000-0001-7283-749X")),
+    person("Mia", "Yu", ,"Mia.Yu@biostatglobal.com", 
+        role = "aut")
+    )
+Description: Missed Opportunity Vaccination Coverage Quality Indicators 
+    (MISS-VCQI) is a set of programs for calculating standard outputs from 
+    missed opportunity surveys. The MISS-VCQI programs complement and extend the 
+    open source Vaccination Coverage Quality Indicators (VCQI) software, 
+    implemented in R as the package vcqiR.
+License: GPL (>= 3)
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3
