@@ -16,6 +16,7 @@ cleanup_MISS_VCQI_globals <- function(){
   # Remove individual VCQI objects:
   rm(list = c(
     "ANALYSIS_COUNTER",
+    "AGGREGATE_VCQI_DATABASES",
     "DELETE_TEMP_VCQI_DATASETS",
     "DELETE_VCQI_DATABASES_AT_END",
     "EXPORT_TO_EXCEL",
