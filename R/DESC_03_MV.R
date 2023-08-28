@@ -21,6 +21,12 @@ DESC_03_MV <- function(VCP = "DESC_03_MV", cleanup = FALSE){
 
   print(paste0("Calculating ", VCP, " ..."))
 
+  removeci = 0
+  if (!vcqi_object_exists("VCQI_CI_METHOD")){
+    assign("VCQI_CI_METHOD","Wald",envir = .GlobalEnv)
+    removeci = 1
+  }
+
   print("Checking global macros")
   DESC_03_00GC()
 
@@ -42,6 +48,10 @@ DESC_03_MV <- function(VCP = "DESC_03_MV", cleanup = FALSE){
   if(EXPORT_TO_EXCEL %in% 1){
     print("Exporting to Excel")
     DESC_03_05TOST_MV()
+  }
+
+  if (removeci == 1){
+    rm("VCQI_CI_METHOD",envir = .GlobalEnv) %>% suppressWarnings()
   }
 
   # * Clear out globals if specified
@@ -74,7 +84,7 @@ DESC_03_MV <- function(VCP = "DESC_03_MV", cleanup = FALSE){
 
     rm(list = c("DESC_03_N_SUBTOTALS","DESC_03_N_RELABEL_LEVELS","DESC_03_SHOW_SUBTOTALS_ONLY",
                 "DESC_03_LIST_N_BEFORE_PCT","DESC_03_LIST_NWTD_BEFORE_PCT", "DESC_03_SUPPRESS_CI_OUTPUT"),
-       envir = .GlobalEnv)%>% suppressWarnings()
+       envir = .GlobalEnv) %>% suppressWarnings()
 
   }
 

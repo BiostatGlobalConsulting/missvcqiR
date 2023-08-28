@@ -25,6 +25,12 @@ DESC_02_MV <- function(VCP = "DESC_02_MV", cleanup = FALSE){
     print(paste0("Calculating ", VCP, " for DESC_02 ..."))
   }
 
+  removeci = 0
+  if (!vcqi_object_exists("VCQI_CI_METHOD")){
+    assign("VCQI_CI_METHOD","Wald",envir = .GlobalEnv)
+    removeci = 1
+  }
+
   print("Checking global macros")
   DESC_02_00GC()
 
@@ -46,6 +52,10 @@ DESC_02_MV <- function(VCP = "DESC_02_MV", cleanup = FALSE){
   if(EXPORT_TO_EXCEL %in% 1){
     print("Exporting to Excel")
     DESC_02_05TOST_MV()
+  }
+
+  if (removeci == 1){
+    rm("VCQI_CI_METHOD",envir = .GlobalEnv) %>% suppressWarnings()
   }
 
   # * Clear out globals if specified
