@@ -74,7 +74,7 @@ DESC_03_MV <- function(VCP = "DESC_03_MV", cleanup = FALSE){
 
     rm(list = c("DESC_03_N_SUBTOTALS","DESC_03_N_RELABEL_LEVELS","DESC_03_SHOW_SUBTOTALS_ONLY",
                 "DESC_03_LIST_N_BEFORE_PCT","DESC_03_LIST_NWTD_BEFORE_PCT", "DESC_03_SUPPRESS_CI_OUTPUT"),
-       envir = .GlobalEnv)%>% suppressWarnings()
+       envir = .GlobalEnv) %>% suppressWarnings()
 
   }
 

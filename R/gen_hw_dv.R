@@ -6,6 +6,7 @@
 #' @import dplyr
 #' @import stringr
 #' @import tidyselect
+#' @importFrom sjlabelled set_labels
 #'
 #' @return a dataset
 #'
@@ -31,10 +32,13 @@ gen_hw_dv <- function(VCP = "gen_hw_dv"){
   # HW age group
   dat <- dat %>% mutate(age_group = NA)
   label1 <- paste0(language_string(language_use = language_use, str = "OS_240"), " 20") # "Under 20"
-  dat <- dat %>% mutate(age_group = case_when(HW03AB <  20 ~ label1, HW03AB >= 20 & HW03AB < 35 ~ "20-34",
-                                              HW03AB >= 35 & HW03AB < 45 ~ "35-44", HW03AB >= 45 & HW03AB < 55 ~ "45-54",
-                                              HW03AB >= 55 & !is.na(HW03AB) ~ "55+"))
+  dat <- dat %>% mutate(age_group = case_when(HW03AB <  20 ~ 1, HW03AB >= 20 & HW03AB < 35 ~ 2,
+                                              HW03AB >= 35 & HW03AB < 45 ~ 3, HW03AB >= 45 & HW03AB < 55 ~ 4,
+                                              HW03AB >= 55 & !is.na(HW03AB) ~ 5))
   dat$age_group <- haven::labelled(dat$age_group, label = "Age group")
+  f <- paste0("dat$age_group <- sjlabelled::set_labels(dat$age_group, labels = c('",label1,
+      "' = 1, '20-34' = 2, '35-44' = 3, '45-54' = 4, '55+' = 5), force.labels = TRUE)")
+  eval(rlang::parse_expr(f))
 
   # HW years of experience
   dat <- dat %>% mutate(experience_category = NA)
@@ -43,12 +47,15 @@ gen_hw_dv <- function(VCP = "gen_hw_dv"){
   label2 <- paste0("2-4 ", language_string(language_use = language_use, str = "OS_242")) # "2-4 years"
   label3 <- paste0("5+ ", language_string(language_use = language_use, str = "OS_242")) # "5+ years"
 
-  dat <- dat %>% mutate(experience_category = case_when(HW03AE_1 == 0 & HW03AE_2 >= 1 & HW03AE_2 <=12 ~ label0,
-                                                        is.na(HW03AE_1) & HW03AE_2 >= 1 & HW03AE_2 <=12 ~ label0,
-                                                        HW03AE_1 == 1 ~ label1,
-                                                        HW03AE_1 > 1 & HW03AE_1 < 5 ~ label2,
-                                                        HW03AE_1 >= 5 & !is.na(HW03AE_1) ~ label3))
+  dat <- dat %>% mutate(experience_category = case_when(HW03AE_1 == 0 & HW03AE_2 >= 1 & HW03AE_2 <=12 ~ 0,
+                                                        is.na(HW03AE_1) & HW03AE_2 >= 1 & HW03AE_2 <=12 ~ 0,
+                                                        HW03AE_1 == 1 ~ 1,
+                                                        HW03AE_1 > 1 & HW03AE_1 < 5 ~ 2,
+                                                        HW03AE_1 >= 5 & !is.na(HW03AE_1) ~ 3))
   dat$experience_category <- haven::labelled(dat$experience_category, label = "Time in post")
+  f <- paste0("dat$experience_category <- sjlabelled::set_labels(dat$experience_category, labels = c('",label0,
+              "' = 0, '",label1,"' = 1, '",label2,"' = 2, '",label3,"' = 3), force.labels = TRUE)")
+  eval(rlang::parse_expr(f))
 
   # Create variable to combine questions HW03AH and HW03AI for requested table
 
@@ -56,10 +63,14 @@ gen_hw_dv <- function(VCP = "gen_hw_dv"){
   label2 <- language_string(language_use = language_use, str = "OS_245") # "Non vaccination or VPD class offered in last 12 months"
   label3 <- language_string(language_use = language_use, str = "OS_246") # "No classes offered"
 
-  dat <- dat %>% mutate(classes = ifelse(HW03AH %in% 1,label1,NA))
-  dat <- dat %>% mutate(classes = ifelse((classes == label1) & (HW03AI %in% 2),label2,classes))
-  dat <- dat %>% mutate(classes = ifelse(is.na(classes),label3,classes))
+  dat <- dat %>% mutate(classes = ifelse(HW03AH %in% 1,1,NA))
+  dat <- dat %>% mutate(classes = ifelse((classes == 1) & (HW03AI %in% 2),2,classes))
+  dat <- dat %>% mutate(classes = ifelse(is.na(classes),3,classes))
   dat$classes <- haven::labelled(dat$classes, label = language_string(language_use = language_use, str = "OS_243"))
+
+  f <- paste0("dat$classes <- sjlabelled::set_labels(dat$classes, labels = c('",label1,
+              "' = 1, '",label2,"' = 2, '",label3,"' = 3), force.labels = TRUE)")
+  eval(rlang::parse_expr(f))
 
   tempname <- gsub(".rds","",HW_SURVEY_DATASET,fixed = TRUE)
   tempname <- gsub(".dta","",tempname,fixed = TRUE)
