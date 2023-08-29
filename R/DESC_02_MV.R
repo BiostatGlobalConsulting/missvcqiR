@@ -30,7 +30,7 @@ DESC_02_MV <- function(VCP = "DESC_02_MV", cleanup = FALSE){
 
   if(VCQI_PREPROCESS_DATA %in% 1){
     print("Pre-processing dataset")
-    DESC_02_01PP_MV()
+    DESC_02_01PP()
   }
 
   if(VCQI_GENERATE_DVS %in% 1){

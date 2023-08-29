@@ -1,4 +1,4 @@
-#' Pre-process dataset for DESC_02_MV
+#' Pre-process dataset for DESC_02
 #'
 #' @param VCP VCQI current program name to be logged, default to be the function name
 #'
@@ -7,7 +7,7 @@
 #' @import dplyr
 #' @import tidyselect
 
-# DESC_02_01PP_MV R version 1.00 - Biostat Global Consulting - 2023-05-23
+# DESC_02_01PP R version 1.00 - Biostat Global Consulting - 2023-05-23
 # *******************************************************************************
 # Change log
 
@@ -16,7 +16,7 @@
 # *******************************************************************************
 
 
-DESC_02_01PP_MV <- function(VCP = "DESC_02_01PP_MV"){
+DESC_02_01PP <- function(VCP = "DESC_02_01PP"){
   vcqi_log_comment(VCP, 5, "Flow", "Starting")
 
   dat <- vcqi_read(paste0(VCQI_OUTPUT_FOLDER,"/",DESC_02_DATASET))
@@ -34,8 +34,7 @@ DESC_02_01PP_MV <- function(VCP = "DESC_02_01PP_MV"){
     assign("DESC_02_COUNTER", 1, envir = .GlobalEnv)
   }
 
-  #removed level2id
-  dat <- dat %>% select(level1id,level3id,stratumid,clusterid,respid,
+  dat <- dat %>% select(level1id,level2id,level3id,stratumid,clusterid,respid,
                         HH02,HH04,psweight,all_of(VCQI_LEVEL4_SET_VARLIST),all_of(DESC_02_VARIABLES))
 
   saveRDS(dat, file = paste0(VCQI_OUTPUT_FOLDER,"/DESC_02_",ANALYSIS_COUNTER,"_",DESC_02_COUNTER,".rds"))

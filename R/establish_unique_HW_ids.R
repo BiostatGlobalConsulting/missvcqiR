@@ -48,7 +48,7 @@ establish_unique_HW_ids <- function(VCP = "establish_unique_HW_ids"){
     dat <- dat %>% mutate(level1id = 1,level3id = ID02AIid,
                           clusterid = NA, respid = NA,
                           HH02 = NA_character_, HH04 = NA_character_,
-                          psweight = 10)
+                          psweight = 10, level2id = 1)
 
     # check for level4 stratifiers and merge them in if necessary
 
