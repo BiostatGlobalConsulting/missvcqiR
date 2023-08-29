@@ -100,8 +100,8 @@ check_HW_analysis_metadata <- function(VCP = "check_HW_analysis_metadata"){
                    exitflag <- 1
                  }
                } else if (any(is.na(var))){
-                 errormsgs <- c(errormsgs,paste0(var3[v], "cannot have a missing value in the HW dataset."))
-                 vcqi_log_comment(VCP,1,"Error", paste0(var3[v], "cannot have a missing value in the HW dataset."))
+                 errormsgs <- c(errormsgs,paste0(var3[v], " cannot have a missing value in the HW dataset."))
+                 vcqi_log_comment(VCP,1,"Error", paste0(var3[v], " cannot have a missing value in the HW dataset."))
                  exitflag <- 1
                }
              }

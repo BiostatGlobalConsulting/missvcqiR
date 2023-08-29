@@ -35,7 +35,7 @@ HW_PRAC_01_01PP <- function(VCP = "HW_PRAC_01_01PP"){
   }
 
   #TODO: level2id?
-  dat <- dat %>% select(c(level1id,level3id,stratumid,clusterid,respid, all_of(VCQI_LEVEL4_SET_VARLIST), all_of(keeplist)))
+  dat <- dat %>% select(c(level1id,level2id,level3id,stratumid,clusterid,respid, all_of(VCQI_LEVEL4_SET_VARLIST), all_of(keeplist)))
 
   saveRDS(dat, file = paste0(VCQI_OUTPUT_FOLDER,"/HW_PRAC_01_",ANALYSIS_COUNTER,".rds"))
 

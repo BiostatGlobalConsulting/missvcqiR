@@ -7,6 +7,7 @@
 #' @import stringr
 #' @import tidyselect
 #' @importFrom sjlabelled set_labels
+#' @import haven
 #'
 #' @return a dataset
 #'
