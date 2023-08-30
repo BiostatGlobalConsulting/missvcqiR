@@ -31,7 +31,7 @@ check_miss_VCQI_CM_metadata <- function(VCP = "check_miss_VCQI_CM_metadata"){
 
         # Check if the file is in valid format
         if (is.data.frame(CM) == FALSE){
-          errormsgs <- c(errormsgs,paste0("The file defined by global macros VCQI_DATA_FOLDER/VCQI_CM_DATASET ", paste0(VCQI_DATA_FOLDER, "/", VCQI_CM_DATASET)," is not in valid format"))
+          errormsgs <- c(errormsgs,paste0("The file defined by global macros VCQI_DATA_FOLDER/VCQI_CM_DATASET ", VCQI_DATA_FOLDER, "/", VCQI_CM_DATASET," is not in valid format"))
           exitflag <- 1
           vcqi_log_comment(VCP, 1, "Error",
                            paste0("CM dataset: ", VCQI_DATA_FOLDER, "/",
@@ -46,26 +46,29 @@ check_miss_VCQI_CM_metadata <- function(VCP = "check_miss_VCQI_CM_metadata"){
               # Check variable format
               if (cm_vars[i] %in% "ID02AIname") {
                 if(is.character(get(cm_vars[i], CM)) == FALSE) {
-                  warningmsgs <- c(warningmsgs,
+                  errormsgs <- c(warningmsgs,
                                    paste0(cm_vars[i]," should be a character variable in the CM dataset."))
-                  vcqi_log_comment(VCP, 2, "Warning",
+                  vcqi_log_comment(VCP, 1, "Error",
                                    paste0(cm_vars[i]," should be a character variable in the CM dataset."))
+                  exitflag <- 1
                 }
               } else {
                 if(is.numeric(get(cm_vars[i], CM)) == FALSE) {
-                  warningmsgs <- c(warningmsgs,
+                  errormsgs <- c(warningmsgs,
                                    paste0(cm_vars[i]," should be a numeric variable in the CM dataset."))
-                  vcqi_log_comment(VCP, 2, "Warning",
+                  vcqi_log_comment(VCP, 1, "Error",
                                    paste0(cm_vars[i]," should be a numeric variable in the CM dataset."))
+                  exitflag <- 1
                 }
               }
 
               # Check for missing values
               if (cm_vars[i] %in% c("province_id", "urban_cluster")) {
                 if (sum(is.na(get(cm_vars[i], CM))) > 0) {
-                  warningmsgs <-
+                  errormsgs <-
                     c(warningmsgs,paste0(cm_vars[i]," should not have a missing value in the CM dataset."))
-                  vcqi_log_comment(VCP,2,"Warning",paste0(cm_vars[i]," should not have a missing value in the CM dataset."))
+                  vcqi_log_comment(VCP, 1, "Error",paste0(cm_vars[i]," should not have a missing value in the CM dataset."))
+                  exitflag <- 1
                 }
               }
 
