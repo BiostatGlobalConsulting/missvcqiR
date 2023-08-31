@@ -63,7 +63,7 @@ check_miss_VCQI_CM_metadata <- function(VCP = "check_miss_VCQI_CM_metadata"){
               }
 
               # Check for missing values
-              if (cm_vars[i] %in% c("province_id", "urban_cluster")) {
+              if (!cm_vars[i] %in% c("province_id", "urban_cluster")) {
                 if (sum(is.na(get(cm_vars[i], CM))) > 0) {
                   errormsgs <-
                     c(warningmsgs,paste0(cm_vars[i]," should not have a missing value in the CM dataset."))
