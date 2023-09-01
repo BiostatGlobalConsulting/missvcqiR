@@ -298,13 +298,32 @@ calculate_MOV_flags <- function(VCP = "calculate_MOV_flags"){
 
       dat <- dat %>%
         pivot_longer(contains("card_date"), names_to = "visitdose",
-                     values_to = "visitdate") %>%
-        filter(!is.na(visitdate)) %>%
+                     values_to = "visitdate")
+
+      datsummary <- dat %>%
+        group_by(visitdose) %>%
+        summarize(n_dates = sum(!is.na(visitdate)))
+
+      no_dates <- datsummary %>%
+        filter(n_dates %in% 0) %>% pull(visitdose)
+
+      dat <- dat %>%
+        # filter(!is.na(visitdate)) %>%
+        filter(!is.na(visitdate) | (is.na(visitdate) & visitdose %in% no_dates)) %>%
         mutate(visitdose = str_replace(visitdose, "_card_date", ""),
                test = 1) %>%
         pivot_wider(names_from = "visitdose",
                     values_from = "test",
                     names_prefix = "got_")
+
+      # Logic for MISS-VCQI - handling the faux "visit" dose, which is handled
+      # differently the two times MISS-VCQI calls calculate_MOV_flags
+      if (any(names(dat) %in% "got_visit")){
+        if ("visit_card_date" %in% no_dates){
+          dat <- dat %>%
+            filter(is.na(got_visit))
+        }
+      }
 
       # For multidose series, grab the got_<dose><#> columns and coalesce, then
       # attach the coalesced column as got_<dose> and drop the got_<dose><#> cols
@@ -316,6 +335,8 @@ calculate_MOV_flags <- function(VCP = "calculate_MOV_flags"){
 
           var_i <- NULL
           for(ind in seq_along(di)){var_i <- c(var_i, paste0("got_", dn, di[ind]))}
+
+          var_i <- var_i[var_i %in% names(dat)]
 
           temp <- dat %>% select(contains(var_i))
           vars_to_drop <- names(temp)
@@ -348,6 +369,8 @@ calculate_MOV_flags <- function(VCP = "calculate_MOV_flags"){
             tempvarnames,
             paste0("got_", multi$dose[s]),
             paste0("got_", multi$dose[s], 1:multi$dosecount[s], "_tick"))}}
+
+      tempvarnames <- tempvarnames[tempvarnames %in% names(dat)]
 
       dat <- dat %>%
         # Order vars using tempvarnames; everything() puts dose_<str> vars at end
