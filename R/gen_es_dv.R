@@ -6,7 +6,6 @@
 #' @import dplyr
 #' @import stringr
 #' @import tidyselect
-#' @importFrom sjlabelled set_labels
 #' @rawNamespace import(tools, except = makevars_user)
 #'
 #' @return a dataset
@@ -35,17 +34,14 @@ gen_es_dv <- function(VCP = "gen_es_dv"){
   dat <- dat %>% mutate(caregiver_age = case_when(ES04AA < 20 ~ 1, ES04AA >= 20 & ES04AA < 30 ~ 2,
                                                  ES04AA >= 30 & ES04AA < 40 ~ 3, ES04AA >= 40 & ES04AA < 50 ~ 4,
                                                  ES04AA >= 50 ~ 5))
-  dat$caregiver_age <- haven::labelled(dat$caregiver_age, label = "Caregiver's Age grouped for tables")
-  dat$caregiver_age <- sjlabelled::set_labels(dat$caregiver_age,
-                                              labels = c("<20" = 1, "20-29" = 2, "30-39" = 3, "40-49" = 4, "50+" = 5),
-                                              force.labels = TRUE)
+  dat$caregiver_age <- haven::labelled(dat$caregiver_age, label = "Caregiver's Age grouped for tables",
+                                       labels = c("<20" = 1, "20-29" = 2, "30-39" = 3, "40-49" = 4, "50+" = 5))
 
   # Create variable to group childs age
   dat <- dat %>% mutate(childs_age = NA)
   dat <- dat %>% mutate(childs_age = case_when(ES03AA_1_1 %in% 0 ~ 1, ES03AA_1_1 %in% 1 ~ 2, ES03AA_1_1 >=2 ~ 3))
-  dat$childs_age <- haven::labelled(dat$childs_age, label = "Child's age grouped by month for table shells")
-  dat$childs_age <- sjlabelled::set_labels(dat$childs_age,
-                                              labels = c("<1y" = 1, "1y" = 2, "2-5y" = 3),force.labels = TRUE)
+  dat$childs_age <- haven::labelled(dat$childs_age, label = "Child's age grouped by month for table shells",
+                                    labels = c("<1y" = 1, "1y" = 2, "2-5y" = 3))
 
   # Clean up variable ES08AA (child received vaccination today)
   # to set to no if no doses received that day and yes if

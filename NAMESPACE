@@ -46,7 +46,6 @@ import(tools, except = makevars_user)
 import(tools, except = makevars_user)
 
 importFrom(rlang,abort)
-importFrom(sjlabelled,set_labels)
 importFrom(stringr,str_detect)
 importFrom(utils,glob2rx)
 importFrom(utils,stack)
