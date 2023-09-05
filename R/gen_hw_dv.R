@@ -6,8 +6,8 @@
 #' @import dplyr
 #' @import stringr
 #' @import tidyselect
-#' @importFrom sjlabelled set_labels
 #' @import haven
+#' @rawNamespace import(tools, except = makevars_user)
 #'
 #' @return a dataset
 #'
@@ -36,9 +36,8 @@ gen_hw_dv <- function(VCP = "gen_hw_dv"){
   dat <- dat %>% mutate(age_group = case_when(HW03AB <  20 ~ 1, HW03AB >= 20 & HW03AB < 35 ~ 2,
                                               HW03AB >= 35 & HW03AB < 45 ~ 3, HW03AB >= 45 & HW03AB < 55 ~ 4,
                                               HW03AB >= 55 & !is.na(HW03AB) ~ 5))
-  dat$age_group <- haven::labelled(dat$age_group, label = "Age group")
-  f <- paste0("dat$age_group <- sjlabelled::set_labels(dat$age_group, labels = c('",label1,
-      "' = 1, '20-34' = 2, '35-44' = 3, '45-54' = 4, '55+' = 5), force.labels = TRUE)")
+  f <- paste0("dat$age_group <- haven::labelled(dat$age_group, label = 'Age group', labels = c('",
+              label1,"' = 1, '20-34' = 2, '35-44' = 3,'45-54' = 4,'55+' = 5))")
   eval(rlang::parse_expr(f))
 
   # HW years of experience
@@ -53,13 +52,14 @@ gen_hw_dv <- function(VCP = "gen_hw_dv"){
                                                         HW03AE_1 == 1 ~ 1,
                                                         HW03AE_1 > 1 & HW03AE_1 < 5 ~ 2,
                                                         HW03AE_1 >= 5 & !is.na(HW03AE_1) ~ 3))
-  dat$experience_category <- haven::labelled(dat$experience_category, label = "Time in post")
-  f <- paste0("dat$experience_category <- sjlabelled::set_labels(dat$experience_category, labels = c('",label0,
-              "' = 0, '",label1,"' = 1, '",label2,"' = 2, '",label3,"' = 3), force.labels = TRUE)")
+
+  f <- paste0("dat$experience_category <- haven::labelled(dat$experience_category, label = 'Time in post', labels = c('",label0,
+              "' = 0, '",label1,"' = 1, '",label2,"' = 2, '",label3,"' = 3))")
   eval(rlang::parse_expr(f))
 
   # Create variable to combine questions HW03AH and HW03AI for requested table
 
+  varlabel <- language_string(language_use = language_use, str = "OS_243")
   label1 <- language_string(language_use = language_use, str = "OS_244") # "Vaccination or VPD classes offered in last 12 months"
   label2 <- language_string(language_use = language_use, str = "OS_245") # "Non vaccination or VPD class offered in last 12 months"
   label3 <- language_string(language_use = language_use, str = "OS_246") # "No classes offered"
@@ -67,20 +67,15 @@ gen_hw_dv <- function(VCP = "gen_hw_dv"){
   dat <- dat %>% mutate(classes = ifelse(HW03AH %in% 1,1,NA))
   dat <- dat %>% mutate(classes = ifelse((classes == 1) & (HW03AI %in% 2),2,classes))
   dat <- dat %>% mutate(classes = ifelse(is.na(classes),3,classes))
-  dat$classes <- haven::labelled(dat$classes, label = language_string(language_use = language_use, str = "OS_243"))
 
-  f <- paste0("dat$classes <- sjlabelled::set_labels(dat$classes, labels = c('",label1,
-              "' = 1, '",label2,"' = 2, '",label3,"' = 3), force.labels = TRUE)")
+  f <- paste0("dat$classes <- haven::labelled(dat$classes,label = '",varlabel,"', labels = c('",label1,
+              "' = 1, '",label2,"' = 2, '",label3,"' = 3))")
   eval(rlang::parse_expr(f))
 
-  tempname <- gsub(".rds","",HW_SURVEY_DATASET,fixed = TRUE)
-  tempname <- gsub(".dta","",tempname,fixed = TRUE)
-  tempname <- gsub(".csv","",tempname,fixed = TRUE)
-
-  saveRDS(dat, file = paste0(VCQI_OUTPUT_FOLDER,"/",tempname,"_dv.rds"))
+  saveRDS(dat, file = paste0(VCQI_OUTPUT_FOLDER,"/",tools::file_path_sans_ext(HW_SURVEY_DATASET),"_dv.rds"))
 
   # Reset global to reflect new datasetname
-  vcqi_global(HW_SURVEY_DATASET, paste0(tempname,"_dv.rds"))
+  vcqi_global(HW_SURVEY_DATASET, paste0(tools::file_path_sans_ext(HW_SURVEY_DATASET),"_dv.rds"))
 
   # Comment following codes out as we don't use level2 for missvcqiR
   # if (vcqi_object_exists("LEVEL_2_ID")){
