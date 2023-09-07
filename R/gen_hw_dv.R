@@ -32,7 +32,7 @@ gen_hw_dv <- function(VCP = "gen_hw_dv"){
 
   # HW age group
   dat <- dat %>% mutate(age_group = NA)
-  label1 <- paste0(language_string(language_use = language_use, str = "OS_240"), " 20") # "Under 20"
+  label1 <- paste0(language_string(language_use = language_use, str = "OS_240", replaceq = TRUE), " 20") # "Under 20"
   dat <- dat %>% mutate(age_group = case_when(HW03AB <  20 ~ 1, HW03AB >= 20 & HW03AB < 35 ~ 2,
                                               HW03AB >= 35 & HW03AB < 45 ~ 3, HW03AB >= 45 & HW03AB < 55 ~ 4,
                                               HW03AB >= 55 & !is.na(HW03AB) ~ 5))
@@ -42,10 +42,10 @@ gen_hw_dv <- function(VCP = "gen_hw_dv"){
 
   # HW years of experience
   dat <- dat %>% mutate(experience_category = NA)
-  label0 <- paste0("<1 ", language_string(language_use = language_use, str = "OS_241")) # "<1 year"
-  label1 <- paste0("1 ", language_string(language_use = language_use, str = "OS_241")) # "1 year"
-  label2 <- paste0("2-4 ", language_string(language_use = language_use, str = "OS_242")) # "2-4 years"
-  label3 <- paste0("5+ ", language_string(language_use = language_use, str = "OS_242")) # "5+ years"
+  label0 <- paste0("<1 ", language_string(language_use = language_use, str = "OS_241", replaceq = TRUE)) # "<1 year"
+  label1 <- paste0("1 ", language_string(language_use = language_use, str = "OS_241", replaceq = TRUE)) # "1 year"
+  label2 <- paste0("2-4 ", language_string(language_use = language_use, str = "OS_242", replaceq = TRUE)) # "2-4 years"
+  label3 <- paste0("5+ ", language_string(language_use = language_use, str = "OS_242", replaceq = TRUE)) # "5+ years"
 
   dat <- dat %>% mutate(experience_category = case_when(HW03AE_1 == 0 & HW03AE_2 >= 1 & HW03AE_2 <=12 ~ 0,
                                                         is.na(HW03AE_1) & HW03AE_2 >= 1 & HW03AE_2 <=12 ~ 0,
@@ -59,10 +59,10 @@ gen_hw_dv <- function(VCP = "gen_hw_dv"){
 
   # Create variable to combine questions HW03AH and HW03AI for requested table
 
-  varlabel <- language_string(language_use = language_use, str = "OS_243")
-  label1 <- language_string(language_use = language_use, str = "OS_244") # "Vaccination or VPD classes offered in last 12 months"
-  label2 <- language_string(language_use = language_use, str = "OS_245") # "Non vaccination or VPD class offered in last 12 months"
-  label3 <- language_string(language_use = language_use, str = "OS_246") # "No classes offered"
+  varlabel <- language_string(language_use = language_use, str = "OS_243", replaceq = TRUE)
+  label1 <- language_string(language_use = language_use, str = "OS_244", replaceq = TRUE) # "Vaccination or VPD classes offered in last 12 months"
+  label2 <- language_string(language_use = language_use, str = "OS_245", replaceq = TRUE) # "Non vaccination or VPD class offered in last 12 months"
+  label3 <- language_string(language_use = language_use, str = "OS_246", replaceq = TRUE) # "No classes offered"
 
   dat <- dat %>% mutate(classes = ifelse(HW03AH %in% 1,1,NA))
   dat <- dat %>% mutate(classes = ifelse((classes == 1) & (HW03AI %in% 2),2,classes))

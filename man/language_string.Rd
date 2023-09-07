@@ -4,7 +4,7 @@
 \alias{language_string}
 \title{Get the specific string with the user required language}
 \usage{
-language_string(language_use, str)
+language_string(language_use, str, replaceq = FALSE)
 }
 \arguments{
 \item{language_use}{The global that stored the language the user choose}
