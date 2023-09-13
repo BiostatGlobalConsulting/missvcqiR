@@ -38,7 +38,6 @@ HW_BAR_01_01PP <- function(VCP = "HW_BAR_01_01PP"){
     keeplist <- c(keeplist,grep(glob2rx(dlist[v]), names(dat), value=TRUE))
   }
 
-  #TODO: level2id?
   dat <- dat %>% select(c(level1id,level2id,level3id,stratumid,clusterid,respid, all_of(VCQI_LEVEL4_SET_VARLIST), all_of(keeplist)))
 
   saveRDS(dat, file = paste0(VCQI_OUTPUT_FOLDER,"/HW_BAR_01_",ANALYSIS_COUNTER,".rds"))

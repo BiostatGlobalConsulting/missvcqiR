@@ -97,8 +97,8 @@ DESC_02_03DV <- function(VCP = "DESC_02_03DV"){
       }
 
       if (vtype == "number"){
-        if (length(which(labels$values == llist[l])) > 0){
-          m <- which(labels$values == llist[l])
+        if (length(which(labels$values %in% llist[l])) > 0){
+          m <- which(labels$values %in% llist[l])
           dat$tempvar1 <- haven::labelled(dat$tempvar1, label = lalist[m]) %>% suppressWarnings()
         }
       }
