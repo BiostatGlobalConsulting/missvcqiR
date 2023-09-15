@@ -724,7 +724,7 @@ gen_MOV_dvs <- function(VCP = "gen_MOV_dvs"){
                                   (ES08AA_1B_01==1 | ES08AA_1B_02==1 | ES08AA_1B_03==1 | ES08AA_1B_04==1 | ES08AA_1B_05==1 |
                                      ES08AA_1B_06==1 | ES08AA_1B_07==1 | ES08AA_1B_08==1 | ES08AA_1B_09==1 | ES08AA_1B_10==1 |
                                      ES08AA_1B_11==1 | ES08AA_1B_12==1 | (!is.na(ES08AA_1B_12OS) & ES08AA_1B_12OS != ""))) %in% TRUE, 1, tempvar6))
-    # label var reasons_overview1_B_`vc' "MOV: Reasons related to caregiver (`vc')"
+    # label var reasons_overview2_B_`vc' "MOV: Reasons related to caregiver (`vc')"
     dat$tempvar6 <- haven::labelled(dat$tempvar6,
                                     label = paste0(language_string(language_use = language_use, str = "OS_227")," (",vc2,")"))
 
@@ -735,7 +735,7 @@ gen_MOV_dvs <- function(VCP = "gen_MOV_dvs"){
                                   (ES08AA_1C_01==1 | ES08AA_1C_02==1 | ES08AA_1C_03==1 | ES08AA_1C_04==1 | ES08AA_1C_05==1 |
                                      ES08AA_1C_06==1 | ES08AA_1C_07==1 | ES08AA_1C_08==1 | ES08AA_1C_09==1 |
                                      (!is.na(ES08AA_1C_09OS) & ES08AA_1C_09OS != ""))) %in% TRUE,1, tempvar7))
-    # label var reasons_overview1_C_`vc' "MOV: Reasons related to health services (`vc')"
+    # label var reasons_overview2_C_`vc' "MOV: Reasons related to health services (`vc')"
     dat$tempvar7 <- haven::labelled(dat$tempvar7,
                                     label = paste0(language_string(language_use = language_use, str = "OS_228")," (",vc2,")"))
 
@@ -744,7 +744,7 @@ gen_MOV_dvs <- function(VCP = "gen_MOV_dvs"){
     dat <- dat %>% mutate(tempvar8 = NA) %>%
       mutate(tempvar8 = ifelse((tempvar0 == 1 & !!AA == 2) %in% TRUE, 0, tempvar8)) %>%
       mutate(tempvar8 = ifelse(tempvar0 == 1 & !!AA == 2 & eval(rlang::parse_expr(reasons_var_missing_list)), 1, tempvar8))
-    # label var reasons_overview1_D_`vc' "MOV: Reason missing (`vc')"
+    # label var reasons_overview2_D_`vc' "MOV: Reason missing (`vc')"
     dat$tempvar8 <- haven::labelled(dat$tempvar8,
                                     label = paste0(language_string(language_use = language_use, str = "OS_229")," (",vc2,")"))
 
@@ -776,6 +776,11 @@ gen_MOV_dvs <- function(VCP = "gen_MOV_dvs"){
                                                           is.na(ES08AA_1A_03_07) & is.na(ES08AA_1A_03_08) & is.na(ES08AA_1A_03_09) &
                                                           is.na(ES08AA_1A_03_10) & is.na(ES08AA_1A_03_11))) %in% TRUE, 1,ES08AA_1A_03_12))
 
+  # Sick Child : Did not provide a reason/symptom
+  dat$ES08AA_1A_03_12 <- haven::labelled(dat$ES08AA_1A_03_12,
+                                         label = paste0(language_string(language_use = language_use, str = "OS_382"),
+                                                        ": ",
+                                                        language_string(language_use = language_use, str = "OS_383")))
   # Create separate variables for each ES08AA_* var that breaks apart each by
   # eligible and ineligible MKT Added 2018-1-11
   # Added condition to clone if the correct reasons_overview was selected 2018-05-09 MKT
@@ -793,6 +798,9 @@ gen_MOV_dvs <- function(VCP = "gen_MOV_dvs"){
       O1A <- rlang::sym(paste0("reasons_overview1_A_",stype[vc]))
       ei  <- rlang::sym(paste0("elig_indicator_",stype[vc]))
 
+      var_dat <- get(varlist1[v],dat)
+      varlabel <- attr(var_dat,"label")
+
       dat <- dat %>% mutate(tempvar1 = ifelse(!!O2A %in% 1, !!var, NA)) %>%
         mutate(tempvar1 = ifelse(is.na(!!var) & !!O2A %in% 1, 0, tempvar1)) %>%
         mutate(tempvar1 = ifelse(!(!!ei) %in% 1, NA, tempvar1))
@@ -800,6 +808,9 @@ gen_MOV_dvs <- function(VCP = "gen_MOV_dvs"){
       dat <- dat %>% mutate(tempvar2 = ifelse(!!O1A %in% 1, !!var, NA)) %>%
         mutate(tempvar2 = ifelse(is.na(!!var) & !!O1A %in% 1, 0, tempvar2)) %>%
         mutate(tempvar2 = ifelse(!(!!ei) %in% 0, NA, tempvar2))
+
+      dat$tempvar1 <- haven::labelled(dat$tempvar1,label = varlabel)
+      dat$tempvar2 <- haven::labelled(dat$tempvar2,label = varlabel)
 
       names(dat)[which(names(dat) == "tempvar1")] <- paste0(varlist1[v],"_eligible_",stype[vc])
       names(dat)[which(names(dat) == "tempvar2")] <- paste0(varlist1[v],"_ineligible_",stype[vc])
@@ -815,6 +826,9 @@ gen_MOV_dvs <- function(VCP = "gen_MOV_dvs"){
       O1B <- rlang::sym(paste0("reasons_overview1_B_",stype[vc]))
       ei  <- rlang::sym(paste0("elig_indicator_",stype[vc]))
 
+      var_dat <- get(varlist2[v],dat)
+      varlabel <- attr(var_dat,"label")
+
       dat <- dat %>% mutate(tempvar1 = ifelse(!!O2B %in% 1, !!var, NA)) %>%
         mutate(tempvar1 = ifelse(is.na(!!var) & !!O2B %in% 1, 0, tempvar1)) %>%
         mutate(tempvar1 = ifelse(!(!!ei) %in% 1, NA, tempvar1))
@@ -822,6 +836,9 @@ gen_MOV_dvs <- function(VCP = "gen_MOV_dvs"){
       dat <- dat %>% mutate(tempvar2 = ifelse(!!O1B %in% 1, !!var, NA)) %>%
         mutate(tempvar2 = ifelse(is.na(!!var) & !!O1B %in% 1, 0, tempvar2)) %>%
         mutate(tempvar2 = ifelse(!(!!ei) %in% 0, NA, tempvar2))
+
+      dat$tempvar1 <- haven::labelled(dat$tempvar1,label = varlabel)
+      dat$tempvar2 <- haven::labelled(dat$tempvar2,label = varlabel)
 
       names(dat)[which(names(dat) == "tempvar1")] <- paste0(varlist2[v],"_eligible_",stype[vc])
       names(dat)[which(names(dat) == "tempvar2")] <- paste0(varlist2[v],"_ineligible_",stype[vc])
@@ -836,6 +853,9 @@ gen_MOV_dvs <- function(VCP = "gen_MOV_dvs"){
       O1C <- rlang::sym(paste0("reasons_overview1_C_",stype[vc]))
       ei  <- rlang::sym(paste0("elig_indicator_",stype[vc]))
 
+      var_dat <- get(varlist3[v],dat)
+      varlabel <- attr(var_dat,"label")
+
       dat <- dat %>% mutate(tempvar1 = ifelse(!!O2C %in% 1, !!var, NA)) %>%
         mutate(tempvar1 = ifelse(is.na(!!var) & !!O2C %in% 1, 0, tempvar1)) %>%
         mutate(tempvar1 = ifelse(!(!!ei) %in% 1, NA, tempvar1))
@@ -843,6 +863,9 @@ gen_MOV_dvs <- function(VCP = "gen_MOV_dvs"){
       dat <- dat %>% mutate(tempvar2 = ifelse(!!O1C %in% 1, !!var, NA)) %>%
         mutate(tempvar2 = ifelse(is.na(!!var) & !!O1C %in% 1, 0, tempvar2)) %>%
         mutate(tempvar2 = ifelse(!(!!ei) %in% 0, NA, tempvar2))
+
+      dat$tempvar1 <- haven::labelled(dat$tempvar1,label = varlabel)
+      dat$tempvar2 <- haven::labelled(dat$tempvar2,label = varlabel)
 
       names(dat)[which(names(dat) == "tempvar1")] <- paste0(varlist3[v],"_eligible_",stype[vc])
       names(dat)[which(names(dat) == "tempvar2")] <- paste0(varlist3[v],"_ineligible_",stype[vc])

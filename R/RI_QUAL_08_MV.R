@@ -36,7 +36,7 @@ RI_QUAL_08_MV <- function(VCP = "RI_QUAL_08_MV"){
 
     if (VCQI_GENERATE_DATABASES %in% 1){
       print("Generating output databases")
-      RI_QUAL_08_04GO()
+      RI_QUAL_08_04GO_MV()
     }
 
     if(EXPORT_TO_EXCEL %in% 1){

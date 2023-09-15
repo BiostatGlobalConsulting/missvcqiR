@@ -110,13 +110,13 @@ DESC_02_05TOST_MV <- function(VCP = "DESC_02_05TOST_MV"){
     make_table_column(
       tablename = "TO_DESC_02",
       dbfilename = paste0("DESC_02_", ANALYSIS_COUNTER,"_", zpc,"_",vid, "_database.rds"),
-      variable = "n", replacevar = NA, noannotate = TRUE)
+      variable = "n", replacevar = NA, noannotate = TRUE, label = DESC_02_N_LABEL)
 
     if (wtd == 1){
       make_table_column(
         tablename = "TO_DESC_02",
         dbfilename = paste0("DESC_02_", ANALYSIS_COUNTER,"_", zpc,"_",vid, "_database.rds"),
-        variable = "nwtd", replacevar = NA, noannotate = TRUE)
+        variable = "nwtd", replacevar = NA, noannotate = TRUE, label = DESC_02_NWTD_LABEL)
     }
 
     sheetname <- paste0("DESC_02_",DESC_02_COUNTER,"_",DESC_02_VARIABLES[d])

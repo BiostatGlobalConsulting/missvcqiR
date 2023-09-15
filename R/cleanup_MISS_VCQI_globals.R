@@ -26,9 +26,16 @@ cleanup_MISS_VCQI_globals <- function(){
     "MAKE_EXCEL_COLUMNS_NARROW",
     "MAKE_PLOTS",
     "MOV_OUTPUT_DOSE_LIST",
+    "NUM_DOSE_SHIFTS",
     "PLOT_OUTCOMES_IN_TABLE_ORDER",
     "SORT_PLOT_LOW_TO_HIGH",
     "RI_TEMP_DATASETS",
+    "RI_DOSE_LIST",
+    "RI_RECORDS_NOT_SOUGHT",
+    "RI_RECORDS_SOUGHT_FOR_ALL",
+    "RI_RECORDS_SOUGHT_IF_NO_CARD",
+    "RI_SINGLE_DOSE_LIST",
+    "RI_DOSE_LIST_MINUS_VISIT",
     "VCP",
     "VCTC_globals_path",
     "VCQI_AGGREGATED_DATABASES",
@@ -37,6 +44,7 @@ cleanup_MISS_VCQI_globals <- function(){
     "LEVEL_2_ID",
     "LEVEL_3_ID",
     "HW_SURVEY_DATASET",
+    "ES_SURVEY_DATASET",
     "dl",
     "i",
     "level4_layout",
@@ -63,12 +71,21 @@ cleanup_MISS_VCQI_globals <- function(){
     "TO_HW_PRAC_01_CN",
     "TO_HW_BAR_01_CN",
     "OUTPUT_LANGUAGE",
-    "language_use"
+    "language_use",
+    "SAVE_VCQI_TESTING_CODE",
+    "STUDY_DAY_VALID_OR_CRUDE"
   ), envir = .GlobalEnv) %>% suppressWarnings()
 
-  # Remove VCQI objects by pattern:
+  # Remove MISS VCQI objects by pattern:
+  rm(list = ls(pattern = 'min_age_days$', envir = .GlobalEnv), envir = .GlobalEnv)
+  rm(list = ls(pattern = 'max_age_days$', envir = .GlobalEnv), envir = .GlobalEnv)
+  rm(list = ls(pattern = 'min_interval_days$', envir = .GlobalEnv), envir = .GlobalEnv)
+
+  rm(list = ls(pattern = '^EARLIEST_SVY_VACC_DATE_', envir = .GlobalEnv), envir = .GlobalEnv)
+  rm(list = ls(pattern = '^LATEST_SVY_VACC_DATE_', envir = .GlobalEnv), envir = .GlobalEnv)
   rm(list = ls(pattern = '^LEVEL.+_NAME_DATASET', envir = .GlobalEnv), envir = .GlobalEnv)
   rm(list = ls(pattern = '^LEVEL.+_ORDER_DATASET', envir = .GlobalEnv), envir = .GlobalEnv)
+  rm(list = ls(pattern = '^RI_MULTI_.+_DOSE_LIST$', envir = .GlobalEnv), envir = .GlobalEnv)
   rm(list = ls(pattern = '^DESC_02_', envir = .GlobalEnv), envir = .GlobalEnv)
   rm(list = ls(pattern = '^DESC02_', envir = .GlobalEnv), envir = .GlobalEnv)
   rm(list = ls(pattern = '^DESC_03_', envir = .GlobalEnv), envir = .GlobalEnv)
@@ -82,5 +99,12 @@ cleanup_MISS_VCQI_globals <- function(){
   rm(list = ls(pattern = '^VCQI', envir = .GlobalEnv), envir = .GlobalEnv)
   rm(list = ls(pattern = '_TEMP_DATASETS$', envir = .GlobalEnv), envir = .GlobalEnv)
   rm(list = ls(pattern = 'UWPLOT_ANNOTATE_', envir = .GlobalEnv), envir = .GlobalEnv)
-
+  rm(list = ls(pattern = '^RI_DOSES_', envir = .GlobalEnv), envir = .GlobalEnv)
+  rm(list = ls(pattern = 'UWPLOT_ANNOTATE_', envir = .GlobalEnv), envir = .GlobalEnv)
+  rm(list = ls(pattern = '^SHIFTWITHIN_', envir = .GlobalEnv), envir = .GlobalEnv)
+  rm(list = ls(pattern = '^DROPDUP_', envir = .GlobalEnv), envir = .GlobalEnv)
+  rm(list = ls(pattern = '^ES_STUD_', envir = .GlobalEnv), envir = .GlobalEnv)
+  rm(list = ls(pattern = '^TO_ES_STUD_', envir = .GlobalEnv), envir = .GlobalEnv)
+  rm(list = ls(pattern = "SHIFTFROM_", envir = .GlobalEnv), envir = .GlobalEnv)
+  rm(list = ls(pattern = "SHIFTTO_", envir = .GlobalEnv), envir = .GlobalEnv)
 }

@@ -7,7 +7,7 @@
 #' @import dplyr
 #' @import stringr
 
-# RI_QUAL_09_06PO_MV R version 1.02 - Biostat Global Consulting - 2022-10-13
+# RI_QUAL_09_06PO_MV R version 1.03 - Biostat Global Consulting - 2023-09-12
 # *******************************************************************************
 # Change log
 
@@ -15,6 +15,7 @@
 # 2022-10-01  1.00      Mia Yu          Original R version
 # 2022-10-07  1.01      Mia Yu          Add parts that record filename and label
 # 2022-10-13  1.02      Mia Yu          Package version
+# 2023-09-12  1.03      Mia Yu          Update with multi-language
 # *******************************************************************************
 
 RI_QUAL_09_06PO_MV <- function(VCP = "RI_QUAL_09_06PO_MV"){
@@ -73,6 +74,11 @@ RI_QUAL_09_06PO_MV <- function(VCP = "RI_QUAL_09_06PO_MV"){
 
       vcqi_global(SORT_PLOT_LOW_TO_HIGH, 0)
 
+      #RI - Respondents with MOSV for `=upper("`d'")'
+      vcf <- paste0(language_string(language_use = language_use, str = "OS_64"),
+                          " ",str_to_upper(MOV_OUTPUT_DOSE_LIST[d]))
+      title <- create_multi_lingual_plot_title(title_string = vcf)
+
       if (VCQI_SAVE_UW_PLOT_DATA == 1){
         filestub <- paste0("RI_QUAL_09_",ANALYSIS_COUNTER,"_uwplot_",MOV_OUTPUT_DOSE_LIST[d])
         savedata <- paste0(newpath,"/",filestub)
@@ -81,13 +87,19 @@ RI_QUAL_09_06PO_MV <- function(VCP = "RI_QUAL_09_06PO_MV"){
       }
 
       vcqi_to_uwplot_MV(database = paste0(VCQI_OUTPUT_FOLDER,"/RI_QUAL_09_",ANALYSIS_COUNTER,"_",MOV_OUTPUT_DOSE_LIST[d],"_plot_database.rds"),
-                     title = paste0("RI - Respondents with MOV for ", str_to_upper(MOV_OUTPUT_DOSE_LIST[d])),
+                     title = title,
                      name = paste0("RI_QUAL_09_",ANALYSIS_COUNTER,"_uwplot_",MOV_OUTPUT_DOSE_LIST[d]),
                      savedata = savedata)
 
       vcqi_log_comment(VCP, 3, "Comment", paste0("Unweighted proportion plot for ", MOV_OUTPUT_DOSE_LIST[d], " was created and exported."))
 
       vcqi_global(SORT_PLOT_LOW_TO_HIGH, 1)
+
+      #RI - Proportion of MOSVs for `=upper("`d'")'" "that were Later Corrected
+      vcf <- paste0(language_string(language_use = language_use, str = "OS_63"),
+                    " ",str_to_upper(MOV_OUTPUT_DOSE_LIST[d])," ",
+                    language_string(language_use = language_use, str = "OS_73"))
+      title <- create_multi_lingual_plot_title(title_string = vcf)
 
       if (VCQI_SAVE_UW_PLOT_DATA == 1){
         filestub <- paste0("RI_QUAL_09_",ANALYSIS_COUNTER,"_uwplot_",MOV_OUTPUT_DOSE_LIST[d],"_cor")
@@ -97,7 +109,7 @@ RI_QUAL_09_06PO_MV <- function(VCP = "RI_QUAL_09_06PO_MV"){
       }
 
       vcqi_to_uwplot_MV(database = paste0(VCQI_OUTPUT_FOLDER,"/RI_QUAL_09_",ANALYSIS_COUNTER,"_",MOV_OUTPUT_DOSE_LIST[d],"_corplot_database.rds"),
-                     title = paste0("RI - Proportion of MOVs for ", str_to_upper(MOV_OUTPUT_DOSE_LIST[d])," that were Later Corrected"),
+                     title = title,
                      name = paste0("RI_QUAL_09_",ANALYSIS_COUNTER,"_uwplot_",MOV_OUTPUT_DOSE_LIST[d],"_cor"),
                      savedata = savedata)
 
@@ -150,6 +162,9 @@ RI_QUAL_09_06PO_MV <- function(VCP = "RI_QUAL_09_06PO_MV"){
 
     vcqi_global(SORT_PLOT_LOW_TO_HIGH, 0)
 
+    #RI: Respondents with MOSV for Any Dose
+    title <- create_multi_lingual_plot_title(title_string = language_string(language_use = language_use, str = "OS_65"))
+
     if (VCQI_SAVE_UW_PLOT_DATA == 1){
       filestub <- paste0("RI_QUAL_09_",ANALYSIS_COUNTER,"_uwplot_anydose")
       savedata <- paste0(newpath,"/",filestub)
@@ -158,13 +173,18 @@ RI_QUAL_09_06PO_MV <- function(VCP = "RI_QUAL_09_06PO_MV"){
     }
 
     vcqi_to_uwplot_MV(database = paste0(VCQI_OUTPUT_FOLDER,"/RI_QUAL_09_",ANALYSIS_COUNTER,"_anydose_plot_database.rds"),
-                   title = "RI - Respondents with MOV for Any Dose",
+                   title = title,
                    name = paste0("RI_QUAL_09_",ANALYSIS_COUNTER,"_uwplot_anydose"),
                    savedata = savedata)
 
     vcqi_log_comment(VCP, 3, "Comment","Unweighted proportion plot for any dose was created and exported.")
 
     vcqi_global(SORT_PLOT_LOW_TO_HIGH, 1)
+
+    vcf <- paste0(language_string(language_use = language_use, str = "OS_62"),
+                  " ",
+                  language_string(language_use = language_use, str = "OS_72"))
+    title <- create_multi_lingual_plot_title(title_string = vcf)
 
     if (VCQI_SAVE_UW_PLOT_DATA == 1){
       filestub <- paste0("RI_QUAL_09_",ANALYSIS_COUNTER,"_uwplot_anydose_cor")
@@ -174,7 +194,7 @@ RI_QUAL_09_06PO_MV <- function(VCP = "RI_QUAL_09_06PO_MV"){
     }
 
     vcqi_to_uwplot_MV(database = paste0(VCQI_OUTPUT_FOLDER,"/RI_QUAL_09_",ANALYSIS_COUNTER,"_anydose_corplot_database.rds"),
-                   title = paste0("RI - Proportion of MOVs that had All MOVs Later Corrected"),
+                   title = title,
                    name = paste0("RI_QUAL_09_",ANALYSIS_COUNTER,"_uwplot_anydose_cor"),
                    savedata = savedata)
 
