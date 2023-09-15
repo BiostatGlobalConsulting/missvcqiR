@@ -6,7 +6,7 @@
 #'
 #' @import stringr
 
-# RI_QUAL_08_04GO R version 1.02 - Biostat Global Consulting - 2023-07-21
+# RI_QUAL_08_04GO_MV R version 1.02 - Biostat Global Consulting - 2023-07-21
 # *******************************************************************************
 # Change log
 
@@ -16,7 +16,7 @@
 # 2023-07-21  1.02      Caitlin Clary   Update labels (MOV -> MOSV)
 # *******************************************************************************
 
-RI_QUAL_08_04GO <- function(VCP = "RI_QUAL_08_04GO"){
+RI_QUAL_08_04GO_MV <- function(VCP = "RI_QUAL_08_04GO_MV"){
   vcqi_log_comment(VCP, 5, "Flow", "Starting")
 
   vc <- str_to_lower(RI_QUAL_08_VALID_OR_CRUDE)
@@ -25,7 +25,7 @@ RI_QUAL_08_04GO <- function(VCP = "RI_QUAL_08_04GO"){
   for (d in seq_along(MOV_OUTPUT_DOSE_LIST)){
     print(MOV_OUTPUT_DOSE_LIST[d])
 
-    make_count_output_database(numerator = paste0("total_mov_",MOV_OUTPUT_DOSE_LIST[d],"_",vc),
+    make_count_output_database_MV(numerator = paste0("total_mov_",MOV_OUTPUT_DOSE_LIST[d],"_",vc),
                                denominator = paste0("total_elig_",MOV_OUTPUT_DOSE_LIST[d],"_",vc),
                                estlabel = paste0("Visits with MOSV for ", str_to_upper(MOV_OUTPUT_DOSE_LIST[d])," (", pvc,")(%)"),
                                vid = MOV_OUTPUT_DOSE_LIST[d],
@@ -34,13 +34,13 @@ RI_QUAL_08_04GO <- function(VCP = "RI_QUAL_08_04GO"){
 
   print("Totals...")
 
-  make_count_output_database(numerator = paste0("total_mov_visits_",vc),
+  make_count_output_database_MV(numerator = paste0("total_mov_visits_",vc),
                              denominator = paste0("total_elig_visits_",vc),
                              estlabel = paste0("Visits with MOSV for any dose "," (", pvc,")(%)"),
                              vid = "any",
                              measureid = "RI_QUAL_08")
 
-  make_count_output_database(numerator = paste0("total_movs_",vc),
+  make_count_output_database_MV(numerator = paste0("total_movs_",vc),
                              denominator = paste0("total_elig_visits_",vc),
                              estlabel = paste0("Rate of MOSVs per eligible visit "," (", pvc,")(%)"),
                              vid = "rate",

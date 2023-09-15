@@ -8,7 +8,7 @@
 #' @import dplyr
 #' @import tidyselect
 
-# RI_QUAL_09_01PP R version 1.02 - Biostat Global Consulting - 2023-07-18
+# RI_QUAL_09_01PP_MV R version 1.02 - Biostat Global Consulting - 2023-07-18
 # *******************************************************************************
 # Change log
 
@@ -19,7 +19,7 @@
 # *******************************************************************************
 
 
-RI_QUAL_09_01PP <- function(VCP = "RI_QUAL_09_01PP"){
+RI_QUAL_09_01PP_MV <- function(VCP = "RI_QUAL_09_01PP_MV"){
   vcqi_log_comment(VCP, 5, "Flow", "Starting")
 
   vc <- str_to_lower(RI_QUAL_09_VALID_OR_CRUDE)
@@ -48,7 +48,7 @@ RI_QUAL_09_01PP <- function(VCP = "RI_QUAL_09_01PP"){
 
   dat <- dat %>% select(level1id,level2id,level3id,stratumid,clusterid,respid,RI01,RI03,RI11,
                         RI12,HH02,HH04,psweight, all_of(VCQI_LEVEL4_SET_VARLIST),all_of(dlist),
-                        all_of(vars),level1name,level2name,level3name)
+                        all_of(vars),level1name,level3name)
 
   saveRDS(dat,file = paste0(VCQI_OUTPUT_FOLDER,"/RI_QUAL_09_",ANALYSIS_COUNTER,".rds"))
 

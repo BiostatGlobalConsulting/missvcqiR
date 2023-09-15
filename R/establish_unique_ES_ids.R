@@ -5,6 +5,7 @@
 #' @import dplyr
 #' @import tidyselect
 #' @rawNamespace import(tools, except = makevars_user)
+#' @rawNamespace import(rlang, except = c(local_options,with_options))
 #'
 #' @return a dataset
 #'
@@ -51,6 +52,15 @@ establish_unique_ES_ids <- function(VCP = "establish_unique_ES_ids"){
                           clusterid = NA, HH02 = NA_character_, HH04 = NA_character_,
                           psweight = 1)
 
+    if (vcqi_object_exists("LEVEL_2_ID")){
+      l2id <- rlang::sym(paste0("level2_",LEVEL_2_ID,"small"))
+      dat <- dat %>% mutate(level2id = !!l2id)
+
+      # obtain province names from a small dataset for that purpose
+      dat2 <- vcqi_read(LEVEL2_NAME_DATASET)
+      dat <- inner_join(dat,dat2,by = "level2id",multiple = "all")
+    }
+
     dat2 <- vcqi_read(LEVEL1_NAME_DATASET)
     dat <- inner_join(dat,dat2,by = "level1id")
 
@@ -72,10 +82,23 @@ establish_unique_ES_ids <- function(VCP = "establish_unique_ES_ids"){
       }
     } # end of VCQI_LEVEL4_SET_VARLIST v loop
 
-    dat <- dat %>% mutate(level2id = 1) #NOTE: slightly different from the Stata version
-
     saveRDS(dat, paste0(VCQI_OUTPUT_FOLDER,"/ES_with_ids.rds"))
     saveRDS(dat, paste0(VCQI_OUTPUT_FOLDER,"/RI_with_ids.rds"))
+
+    if (!vcqi_object_exists("LEVEL_2_ID")){
+      dat2 <- data.frame(level2id = 1, level2name = "Null Level 2 Placeholder")
+      save(dat2, paste0(VCQI_OUTPUT_FOLDER,"/level2_placeholder_name_dataset.rds"))
+      assign(LEVEL2_NAME_DATASET, paste0(VCQI_OUTPUT_FOLDER,"/level2_placeholder_name_dataset.rds"), envir = .GlobalEnv)
+
+      dat2 <- dat2 %>% select(-c(level2name)) %>% mutate(level2order = 1)
+      save(dat2, paste0(VCQI_OUTPUT_FOLDER,"/level2_placeholder_order_dataset.rds"))
+      assign(LEVEL2_ORDER_DATASET, paste0(VCQI_OUTPUT_FOLDER,"/level2_placeholder_order_dataset.rds"), envir = .GlobalEnv)
+
+      dat2 <- vcqi_read(LEVEL3_NAME_DATASET) %>%
+        mutate(level2id = 1,level2nameforlevel3 = "Null Level 2 Placeholder")
+      save(dat2, paste0(VCQI_OUTPUT_FOLDER,"/level2namesforlevel3.rds"))
+
+    }
   }
 
   vcqi_log_comment(VCP, 5, "Flow", "Exiting")

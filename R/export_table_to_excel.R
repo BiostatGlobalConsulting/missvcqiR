@@ -11,6 +11,7 @@
 #' @import dplyr
 #' @import openxlsx
 #' @import stringr
+#' @import haven
 
 # export_table_to_excel R version 1.06 - Biostat Global Consulting - 2023-02-07
 # *******************************************************************************
@@ -93,6 +94,10 @@ export_table_to_excel <- function(indicator, tablename = NULL, sheet = NULL, bri
   }
 
   addWorksheet(wb, sheetName = sheet1)
+
+  exporttb <- haven::zap_label(exporttb)
+  exporttb <- haven::zap_labels(exporttb)
+
   writeData(wb, sheet = sheet1, colnames, startCol = 2, startRow = 3, colNames = FALSE)
   writeData(wb, sheet = sheet1, exporttb, startRow = 4, colNames = FALSE)
 
@@ -236,6 +241,10 @@ export_table_to_excel <- function(indicator, tablename = NULL, sheet = NULL, bri
     briefcol <- data.frame(t(as.matrix(briefcol)))
 
     addWorksheet(wb, sheetName = sheet2)
+
+    brieftb <- haven::zap_label(brieftb)
+    brieftb <- haven::zap_labels(brieftb)
+
     writeData(wb, sheet = sheet2, briefcol, startCol = 2, startRow = 3, colNames = FALSE)
     writeData(wb, sheet = sheet2, brieftb,  startRow = 4, colNames = FALSE)
 
