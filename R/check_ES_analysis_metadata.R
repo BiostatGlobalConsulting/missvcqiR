@@ -41,15 +41,34 @@ check_ES_analysis_metadata <- function(VCP = "check_ES_analysis_metadata"){
 
   # Check that user has specified doses to analyze
   vcqi_log_global(RI_SINGLE_DOSE_LIST)
-  vcqi_log_global(RI_MULTI_2_DOSE_LIST)
-  vcqi_log_global(RI_MULTI_3_DOSE_LIST)
 
-  if (!vcqi_object_exists("RI_SINGLE_DOSE_LIST") &
-      !vcqi_object_exists("RI_MULTI_2_DOSE_LIST") &
-      !vcqi_object_exists("RI_MULTI_3_DOSE_LIST")){
-    errormsgs <- c(errormsgs,"No RI doses are identified for analysis...so quit")
-    vcqi_log_comment(VCP,1,"Error", "No RI doses are identified for analysis...so quit")
+  # Log multi-dose lists:
+  lapply(2:9, function(x) if(vcqi_object_exists(paste0("RI_MULTI_", x, "_DOSE_LIST"))){
+    val <- paste(get(paste0("RI_MULTI_", x, "_DOSE_LIST")), collapse = ", ")
+    vcqi_log_comment(VCP, 3, "Global", paste0(
+      "Global value RI_MULTI_", x, "_DOSE_LIST is ", val
+    ))
+
+  }) %>% invisible() # don't print to console
+
+  multi_dose_list <- lapply(2:9, function(x) if(vcqi_object_exists(paste0("RI_MULTI_", x, "_DOSE_LIST"))){
+    data.frame(dosename = get(paste0("RI_MULTI_", x, "_DOSE_LIST"))) %>%
+      mutate(n_doses = rep(x, n()))
+  }) %>% do.call(rbind, .)
+
+  if (!vcqi_object_exists("RI_SINGLE_DOSE_LIST")) {
+    single_dose <- NULL
+  } else {
+    single_dose <- RI_SINGLE_DOSE_LIST
+  }
+
+  if(is.null(single_dose) &
+     is.null(multi_dose_list)){
+    errormsgs <- c(errormsgs,
+                   "No RI doses are identified for analysis...so quit")
     exitflag <- 1
+    vcqi_log_comment(VCP, 1, "Error",
+                     "No RI doses are identified for analysis...so quit")
   }
 
   if (exitflag == 1) {
