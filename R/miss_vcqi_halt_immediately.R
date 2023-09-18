@@ -77,6 +77,7 @@ miss_vcqi_halt_immediately <- function(
       }
 
       datasetlist <- c(HW_TEMP_DATASETS,RI_TEMP_DATASETS)
+      datasetlist <- unique(datasetlist)
 
       for (d in seq_along(datasetlist)){
         vcqi_log_comment(VCP, 3, "Cleanup",

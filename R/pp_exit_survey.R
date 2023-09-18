@@ -28,16 +28,50 @@ pp_exit_survey <- function(VCP = "pp_exit_survey"){
 
   vcqi_log_comment(VCP, 5, "Flow", "Starting")
 
-  assign("VCQI_RI_DATASET", ES_SURVEY_DATASET, envir = global_env())
-
-  dat <- vcqi_read(paste0(VCQI_DATA_FOLDER,"/",VCQI_RI_DATASET))
-  saveRDS(dat,paste0(VCQI_OUTPUT_FOLDER,"/",tools::file_path_sans_ext(VCQI_RI_DATASET),"_miss_vcqi_ready.rds"))
-
-  vcqi_global(VCQI_RI_DATASET, paste0(tools::file_path_sans_ext(VCQI_RI_DATASET),"_miss_vcqi_ready.rds"))
-
   exitflag <- 0
   errormsgs <- NULL
   warningmsgs <- NULL
+
+  #NOTE: This part is R unique
+  if (!vcqi_object_exists("ES_SURVEY_DATASET")) {
+    errormsgs <- c(errormsgs,
+                   "Please set ES_SURVEY_DATASET")
+    exitflag <- 1
+    vcqi_log_comment(VCP, 1, "Error", "Please set ES_SURVEY_DATASET")
+  } else {
+
+    assign("VCQI_RI_DATASET", ES_SURVEY_DATASET, envir = global_env())
+    RIfile <- paste0(VCQI_DATA_FOLDER, "/", VCQI_RI_DATASET)
+    if (!file.exists(RIfile)) {
+      errormsgs <- c(errormsgs,
+                     paste0("The file defined by global macros VCQI_DATA_FOLDER/ES_SURVEY_DATASET (",
+                            RIfile,") does not exist"))
+      exitflag <- 1
+      vcqi_log_comment(VCP,1,"Error",paste0("ES dataset: ", RIfile, " does not exist"))
+    } else {
+      #read the ES dataset
+      dat <- vcqi_read(RIfile)
+      if (is.data.frame(dat) == FALSE) {
+        errormsgs <- c(errormsgs,
+                       paste0("The file defined by global macros VCQI_DATA_FOLDER/ES_SURVEY_DATASET (",
+                              RIfile,") is not in valid format"))
+        exitflag <- 1
+        vcqi_log_comment(VCP,1,"Error",paste0("ES dataset: ", RIfile, " is not in valid format"))
+      } else{
+        dat <- vcqi_read(paste0(VCQI_DATA_FOLDER, "/", VCQI_RI_DATASET))
+        saveRDS(dat,paste0(VCQI_OUTPUT_FOLDER,"/",tools::file_path_sans_ext(VCQI_RI_DATASET),"_miss_vcqi_ready.rds"))
+        vcqi_global(VCQI_RI_DATASET,paste0(tools::file_path_sans_ext(VCQI_RI_DATASET),"_miss_vcqi_ready.rds")
+        )
+      }
+    }
+  }
+
+  if(exitflag == 1){
+    vcqi_global(VCQI_ERROR, 1)
+    miss_vcqi_halt_immediately(
+      halt_message = errormsgs
+    )
+  }
 
   # Only keep if survey completed
   dat <- dat %>% filter(ES01AE %in% 1)
@@ -74,6 +108,13 @@ pp_exit_survey <- function(VCP = "pp_exit_survey"){
     vcqi_log_comment(VCP,1,"Error",
                      "Global RI_SINGLE_DOSE_LIST, RI_MULTI2_DOSE_LIST or RI_MULTI3_DOSE_LIST must be populated to run miss-vcqi programs")
     exitflag <- 1
+  }
+
+  if(exitflag == 1){
+    vcqi_global(VCQI_ERROR, 1)
+    miss_vcqi_halt_immediately(
+      halt_message = errormsgs
+    )
   }
 
   # Set these below globals that will always be these values when running miss-vcqi
