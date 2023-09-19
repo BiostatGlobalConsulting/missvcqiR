@@ -56,7 +56,23 @@ miss_vcqi_multi_lingual_strings <- function(VCP = "miss_vcqi_multi_lingual_strin
     exitflag <- 1
   } else {
 
-    dat <- openxlsx::read.xlsx(paste0(VCQI_DATA_FOLDER,"/MISS VCQI Label Phrases - En Fr Es Pt.xlsx"), sheet = "Latest version")
+    if (file.exists(paste0(VCQI_DATA_FOLDER,"/MISS VCQI Label Phrases - En Fr Es Pt.xlsx"))){
+      dat <- openxlsx::read.xlsx(xlsxFile = paste0(VCQI_DATA_FOLDER,"/MISS VCQI Label Phrases - En Fr Es Pt.xlsx"),
+                                 sheet = "Latest version")
+    } else if (file.exists(paste0(VCQI_DATA_FOLDER,"/Multi-Lingual Phrases - En Fr Es Pt.xlsx"))){
+      dat <- openxlsx::read.xlsx(xlsxFile = paste0(VCQI_DATA_FOLDER,"/Multi-Lingual Phrases - En Fr Es Pt.xlsx"),
+                                 sheet = "Latest version")
+    } else {
+      errormsgs <- c(errormsgs,paste0("Multi-Lingual file not found in ", VCQI_DATA_FOLDER))
+      vcqi_log_comment(VCP,1,"Error", paste0("Multi-Lingual file not found in ", VCQI_DATA_FOLDER))
+      exitflag <- 1
+    }
+
+    if(exitflag == 1){
+      vcqi_global(VCQI_ERROR, 1)
+      miss_vcqi_halt_immediately(halt_message = errormsgs)
+    }
+
     names(dat) <- str_to_upper(names(dat))
 
     var <- get(language,dat)

@@ -406,7 +406,8 @@ gen_MOV_dvs <- function(VCP = "gen_MOV_dvs"){
     table1 <- rlang::sym(paste0("table1_dv_",stype[vc]))
     got_none <- rlang::sym(paste0("got_none_",stype[vc]))
     got_one <- rlang::sym(paste0("got_at_least_one_",stype[vc]))
-    got_all <- rlang::sym(paste0("got_all_elig_no_more_",stype[vc]))
+    got_all <- rlang::sym(paste0("got_all_elig_",stype[vc]))
+    no_more <- rlang::sym(paste0("got_all_elig_no_more_",stype[vc]))
     one_invalid <- rlang::sym(paste0("at_least_one_invalid_",stype[vc]))
     correct <- rlang::sym(paste0("correct_validdose_",stype[vc]))
     no_correct <- rlang::sym(paste0("no_correct_validdose_",stype[vc]))
@@ -423,7 +424,7 @@ gen_MOV_dvs <- function(VCP = "gen_MOV_dvs"){
     dat <- dat %>% mutate(tempvar2 = ifelse((!!table1 == 1 & !!got_none ==1 & tempvar1 == 1) %in% TRUE, 3, tempvar2))
 
     # elig for 1+; rec'd all doses elig for & no others
-    dat <- dat %>% mutate(tempvar2 = ifelse((!!table1 == 1 & !!got_all ==1 & tempvar1 == 1) %in% TRUE, 4, tempvar2))
+    dat <- dat %>% mutate(tempvar2 = ifelse((!!table1 == 1 & !!no_more ==1 & tempvar1 == 1) %in% TRUE, 4, tempvar2))
 
     # elig for 1+; rec'd all doses elig for & some others not elig for
     dat <- dat %>% mutate(tempvar2 = ifelse((!!table1 == 1 & !!got_all ==1 & !!one_invalid == 1 & tempvar1 == 1) %in% TRUE, 5, tempvar2))
@@ -437,7 +438,7 @@ gen_MOV_dvs <- function(VCP = "gen_MOV_dvs"){
     dat <- dat %>% mutate(tempvar2 = ifelse((!!table1 == 1 & !!got_none ==1 & tempvar1 >= 2) %in% TRUE, 7, tempvar2))
 
     # elig for 1+; rec'd all doses elig for & no others
-    dat <- dat %>% mutate(tempvar2 = ifelse((!!table1 == 1 & !!got_all ==1 & tempvar1 >= 2) %in% TRUE, 8, tempvar2))
+    dat <- dat %>% mutate(tempvar2 = ifelse((!!table1 == 1 & !!no_more ==1 & tempvar1 >= 2) %in% TRUE, 8, tempvar2))
 
     # elig for 1+; rec'd some doses elig for & no others
     dat <- dat %>% mutate(tempvar2 = ifelse((!!table1 == 1 & !!correct == 1 & !!mov == 1 & !!no_invalid == 1 & tempvar1 >= 2) %in% TRUE,
@@ -863,6 +864,9 @@ gen_MOV_dvs <- function(VCP = "gen_MOV_dvs"){
       dat <- dat %>% mutate(tempvar2 = ifelse(!!O1C %in% 1, !!var, NA)) %>%
         mutate(tempvar2 = ifelse(is.na(!!var) & !!O1C %in% 1, 0, tempvar2)) %>%
         mutate(tempvar2 = ifelse(!(!!ei) %in% 0, NA, tempvar2))
+
+      dat$tempvar1 <- as.numeric(dat$tempvar1)
+      dat$tempvar2 <- as.numeric(dat$tempvar2)
 
       dat$tempvar1 <- haven::labelled(dat$tempvar1,label = varlabel)
       dat$tempvar2 <- haven::labelled(dat$tempvar2,label = varlabel)

@@ -17,8 +17,15 @@
 # *******************************************************************************
 
 language_string <- function(language_use, str, replaceq = FALSE) {
-  dat <- openxlsx::read.xlsx(xlsxFile = paste0(VCQI_DATA_FOLDER,"/MISS VCQI Label Phrases - En Fr Es Pt.xlsx"),
-                             sheet = "Latest version")
+
+  if (file.exists(paste0(VCQI_DATA_FOLDER,"/MISS VCQI Label Phrases - En Fr Es Pt.xlsx"))){
+    dat <- openxlsx::read.xlsx(xlsxFile = paste0(VCQI_DATA_FOLDER,"/MISS VCQI Label Phrases - En Fr Es Pt.xlsx"),
+                               sheet = "Latest version")
+  } else if (file.exists(paste0(VCQI_DATA_FOLDER,"/Multi-Lingual Phrases - En Fr Es Pt.xlsx"))){
+    dat <- openxlsx::read.xlsx(xlsxFile = paste0(VCQI_DATA_FOLDER,"/Multi-Lingual Phrases - En Fr Es Pt.xlsx"),
+                               sheet = "Latest version")
+  }
+
   names(dat) <- str_to_upper(names(dat))
   var <- get(language_use,dat)
   returnstr <- var[which(dat$STRING_NAME == str)]
