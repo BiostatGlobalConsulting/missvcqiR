@@ -184,21 +184,22 @@ vcqi_global(DELETE_VCQI_DATABASES_AT_END, 1)
 # set the option to 0.
 vcqi_global(DELETE_TEMP_VCQI_DATASETS, 1)
 
-# ********************************************************************************
-# Code Block: HW-E                                               (Do not change)
-#-------------------------------------------------------------------------------
-#                  Format the VCQI dose list and pre-process survey data
+# *************************************************
+# Code Block: HW-E             (Do not change) ----
 
-#-------------------------------------------------------------------------------
+# Format the VCQI dose list and pre-process survey data
+
+# ..............................................................................
 # Run MISS-VCQI multi lingual global program
-# --------------------------------------------------------------------------
+# ..............................................................................
+
 # This will set globals for each output in Miss-VCQI based on the value provided
 # in global OUTPUT_LANGUAGE
 miss_vcqi_multi_lingual_strings()
 
-# --------------------------------------------------------------------------
+# ..............................................................................
 # Check the user's metadata for completeness and correctness
-# --------------------------------------------------------------------------
+# ..............................................................................
 check_HW_analysis_metadata()
 
 # Calculate Knowledge, Attitude and Practice barriers per Annex 7 of The PAHO
@@ -208,9 +209,9 @@ check_HW_analysis_metadata()
 # variables: ${HW_SURVEY_DATASET}_dv
 gen_hw_dv()
 
-# --------------------------------------------------------------------------
+# ..............................................................................
 # Establish unique IDs
-# --------------------------------------------------------------------------
+# ..............................................................................
 
 # NOTE: The name of the dataset coming out of the ID step is HW_with_ids
 # NOTE: establish_unique_ids needs to be created
@@ -233,11 +234,10 @@ if (VCQI_CHECK_INSTEAD_OF_RUN == 1){
   MAKE_PLOTS <- 0
 }
 
-# ********************************************************************************
-#  Code Block: HW-F                                             (User may change)
-# -------------------------------------------------------------------------------
-#                   Calculate VCQI indicators requested by the user
-# -------------------------------------------------------------------------------
+# *************************************************
+#  Code Block: HW-F          (User may change) ----
+
+# Calculate VCQI indicators requested by the user
 
 # This is a counter that is used to name datasets...it is usually set to 1 but
 # the user might change it if requesting repeat analyses with differing
@@ -245,9 +245,9 @@ if (VCQI_CHECK_INSTEAD_OF_RUN == 1){
 
 vcqi_global(ANALYSIS_COUNTER, 1)
 
-# --------------------------------------------------------------------------
+# ..............................................................................
 # Summarize responses to some multiple-choice questions using DESC_02
-# --------------------------------------------------------------------------
+# ..............................................................................
 
 vcqi_global(DESC_02_DATASET, "HW_with_ids.rds")
 vcqi_global(DESC_02_VARIABLES, "HW03AA")
@@ -270,7 +270,7 @@ vcqi_global(DESC_02_TO_FOOTNOTE_4, NA)
 
 DESC_02_MV(cleanup = TRUE)
 
-# --------------------------------------------------------------------------
+# ..............................................................................
 vcqi_global(DESC_02_DATASET, "HW_with_ids.rds")
 vcqi_global(DESC_02_VARIABLES, "age_group")
 vcqi_global(DESC_02_WEIGHTED, "NO")
@@ -292,7 +292,7 @@ vcqi_global(DESC_02_TO_FOOTNOTE_4, NA)
 
 DESC_02_MV(cleanup = TRUE)
 
-# --------------------------------------------------------------------------
+# ..............................................................................
 vcqi_global(DESC_02_DATASET, "HW_with_ids.rds")
 vcqi_global(DESC_02_VARIABLES, "HW03AC")
 vcqi_global(DESC_02_WEIGHTED, "NO")
@@ -317,7 +317,7 @@ vcqi_global(
 
 DESC_02_MV(cleanup = TRUE)
 
-# --------------------------------------------------------------------------
+# ..............................................................................
 vcqi_global(DESC_03_DATASET, "HW_with_ids.rds")
 vcqi_global(DESC_03_SHORT_TITLE, "area_work")
 vcqi_global(DESC_03_VARIABLES, c("HW03AD_1","HW03AD_2"))
@@ -339,7 +339,7 @@ vcqi_global(
 
 DESC_03_MV(cleanup = TRUE)
 
-# --------------------------------------------------------------------------
+# ..............................................................................
 vcqi_global(DESC_02_DATASET, "HW_with_ids.rds")
 vcqi_global(DESC_02_VARIABLES, "experience_category")
 vcqi_global(DESC_02_WEIGHTED, "NO")
@@ -364,7 +364,7 @@ vcqi_global(
 
 DESC_02_MV(cleanup = TRUE)
 
-# --------------------------------------------------------------------------
+# ..............................................................................
 vcqi_global(DESC_02_DATASET, "HW_with_ids.rds")
 vcqi_global(DESC_02_VARIABLES, "classes")
 vcqi_global(DESC_02_WEIGHTED, "NO")
@@ -388,7 +388,7 @@ vcqi_global(
 
 DESC_02_MV(cleanup = TRUE)
 
-# --------------------------------------------------------------------------
+# ..............................................................................
 vcqi_global(DESC_02_DATASET, "HW_with_ids.rds")
 # This currently does not align with question in Box 6
 # Need to confirm this is set up correctly
@@ -415,7 +415,7 @@ vcqi_global(
 
 DESC_02_MV(cleanup = TRUE)
 
-# --------------------------------------------------------------------------
+# ..............................................................................
 # Calculate whether the workers had knowledge & attitude barriers
 
 # Uses dataset: HW_with_ids
@@ -466,7 +466,7 @@ vcqi_global(HW_BAR_01_TO_FOOTNOTE_7,
 
 HW_BAR_01()
 
-# --------------------------------------------------------------------------
+# ..............................................................................
 # Calculate whether the workers engage in improper vx practices
 
 # Uses dataset: HW_with_ids
@@ -517,7 +517,7 @@ vcqi_global(HW_PRAC_01_TO_FOOTNOTE_7,
 
 HW_PRAC_01()
 
-# --------------------------------------------------------------------------
+# ..............................................................................
 vcqi_global(DESC_03_DATASET, "HW_with_ids.rds")
 vcqi_global(DESC_03_SHORT_TITLE, "other_improper_vx_prac")
 vcqi_global(DESC_03_VARIABLES, c("HW06AL", "HW06AM", "HW06AN", "HW06AO"))
@@ -566,7 +566,7 @@ vcqi_global(DESC_03_TO_FOOTNOTE_4,
 DESC_03_MV(cleanup = TRUE)
 
 # *************************************************
-# Code Block: RI-G             (Do not change) ----
+# Code Block: HW-G             (Do not change) ----
 #
 # Exit gracefully
 
