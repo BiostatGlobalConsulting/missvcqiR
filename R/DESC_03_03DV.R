@@ -58,6 +58,7 @@ DESC_03_03DV <- function(VCP = "DESC_03_03DV"){
                                                 str_to_upper(DESC_03_DENOMINATOR) == "RESPONDED", NA,tempvar1))
     }
 
+    dat$tempvar1 <- as.numeric(dat$tempvar1)
     dat$tempvar1 <- haven::labelled(dat$tempvar1, label = varlabel) %>% suppressWarnings()
 
     # If this level is a missing value then allow the user to specify the label via input global macros

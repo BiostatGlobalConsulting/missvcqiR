@@ -136,6 +136,27 @@ ES_STUD_03_03DV <- function(VCP = "ES_STUD_03_03DV"){
 
     if (paste0(vloop2[i],2) %in% str_to_lower(MOV_OUTPUT_DOSE_LIST)){
 
+      elig <- NULL
+      correct <- NULL
+      invalid <- NULL
+      mov <- NULL
+      valid <- NULL
+      for (v in seq_along(vloop1)){
+        if (grepl(vloop2[i], vloop1[v]) %in% TRUE){
+          elig <- c(elig,paste0("elig_",vloop1[v], "_", vc))
+          correct <- c(correct,paste0("correct_nodose_", vloop1[v], "_", vc))
+          invalid <- c(invalid,paste0("invalid_", vloop1[v], "_", vc))
+          mov <- c(mov,paste0("mov_", vloop1[v], "_", vc))
+          valid <- c(valid,paste0("correct_validdose_", vloop1[v], "_", vc))
+        }
+      } #end of vloop1 v loop
+
+      elig <- elig[which(elig %in% names(dat))]
+      correct <- correct[which(correct %in% names(dat))]
+      invalid <- invalid[which(invalid %in% names(dat))]
+      mov <- mov[which(mov %in% names(dat))]
+      valid <- valid[which(valid %in% names(dat))]
+
       sym_elig_dose <- rlang::sym(paste0(vloop2[i], "_elig_", vc))
       sym_correct_nodose <- rlang::sym(paste0("correct_nodose_", vloop2[i], "_", vc))
       sym_invalid_dose <- rlang::sym(paste0("invalid_", vloop2[i], "_", vc))
@@ -145,6 +166,7 @@ ES_STUD_03_03DV <- function(VCP = "ES_STUD_03_03DV"){
       m_dose_elig <- dat %>%
         select(starts_with(paste0("elig_", vloop2[i]))) %>%
         select(ends_with(vc)) %>%
+        select(-c(all_of(elig))) %>%
         mutate(tempx = rowSums(., na.rm = TRUE),
                temp = ifelse(tempx > 0 & !is.na(tempx), 1, 0)) %>%
         select(-tempx)
@@ -152,6 +174,7 @@ ES_STUD_03_03DV <- function(VCP = "ES_STUD_03_03DV"){
       m_correct_nodose <- dat %>%
         select(starts_with(paste0("correct_nodose_", vloop2[i]))) %>%
         select(ends_with(vc)) %>%
+        select(-c(all_of(correct))) %>%
         mutate(
           tempx = rowSums(select(., -!!sym_correct_nodose), na.rm = TRUE),
           tempelig = m_dose_elig$temp,
@@ -162,6 +185,7 @@ ES_STUD_03_03DV <- function(VCP = "ES_STUD_03_03DV"){
       m_invalid_dose <- dat %>%
         select(starts_with(paste0("invalid_", vloop2[i]))) %>%
         select(ends_with(vc)) %>%
+        select(-c(all_of(invalid))) %>%
         mutate(
           tempx = rowSums(select(., -!!sym_invalid_dose), na.rm = TRUE),
           tempelig = m_dose_elig$temp,
@@ -172,6 +196,7 @@ ES_STUD_03_03DV <- function(VCP = "ES_STUD_03_03DV"){
       m_mov_dose <- dat %>%
         select(starts_with(paste0("mov_", vloop2[i]))) %>%
         select(ends_with(vc)) %>%
+        select(-c(all_of(mov))) %>%
         mutate(
           tempx = rowSums(select(., -!!sym_mov_dose), na.rm = TRUE),
           tempelig = m_dose_elig$temp,
@@ -182,6 +207,7 @@ ES_STUD_03_03DV <- function(VCP = "ES_STUD_03_03DV"){
       m_correct_validdose <- dat %>%
         select(starts_with(paste0("correct_validdose_", vloop2[i]))) %>%
         select(ends_with(vc)) %>%
+        select(-c(all_of(valid))) %>%
         mutate(
           tempx = rowSums(select(., -!!sym_correct_validdose), na.rm = TRUE),
           tempelig = m_dose_elig$temp,
@@ -246,7 +272,11 @@ ES_STUD_03_03DV <- function(VCP = "ES_STUD_03_03DV"){
 
   # drop the individual dose variables for multi doses
   # And eligibility variables
-  dat <- dat %>% select(-c(all_of(mlist),all_of(ends_with(paste0("_elig_",vc)))))
+  tempdat <- dat %>% select(all_of(ends_with(paste0("_elig_",vc))))
+  droplist <- names(tempdat)
+  droplist <- c(mlist,droplist)
+  droplist <- unique(droplist)
+  dat <- dat %>% select(-c(all_of(droplist)))
 
   # Create local to contain all the vars that we want to collapse by
   clist <- NULL
@@ -270,8 +300,12 @@ ES_STUD_03_03DV <- function(VCP = "ES_STUD_03_03DV"){
 
   #  Collapse so that it looks at each facility
   level4 <- rlang::sym(VCQI_LEVEL4_SET_VARLIST)
+  groupvar <- c("level1id","level2id","level3id","visitdate","study_day")
+  if (VCQI_LEVEL4_SET_VARLIST %in% groupvar){
+    groupvar <- groupvar[-which(groupvar == VCQI_LEVEL4_SET_VARLIST)]
+  }
   collapsedat <- dat %>% select(!!level4,level1id,level2id,level3id,visitdate,study_day,all_of(clist)) %>%
-    group_by(!!level4,level1id,level2id,level3id,visitdate,study_day) %>%
+    group_by(across(c(all_of(VCQI_LEVEL4_SET_VARLIST),all_of(groupvar)))) %>%
     summarise(across(all_of(clist), sum))
   # save this file
   saveRDS(collapsedat, file = paste0(VCQI_OUTPUT_FOLDER,"/ES_STUD_03_",ANALYSIS_COUNTER,".rds"))

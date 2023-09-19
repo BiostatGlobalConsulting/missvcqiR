@@ -122,7 +122,7 @@ make_DESC_0203_output_database <- function(
           for (k in 1:sub_count){
             if (vcqi_object_exists(paste0("DESC_",mid,"_SUBTOTAL_LIST_",k))){
               sub_list <- get(paste0("DESC_",mid,"_SUBTOTAL_LIST_",k), envir = .GlobalEnv)
-              worldmatch = ((word(sub_list,2) == as.character(valuematch)) %in% TRUE) | (is.na(valuematch) & word(sub_list,2) == "NA")
+              worldmatch = (word(sub_list,2) %in% as.character(valuematch)) | (is.na(valuematch) & word(sub_list,2) == "NA")
               if (((str_to_upper(word(sub_list,1)) == "BEFORE") %in% TRUE & worldmatch) %in% TRUE){
                 vorder <- c(vorder,level_count_without_subtotals + k)
                 vlist <- c(vlist, paste0("desc",mid,"_",tempvid,"_st",k))
@@ -143,8 +143,8 @@ make_DESC_0203_output_database <- function(
           for (k in 1:sub_count){
             if (vcqi_object_exists(paste0("DESC_",mid,"_SUBTOTAL_LIST_",k))){
               sub_list <- get(paste0("DESC_",mid,"_SUBTOTAL_LIST_",k), envir = .GlobalEnv)
-              worldmatch = (word(sub_list,2) == as.character(valuematch) %in% TRUE) | (is.na(valuematch) & word(sub_list,2) == "NA")
-              if ((str_to_upper(word(sub_list,1)) == "AFTER" %in% TRUE & worldmatch) %in% TRUE){
+              worldmatch = (word(sub_list,2) %in% as.character(valuematch)) | (is.na(valuematch) & word(sub_list,2) == "NA")
+              if ((str_to_upper(word(sub_list,1)) %in% "AFTER" & worldmatch) %in% TRUE){
                 vorder <- c(vorder,level_count_without_subtotals + k)
                 vlist <- c(vlist, paste0("desc",mid,"_",tempvid,"_st",k))
               }
