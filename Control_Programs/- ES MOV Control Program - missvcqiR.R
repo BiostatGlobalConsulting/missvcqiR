@@ -1,22 +1,19 @@
-# User's Guide RI Control Program R version 1.00 - Biostat Global Consulting - 2023-08-30
+# User's Guide ES Control Program R version 1.00 - Biostat Global Consulting - 2023-10-02
 #
-# Vaccination Coverage Quality Indicators (VCQI) control program to analyze data
-# from a routine immunization survey
+# Missed Opportunities Vaccination Coverage Quality Indicators (MISS-VCQI)
+# control program to analyze data from an MOV exit survey
 #
 # Change log
 #
 # Date          Version Number    Name          What Changed
-# 2022-12-01    1.00              BGC           Original R Version
+# 2023-10-02    1.00              BGC           Original R Version
 #
 # This program is configured to analyze the VCQI demonstration datasets from a
-# fictional coverage survey in the fictional country of Harmonia.  It serves as
-# a template that users may copy to use with new datasets from real surveys.
+# fictional exit survey.  It serves as a template that users may copy to use
+# with new datasets from real surveys.
 #
-# After copying the program, make a set of edits in Blocks RI-B and RI-D and
-# RI-F below in accordance with guidance in the VCQI User's Guide.
-#
-# This program example is described in detail in Chapter 7 of the VCQI User's
-# Guide.
+# After copying the program, make a set of edits in Blocks ES-B and ES-D and
+# ES-F below in accordance with guidance in the MISS-VCQI User's Guide.
 #
 # You will find the latest versions of VCQI documentation and information about
 # VCQI programs at the VCQI Resources Website:
@@ -50,7 +47,7 @@ VCQI_ANALYSIS_NAME <- "ES_Test"
 # Set VCQI_CHECK_INSTEAD_OF_RUN value to 1 to test all metadata and code that
 # makes datasets and calculates derived variables, without running the
 # indicators or generating output
-# Note: checks are not fully implemented and tested in the R version of VCQI
+# Note: checks are not fully implemented and tested in the R version of MISS-VCQI
 VCQI_CHECK_INSTEAD_OF_RUN <- 0
 
 # *************************************************
@@ -507,7 +504,7 @@ vcqi_global(DESC_02_N_RELABEL_LEVELS, 1)
 vcqi_global(DESC_02_RELABEL_LEVEL_1, NA)
 vcqi_global(DESC_02_RELABEL_LABEL_1, language_string(language_use = language_use, str = "OS_91")) # Missing
 
-vcqi_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str = "OS_86")) #Caregiver's Sex
+vcqi_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str = "OS_86")) # Caregiver's Sex
 # No subtitle or additional footnotes
 vcqi_global(DESC_02_TO_SUBTITLE, NA)
 vcqi_global(DESC_02_TO_FOOTNOTE_4, NA)
@@ -549,9 +546,9 @@ vcqi_global(DESC_02_LIST_N_BEFORE_PCT, "Yes")
 
 vcqi_global(DESC_02_N_RELABEL_LEVELS, 1)
 vcqi_global(DESC_02_RELABEL_LEVEL_1, NA)
-vcqi_global(DESC_02_RELABEL_LABEL_1, language_string(language_use = language_use, str = "OS_91")) #Missing
+vcqi_global(DESC_02_RELABEL_LABEL_1, language_string(language_use = language_use, str = "OS_91")) # Missing
 
-vcqi_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str = "OS_94")) #Caregiver's Occupation
+vcqi_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str = "OS_94")) # Caregiver's Occupation
 # No subtitle or additional footnotes
 vcqi_global(DESC_02_TO_SUBTITLE, NA)
 vcqi_global(DESC_02_TO_FOOTNOTE_4, NA)
@@ -588,9 +585,9 @@ vcqi_global(DESC_02_LIST_N_BEFORE_PCT, "Yes")
 
 vcqi_global(DESC_02_N_RELABEL_LEVELS, 1)
 vcqi_global(DESC_02_RELABEL_LEVEL_1, NA)
-vcqi_global(DESC_02_RELABEL_LABEL_1, language_string(language_use = language_use, str = "OS_91")) #Missing
+vcqi_global(DESC_02_RELABEL_LABEL_1, language_string(language_use = language_use, str = "OS_91")) # Missing
 
-vcqi_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str = "OS_97")) #Child's Sex
+vcqi_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str = "OS_97")) # Child's Sex
 # No subtitle or additional footnotes
 vcqi_global(DESC_02_TO_SUBTITLE, NA)
 vcqi_global(DESC_02_TO_FOOTNOTE_4, NA)
@@ -607,9 +604,9 @@ vcqi_global(DESC_02_LIST_N_BEFORE_PCT, "Yes")
 
 vcqi_global(DESC_02_N_RELABEL_LEVELS, 1)
 vcqi_global(DESC_02_RELABEL_LEVEL_1, NA)
-vcqi_global(DESC_02_RELABEL_LABEL_1, language_string(language_use = language_use, str = "OS_91")) #No Vx Data
+vcqi_global(DESC_02_RELABEL_LABEL_1, language_string(language_use = language_use, str = "OS_91")) # No Vx Data
 
-vcqi_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str = "OS_98")) #Children with Vaccination Data
+vcqi_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str = "OS_98")) # Children with Vaccination Data
 # No subtitle or additional footnotes
 vcqi_global(DESC_02_TO_SUBTITLE, NA)
 vcqi_global(DESC_02_TO_FOOTNOTE_4, NA)
@@ -659,22 +656,22 @@ vcqi_global(DESC_02_LIST_N_BEFORE_PCT, "Yes")
 
 vcqi_global(DESC_02_N_RELABEL_LEVELS, 1)
 vcqi_global(DESC_02_RELABEL_LEVEL_1, NA)
-vcqi_global(DESC_02_RELABEL_LABEL_1, language_string(language_use = language_use, str = "OS_91")) #Missing
+vcqi_global(DESC_02_RELABEL_LABEL_1, language_string(language_use = language_use, str = "OS_91")) # Missing
 
 #Proportion of Vaccinated, Unvaccinated and Undervaccinated
 vcqi_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str = "OS_105"))
 # No subtitle or additional footnotes
 vcqi_global(DESC_02_TO_SUBTITLE, NA)
 
-if(stringr::str_to_upper(DESC_02_COVG_CRUDE_OR_VALID) == "VALID"){
-  #Note: Early doses are ignored in this analysis;
-  #the respondent is considered to have not received them.
+if (stringr::str_to_upper(DESC_02_COVG_CRUDE_OR_VALID) == "VALID"){
+  # Note: Early doses are ignored in this analysis; the respondent is considered
+  # to have not received them.
   vcqi_global(DESC_02_TO_FOOTNOTE_4, language_string(language_use = language_use, str = "OS_90"))
 }
 
-if(stringr::str_to_upper(DESC_02_COVG_CRUDE_OR_VALID) == "CRUDE"){
-  # Note: Early doses are accepted in this analysis;
-  #       all doses are considered valid doses.
+if (stringr::str_to_upper(DESC_02_COVG_CRUDE_OR_VALID) == "CRUDE"){
+  # Note: Early doses are accepted in this analysis; all doses are considered
+  # valid doses.
   vcqi_global(DESC_02_TO_FOOTNOTE_4, language_string(language_use = language_use, str = "OS_106"))
 }
 
@@ -726,18 +723,19 @@ vcqi_global(DESC_02_N_LABEL,
                    language_string(language_use = language_use, str = "OS_2")))
 
 if (stringr::str_to_upper(DESC_02_COVG_CRUDE_OR_VALID) == "VALID"){
-  # Note: Early doses are ignored in this analysis;
-  #       the respondent is considered to have not received them.
+  # Note: Early doses are ignored in this analysis; the respondent is considered
+  # to have not received them.
   vcqi_global(DESC_02_TO_FOOTNOTE_5, language_string(language_use = language_use, str = "OS_90"))
 }
 
 if (stringr::str_to_upper(DESC_02_COVG_CRUDE_OR_VALID) == "CRUDE"){
-  # Note: Early doses are accepted in this analysis;
-  #       all doses are considered valid doses.
+  # Note: Early doses are accepted in this analysis; all doses are considered
+  # valid doses.
   vcqi_global(DESC_02_TO_FOOTNOTE_5, language_string(language_use = language_use, str = "OS_106"))
 }
 
-# Note: Number of children who had cards means they had card with valid dob and at least one dose date
+# Note: Number of children who had cards means they had card with valid dob and
+# at least one dose date
 vcqi_global(DESC_02_TO_FOOTNOTE_6, language_string(language_use = language_use, str = "OS_89"))
 
 DESC_02_MV(cleanup = TRUE)
@@ -773,51 +771,53 @@ vcqi_global(DESC_02_SUBTOTAL_LABEL_3, language_string(language_use = language_us
 vcqi_global(DESC_02_N_LABEL, language_string(language_use = language_use, str = "OS_121"))
 
 if (stringr::str_to_upper(DESC_02_COVG_CRUDE_OR_VALID) == "VALID"){
-  # Note: Early doses are ignored in this analysis;
-  # the respondent is considered to have not received them.
+  # Note: Early doses are ignored in this analysis; the respondent is considered
+  # to have not received them.
   vcqi_global(DESC_02_TO_FOOTNOTE_4, language_string(language_use = language_use, str = "OS_90"))
 }
 
 if (stringr::str_to_upper(DESC_02_COVG_CRUDE_OR_VALID) == "CRUDE"){
-  # Note: Early doses are accepted in this analysis;
-  #       all doses are considered valid doses.
+  # Note: Early doses are accepted in this analysis; all doses are considered
+  # valid doses.
   vcqi_global(DESC_02_TO_FOOTNOTE_4, language_string(language_use = language_use, str = "OS_106"))
 }
 
-# Note: Number of children who had cards means they had a card with valid dob and at least one dose date
+# Note: Number of children who had cards means they had a card with valid dob
+# and at least one dose date
 vcqi_global(DESC_02_TO_FOOTNOTE_5, language_string(language_use = language_use, str = "OS_89"))
 # Note: The sum of percentages may not add to 100% because a single visit may
 # result in any combination of invalid and valid doses and MOVs
 vcqi_global(DESC_02_TO_FOOTNOTE_6, language_string(language_use = language_use, str = "OS_122"))
-#[1]No errors (perfect performance)
+#[1] No errors (perfect performance)
 vcqi_global(DESC_02_TO_FOOTNOTE_7, language_string(language_use = language_use, str = "OS_123"))
-#[2]Rec'd valid dose(s)
+#[2] Rec'd valid dose(s)
 vcqi_global(DESC_02_TO_FOOTNOTE_8, language_string(language_use = language_use, str = "OS_124"))
-#[3]Rec'd invalid dose(s)
+#[3] Rec'd invalid dose(s)
 vcqi_global(DESC_02_TO_FOOTNOTE_9,language_string(language_use = language_use, str = "OS_125"))
-#[4]Experienced MOV(s)
+#[4] Experienced MOV(s)
 vcqi_global(DESC_02_TO_FOOTNOTE_10, language_string(language_use = language_use, str = "OS_126"))
-#[5]Asked reason why not vaccinated
+#[5] Asked reason why not vaccinated
 vcqi_global(DESC_02_TO_FOOTNOTE_11, language_string(language_use = language_use, str = "OS_127"))
-#[6]Experienced MOV but were not asked why not vaccinated
+#[6] Experienced MOV but were not asked why not vaccinated
 vcqi_global(DESC_02_TO_FOOTNOTE_12, language_string(language_use = language_use, str = "OS_128"))
 
 DESC_02_MV(cleanup = TRUE)
 
 # ..............................................................................
-# Now demonstrate using DESC_03 on a multiple-choice question
-# where the respondent can select all answers that apply
+# Now demonstrate using DESC_03 on a multiple-choice question where the
+# respondent can select all answers that apply
 # ..............................................................................
 
 # Study day table 3
 vcqi_global(STUDY_DAY_VALID_OR_CRUDE, "crude")
 vcqi_global(DESC_03_DATASET, "MOV_dvs.rds")
 vcqi_global(DESC_03_SHORT_TITLE, "Study Day - Table 3")
-vcqi_global(DESC_03_VARIABLES,
-            c(paste0("table3_dv_no_errors_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("table3_dv_recd_invalid_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("table3_dv_recd_valid_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("table3_dv_mov_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE))))
+vcqi_global(
+  DESC_03_VARIABLES,
+  c(paste0("table3_dv_no_errors_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("table3_dv_recd_invalid_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("table3_dv_recd_valid_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("table3_dv_mov_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE))))
 vcqi_global(DESC_03_WEIGHTED, "NO")
 vcqi_global(DESC_03_DENOMINATOR, "RESPONDED")
 vcqi_global(DESC_03_SELECTED_VALUE, 1)
@@ -835,19 +835,20 @@ vcqi_global(DESC_03_TO_FOOTNOTE_4, language_string(language_use = language_use, 
 # Note: A child could be in more than one column so percentages may sum to more than 100%
 
 if (stringr::str_to_upper(STUDY_DAY_VALID_OR_CRUDE) == "VALID"){
-  # Note: Early doses are ignored in this analysis;
-  # the respondent is considered to have not received them.
+  # Note: Early doses are ignored in this analysis; the respondent is considered
+  # to have not received them.
   vcqi_global(DESC_03_TO_FOOTNOTE_5, language_string(language_use = language_use, str = "OS_90"))
 }
 
 if (stringr::str_to_upper(STUDY_DAY_VALID_OR_CRUDE) == "CRUDE"){
-  # Note: Early doses are accepted in this analysis;
-  #       all doses are considered valid doses.
+  # Note: Early doses are accepted in this analysis; all doses are considered
+  # valid doses.
   vcqi_global(DESC_03_TO_FOOTNOTE_5, language_string(language_use = language_use, str = "OS_106"))
 }
 
 vcqi_global(DESC_03_TO_FOOTNOTE_6, language_string(language_use = language_use, str = "OS_89"))
-# Note: Number of children who had cards means they had card with valid dob and at least one dose date
+# Note: Number of children who had cards means they had card with valid dob and
+# at least one dose date
 
 DESC_03_MV(cleanup = TRUE)
 
@@ -866,15 +867,15 @@ vcqi_global(ES_STUD_01_TO_FOOTNOTE_1, language_string(language_use = language_us
 # at least one dose date
 vcqi_global(ES_STUD_01_TO_FOOTNOTE_2, language_string(language_use = language_use, str = "OS_89"))
 
-if(stringr::str_to_upper(ES_STUD_01_VALID_OR_CRUDE) == "VALID"){
-  # Note: Early doses are ignored in this analysis;
-  #       the respondent is considered to have not received them.
+if (stringr::str_to_upper(ES_STUD_01_VALID_OR_CRUDE) == "VALID"){
+  # Note: Early doses are ignored in this analysis; the respondent is considered
+  # to have not received them.
   vcqi_global(ES_STUD_01_TO_FOOTNOTE_3, language_string(language_use = language_use, str = "OS_90"))
 }
 
-if(stringr::str_to_upper(ES_STUD_01_VALID_OR_CRUDE) == "CRUDE"){
-  # Note: Early doses are accepted in this analysis;
-  #       all doses are considered valid doses.
+if (stringr::str_to_upper(ES_STUD_01_VALID_OR_CRUDE) == "CRUDE"){
+  # Note: Early doses are accepted in this analysis; all doses are considered
+  # valid doses.
   vcqi_global(ES_STUD_01_TO_FOOTNOTE_3, language_string(language_use = language_use, str = "OS_106"))
 }
 
@@ -894,14 +895,14 @@ vcqi_global(ES_STUD_02_TO_SUBTITLE, NA)
 vcqi_global(ES_STUD_02_TO_FOOTNOTE_1, language_string(language_use = language_use, str = "OS_133"))
 
 if (stringr::str_to_upper(ES_STUD_02_VALID_OR_CRUDE) == "VALID"){
-  # Note: Early doses are ignored in this analysis;
-  #       the respondent is considered to have not received them.
+  # Note: Early doses are ignored in this analysis; the respondent is considered
+  # to have not received them.
   vcqi_global(ES_STUD_02_TO_FOOTNOTE_2, language_string(language_use = language_use, str = "OS_90"))
 }
 
 if (stringr::str_to_upper(ES_STUD_02_VALID_OR_CRUDE) == "CRUDE"){
-  # Note: Early doses are accepted in this analysis;
-  #       all doses are considered valid doses.
+  # Note: Early doses are accepted in this analysis; all doses are considered
+  # valid doses.
   vcqi_global(ES_STUD_02_TO_FOOTNOTE_2, language_string(language_use = language_use, str = "OS_106"))
 }
 
@@ -919,29 +920,32 @@ vcqi_global(ES_STUD_03_TO_SUBTITLE_FOR_ALL, language_string(language_use = langu
 # Broken down by Antigen
 vcqi_global(ES_STUD_03_TO_SUBTITLE_ANTIGEN, language_string(language_use = language_use, str = "OS_136"))
 
-# Note: Only children who had a vaccination card with a valid dob, at least one dose date,
-#       and were eligible to receive at least one dose on the study day are summarized in the table
+# Note: Only children who had a vaccination card with a valid dob, at least one
+# dose date, and were eligible to receive at least one dose on the study day are
+# summarized in the table
 vcqi_global(ES_STUD_03_TO_FOOTNOTE_1, language_string(language_use = language_use, str = "OS_133"))
 
-if(stringr::str_to_upper(ES_STUD_03_VALID_OR_CRUDE) == "VALID"){
-  # Note: Early doses are ignored in this analysis;
-  #       the respondent is considered to have not received them.
+if (stringr::str_to_upper(ES_STUD_03_VALID_OR_CRUDE) == "VALID"){
+  # Note: Early doses are ignored in this analysis; the respondent is considered
+  # to have not received them.
   vcqi_global(ES_STUD_03_TO_FOOTNOTE_2, language_string(language_use = language_use, str = "OS_90"))
 }
 
-if(stringr::str_to_upper(ES_STUD_03_VALID_OR_CRUDE) == "CRUDE"){
-  # Note: Early doses are accepted in this analysis;
-  #       all doses are considered valid doses.
+if (stringr::str_to_upper(ES_STUD_03_VALID_OR_CRUDE) == "CRUDE"){
+  # Note: Early doses are accepted in this analysis; all doses are considered
+  # valid doses.
   vcqi_global(ES_STUD_03_TO_FOOTNOTE_2, language_string(language_use = language_use, str = "OS_106"))
 }
 
-# Note: Dose is included in the INVALID TOTAL category if child was not eligible for that dose.
+# Note: Dose is included in the INVALID TOTAL category if child was not eligible
+# for that dose.
 vcqi_global(ES_STUD_03_TO_FOOTNOTE_3, language_string(language_use = language_use, str = "OS_137"))
-# Note: RECEIVED INVALID DOSE means the child was not eligible and received the dose.
+# Note: RECEIVED INVALID DOSE means the child was not eligible and received the
+# dose.
 vcqi_global(ES_STUD_03_TO_FOOTNOTE_4, language_string(language_use = language_use, str = "OS_138"))
 # Note: RECEIVED VALID DOSE means the child was eligible and received the dose.
 vcqi_global(ES_STUD_03_TO_FOOTNOTE_5, language_string(language_use = language_use, str = "OS_139"))
-# Note: EXPERIENCED MOV means the child was eligible and did not received the dose.
+# Note: EXPERIENCED MOV means the child was eligible and did not receive the dose.
 vcqi_global(ES_STUD_03_TO_FOOTNOTE_6, language_string(language_use = language_use, str = "OS_140"))
 # Note: Dose is included in the ELIGIBLE TOTAL category if child was eligible for that dose.
 vcqi_global(ES_STUD_03_TO_FOOTNOTE_7, language_string(language_use = language_use, str = "OS_141"))
@@ -953,11 +957,12 @@ ES_STUD_03()
 vcqi_global(STUDY_DAY_VALID_OR_CRUDE, "crude")
 vcqi_global(DESC_03_DATASET, "MOV_dvs.rds")
 vcqi_global(DESC_03_SHORT_TITLE, "mov_rsns_all_1")
-vcqi_global(DESC_03_VARIABLES,
-            c(paste0("reasons_overview1_A_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("reasons_overview1_B_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("reasons_overview1_C_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("reasons_overview1_D_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE))))
+vcqi_global(
+  DESC_03_VARIABLES,
+  c(paste0("reasons_overview1_A_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("reasons_overview1_B_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("reasons_overview1_C_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("reasons_overview1_D_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE))))
 vcqi_global(DESC_03_WEIGHTED, "NO")
 vcqi_global(DESC_03_DENOMINATOR, "RESPONDED")
 vcqi_global(DESC_03_SELECTED_VALUE, 1)
@@ -969,16 +974,17 @@ vcqi_global(DESC_03_TO_SUBTITLE,NA)
 vcqi_global(DESC_03_LIST_N_BEFORE_PCT, "Yes")
 
 vcqi_global(DESC_03_N_LABEL, language_string(language_use = language_use, str = "OS_143"))
-# Total number of children who were not eligible for any doses and were asked this question (N)
+# Total number of children who were not eligible for any doses and were asked
+# this question (N)
 
 vcqi_global(DESC_03_TO_FOOTNOTE_4, paste0(language_string(language_use = language_use, str = "OS_144"), " 1A"))
-# [1]Details in Table MOV reasons 1A
+# [1] Details in Table MOV reasons 1A
 
 vcqi_global(DESC_03_TO_FOOTNOTE_5, paste0(language_string(language_use = language_use, str = "OS_145"), " 1B"))
-# [2]Details in Table MOV reasons 1B
+# [2] Details in Table MOV reasons 1B
 
 vcqi_global(DESC_03_TO_FOOTNOTE_6, paste0(language_string(language_use = language_use, str = "OS_146"), " 1C"))
-# [3]Details in Table MOV reasons 1C
+# [3] Details in Table MOV reasons 1C
 
 DESC_03_MV(cleanup = TRUE)
 
@@ -987,26 +993,28 @@ DESC_03_MV(cleanup = TRUE)
 vcqi_global(STUDY_DAY_VALID_OR_CRUDE, "crude")
 vcqi_global(DESC_03_DATASET, "MOV_dvs.rds")
 vcqi_global(DESC_03_SHORT_TITLE, "MOV_rsns_1A")
-vcqi_global(DESC_03_VARIABLES,
-            c(paste0("ES08AA_1A_01_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("ES08AA_1A_02_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("ES08AA_1A_03_01_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("ES08AA_1A_03_02_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("ES08AA_1A_03_03_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("ES08AA_1A_03_04_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("ES08AA_1A_03_05_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("ES08AA_1A_03_06_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("ES08AA_1A_03_07_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("ES08AA_1A_03_08_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("ES08AA_1A_03_09_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("ES08AA_1A_03_10_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("ES08AA_1A_03_11_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("ES08AA_1A_03_12_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE))))
+vcqi_global(
+  DESC_03_VARIABLES,
+  c(paste0("ES08AA_1A_01_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1A_02_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1A_03_01_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1A_03_02_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1A_03_03_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1A_03_04_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1A_03_05_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1A_03_06_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1A_03_07_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1A_03_08_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1A_03_09_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1A_03_10_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1A_03_11_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1A_03_12_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE))))
 vcqi_global(DESC_03_WEIGHTED, "NO")
 vcqi_global(DESC_03_DENOMINATOR, "RESPONDED")
 vcqi_global(DESC_03_SELECTED_VALUE, 1)
 
-# Related to Health Workers: Reasons for MOV from respondents who were not eligible for any doses
+# Related to Health Workers: Reasons for MOV from respondents who were not
+# eligible for any doses
 vcqi_global(DESC_03_TO_TITLE, language_string(language_use = language_use, str = "OS_148"))
 # MOV reasons 1A
 vcqi_global(DESC_03_TO_SUBTITLE,paste0(language_string(language_use = language_use, str = "OS_149"), " 1A"))
@@ -1017,19 +1025,22 @@ vcqi_global(DESC_03_N_LABEL, language_string(language_use = language_use, str = 
 # Total number of respondents who gave a reason related to health workers (N)
 
 vcqi_global(DESC_03_TO_FOOTNOTE_4, language_string(language_use = language_use, str = "OS_150"))
-# Note: These are not the respondents of primary interest since they were not eligible for any doses
+# Note: These are not the respondents of primary interest since they were not
+# eligible for any doses
 
 vcqi_global(DESC_03_TO_FOOTNOTE_5, language_string(language_use = language_use, str = "OS_151"))
 # Note: Denominators for b-c is column p
 
 vcqi_global(DESC_03_TO_FOOTNOTE_6, language_string(language_use = language_use, str = "OS_152"))
-# For questions 3.#, the doctor or nurse said that it could not be done because the child is sick
+# For questions 3.#, the doctor or nurse said that it could not be done because
+# the child is sick
 
 vcqi_global(DESC_03_TO_FOOTNOTE_7, language_string(language_use = language_use, str = "OS_153"))
 # More than one item from the list in 3.# may have been checked for an individual
 
 vcqi_global(DESC_03_TO_FOOTNOTE_8, language_string(language_use = language_use, str = "OS_154"))
-# May not equal the row total because individuals were allowed to check more than one from 3.#
+# May not equal the row total because individuals were allowed to check more
+# than one from 3.#
 
 DESC_03_MV(cleanup = TRUE)
 
@@ -1038,19 +1049,20 @@ DESC_03_MV(cleanup = TRUE)
 vcqi_global(STUDY_DAY_VALID_OR_CRUDE, "crude")
 vcqi_global(DESC_03_DATASET, "MOV_dvs.rds")
 vcqi_global(DESC_03_SHORT_TITLE, "MOV_rsns_1B")
-vcqi_global(DESC_03_VARIABLES,
-            c(paste0("ES08AA_1B_01_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("ES08AA_1B_02_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("ES08AA_1B_03_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("ES08AA_1B_04_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("ES08AA_1B_05_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("ES08AA_1B_06_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("ES08AA_1B_07_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("ES08AA_1B_08_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("ES08AA_1B_09_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("ES08AA_1B_10_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("ES08AA_1B_11_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("ES08AA_1B_12_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE))))
+vcqi_global(
+  DESC_03_VARIABLES,
+  c(paste0("ES08AA_1B_01_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1B_02_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1B_03_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1B_04_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1B_05_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1B_06_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1B_07_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1B_08_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1B_09_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1B_10_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1B_11_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1B_12_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE))))
 vcqi_global(DESC_03_WEIGHTED, "NO")
 vcqi_global(DESC_03_DENOMINATOR, "RESPONDED")
 vcqi_global(DESC_03_SELECTED_VALUE, 1)
@@ -1075,16 +1087,17 @@ DESC_03_MV(cleanup = TRUE)
 vcqi_global(STUDY_DAY_VALID_OR_CRUDE,"crude")
 vcqi_global(DESC_03_DATASET, "MOV_dvs.rds")
 vcqi_global(DESC_03_SHORT_TITLE, "MOV_rsns_1C")
-vcqi_global(DESC_03_VARIABLES,
-            c(paste0("ES08AA_1C_01_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("ES08AA_1C_02_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("ES08AA_1C_03_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("ES08AA_1C_04_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("ES08AA_1C_05_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("ES08AA_1C_06_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("ES08AA_1C_07_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("ES08AA_1C_08_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("ES08AA_1C_09_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE))))
+vcqi_global(
+  DESC_03_VARIABLES,
+  c(paste0("ES08AA_1C_01_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1C_02_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1C_03_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1C_04_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1C_05_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1C_06_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1C_07_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1C_08_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1C_09_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE))))
 vcqi_global(DESC_03_WEIGHTED, "NO")
 vcqi_global(DESC_03_DENOMINATOR, "RESPONDED")
 vcqi_global(DESC_03_SELECTED_VALUE, 1)
@@ -1097,10 +1110,11 @@ vcqi_global(DESC_03_TO_SUBTITLE, paste0(language_string(language_use = language_
 vcqi_global(DESC_03_LIST_N_BEFORE_PCT, "Yes")
 
 vcqi_global(DESC_03_N_LABEL, language_string(language_use = language_use, str = "OS_158"))
-# Total number of respondents who gave a reason related to health service’s logistics and organization (N)
+# Total number of respondents who gave a reason related to health service’s
+# logistics and organization (N)
 
 vcqi_global(DESC_03_TO_FOOTNOTE_4, language_string(language_use = language_use, str = "OS_159"))
-#Note: Denominators for b-j is column k
+# Note: Denominators for b-j is column k
 
 DESC_03_MV(cleanup = TRUE)
 
@@ -1109,11 +1123,12 @@ DESC_03_MV(cleanup = TRUE)
 vcqi_global(STUDY_DAY_VALID_OR_CRUDE, "crude")
 vcqi_global(DESC_03_DATASET, "MOV_dvs.rds")
 vcqi_global(DESC_03_SHORT_TITLE, "mov_rsns_all_2")
-vcqi_global(DESC_03_VARIABLES,
-            c(paste0("reasons_overview2_A_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("reasons_overview2_B_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("reasons_overview2_C_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("reasons_overview2_D_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE))))
+vcqi_global(
+  DESC_03_VARIABLES,
+  c(paste0("reasons_overview2_A_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("reasons_overview2_B_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("reasons_overview2_C_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("reasons_overview2_D_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE))))
 vcqi_global(DESC_03_WEIGHTED, "NO")
 vcqi_global(DESC_03_DENOMINATOR, "RESPONDED")
 vcqi_global(DESC_03_SELECTED_VALUE, 1)
@@ -1128,13 +1143,13 @@ vcqi_global(DESC_03_N_LABEL, language_string(language_use = language_use, str = 
 # Total number of children eligible for 1+ doses and were asked this question (N)
 
 vcqi_global(DESC_03_TO_FOOTNOTE_4, paste0(language_string(language_use = language_use, str = "OS_144"), " 2A"))
-# [1]Details in Table MOV reasons 2A
+# [1] Details in Table MOV reasons 2A
 
 vcqi_global(DESC_03_TO_FOOTNOTE_5, paste0(language_string(language_use = language_use, str = "OS_145"), " 2B"))
-# [2]Details in Table MOV reasons 2B
+# [2] Details in Table MOV reasons 2B
 
 vcqi_global(DESC_03_TO_FOOTNOTE_6, paste0(language_string(language_use = language_use, str = "OS_146"), " 2C"))
-# [3]Details in Table MOV reasons 2C
+# [3] Details in Table MOV reasons 2C
 
 DESC_03_MV(cleanup = TRUE)
 
@@ -1143,21 +1158,22 @@ DESC_03_MV(cleanup = TRUE)
 vcqi_global(STUDY_DAY_VALID_OR_CRUDE, "crude")
 vcqi_global(DESC_03_DATASET, "MOV_dvs.rds")
 vcqi_global(DESC_03_SHORT_TITLE, "MOV_rsns_2A")
-vcqi_global(DESC_03_VARIABLES,
-            c(paste0("ES08AA_1A_01_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("ES08AA_1A_02_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("ES08AA_1A_03_01_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("ES08AA_1A_03_02_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("ES08AA_1A_03_03_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("ES08AA_1A_03_04_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("ES08AA_1A_03_05_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("ES08AA_1A_03_06_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("ES08AA_1A_03_07_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("ES08AA_1A_03_08_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("ES08AA_1A_03_09_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("ES08AA_1A_03_10_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("ES08AA_1A_03_11_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("ES08AA_1A_03_12_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE))))
+vcqi_global(
+  DESC_03_VARIABLES,
+  c(paste0("ES08AA_1A_01_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1A_02_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1A_03_01_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1A_03_02_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1A_03_03_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1A_03_04_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1A_03_05_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1A_03_06_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1A_03_07_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1A_03_08_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1A_03_09_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1A_03_10_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1A_03_11_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1A_03_12_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE))))
 vcqi_global(DESC_03_WEIGHTED, "NO")
 vcqi_global(DESC_03_DENOMINATOR, "RESPONDED")
 vcqi_global(DESC_03_SELECTED_VALUE, 1)
@@ -1173,20 +1189,23 @@ vcqi_global(DESC_03_N_LABEL, language_string(language_use = language_use, str = 
 # Total number of respondents who gave a reason related to health workers (N)
 
 vcqi_global(DESC_03_TO_FOOTNOTE_4, language_string(language_use = language_use, str = "OS_162"))
-# Note: The study protocol only administers this question if the child received 0 doses on the study day.
-#      Some respondents may receive some doses AND experience 1+ MOVs.
+# Note: The study protocol only administers this question if the child received
+# 0 doses on the study day. Some respondents may receive some doses AND
+# experience 1+ MOVs.
 
 vcqi_global(DESC_03_TO_FOOTNOTE_5, language_string(language_use = language_use, str = "OS_151"))
 # Note: Denominators for b-c is column p
 
 vcqi_global(DESC_03_TO_FOOTNOTE_6, language_string(language_use = language_use, str = "OS_152"))
-# For questions 3.#, the doctor or nurse said that it could not be done because the child is sick
+# For questions 3.#, the doctor or nurse said that it could not be done because
+# the child is sick
 
 vcqi_global(DESC_03_TO_FOOTNOTE_7, language_string(language_use = language_use, str = "OS_153"))
 # More than one item from the list in 3.# may have been checked for an individual
 
 vcqi_global(DESC_03_TO_FOOTNOTE_8, language_string(language_use = language_use, str = "OS_154"))
-# May not equal the row total because individuals were allowed to check more than one from 3.#
+# May not equal the row total because individuals were allowed to check more
+# than one from 3.#
 
 DESC_03_MV(cleanup = TRUE)
 
@@ -1195,19 +1214,20 @@ DESC_03_MV(cleanup = TRUE)
 vcqi_global(STUDY_DAY_VALID_OR_CRUDE, "crude")
 vcqi_global(DESC_03_DATASET, "MOV_dvs.rds")
 vcqi_global(DESC_03_SHORT_TITLE, "MOV_rsns_2B")
-vcqi_global(DESC_03_VARIABLES,
-            c(paste0("ES08AA_1B_01_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("ES08AA_1B_02_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("ES08AA_1B_03_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("ES08AA_1B_04_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("ES08AA_1B_05_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("ES08AA_1B_06_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("ES08AA_1B_07_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("ES08AA_1B_08_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("ES08AA_1B_09_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("ES08AA_1B_10_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("ES08AA_1B_11_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("ES08AA_1B_12_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE))))
+vcqi_global(
+  DESC_03_VARIABLES,
+  c(paste0("ES08AA_1B_01_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1B_02_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1B_03_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1B_04_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1B_05_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1B_06_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1B_07_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1B_08_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1B_09_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1B_10_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1B_11_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1B_12_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE))))
 vcqi_global(DESC_03_WEIGHTED, "NO")
 vcqi_global(DESC_03_DENOMINATOR, "RESPONDED")
 vcqi_global(DESC_03_SELECTED_VALUE, 1)
@@ -1223,8 +1243,9 @@ vcqi_global(DESC_03_N_LABEL, language_string(language_use = language_use, str = 
 # Total number of respondents who gave a reason related to the caregiver (N)
 
 vcqi_global(DESC_03_TO_FOOTNOTE_4, language_string(language_use = language_use, str = "OS_162"))
-# Note: The study protocol only administers this question if the child received 0 doses on the study day.
-#      Some respondents may receive some doses AND experience 1+ MOVs.
+# Note: The study protocol only administers this question if the child received
+# 0 doses on the study day. Some respondents may receive some doses AND
+# experience 1+ MOVs.
 vcqi_global(DESC_03_TO_FOOTNOTE_5, language_string(language_use = language_use, str = "OS_157"))
 # Note: Denominators for b-m is column n
 
@@ -1235,16 +1256,17 @@ DESC_03_MV(cleanup = TRUE)
 vcqi_global(STUDY_DAY_VALID_OR_CRUDE, "crude")
 vcqi_global(DESC_03_DATASET, "MOV_dvs.rds")
 vcqi_global(DESC_03_SHORT_TITLE, "MOV_rsns_2C")
-vcqi_global(DESC_03_VARIABLES,
-            c(paste0("ES08AA_1C_01_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("ES08AA_1C_02_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("ES08AA_1C_03_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("ES08AA_1C_04_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("ES08AA_1C_05_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("ES08AA_1C_06_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("ES08AA_1C_07_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("ES08AA_1C_08_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-              paste0("ES08AA_1C_09_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE))))
+vcqi_global(
+  DESC_03_VARIABLES,
+  c(paste0("ES08AA_1C_01_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1C_02_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1C_03_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1C_04_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1C_05_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1C_06_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1C_07_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1C_08_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1C_09_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE))))
 vcqi_global(DESC_03_WEIGHTED, "NO")
 vcqi_global(DESC_03_DENOMINATOR, "RESPONDED")
 vcqi_global(DESC_03_SELECTED_VALUE, 1)
@@ -1257,11 +1279,13 @@ vcqi_global(DESC_03_TO_SUBTITLE,paste0(language_string(language_use = language_u
 vcqi_global(DESC_03_LIST_N_BEFORE_PCT, "Yes")
 
 vcqi_global(DESC_03_N_LABEL, language_string(language_use = language_use, str = "OS_158"))
-# Total number of respondents who gave a reason related to health service’s logistics and organization (N)
+# Total number of respondents who gave a reason related to health service’s
+# logistics and organization (N)
 
 vcqi_global(DESC_03_TO_FOOTNOTE_4, language_string(language_use = language_use, str = "OS_162"))
-# Note: The study protocol only administers this question if the child received 0 doses on the study day.
-#      Some respondents may receive some doses AND experience 1+ MOVs.
+# Note: The study protocol only administers this question if the child received
+# 0 doses on the study day. Some respondents may receive some doses AND
+# experience 1+ MOVs.
 
 vcqi_global(DESC_03_TO_FOOTNOTE_5, language_string(language_use = language_use, str = "OS_159"))
 # Note: Denominators for b-j is column k
@@ -1283,18 +1307,19 @@ vcqi_global(RI_QUAL_08_TO_FOOTNOTE_1, language_string(language_use = language_us
 # Percent of visits where children were eligible for the dose and did not receive it.
 
 if (stringr::str_to_upper(RI_QUAL_08_VALID_OR_CRUDE) == "VALID"){
-  # Note: Early doses are ignored in this analysis;
-  #       the respondent is considered to have not received them.
+  # Note: Early doses are ignored in this analysis; the respondent is considered
+  # to have not received them.
   vcqi_global(RI_QUAL_08_TO_FOOTNOTE_2, language_string(language_use = language_use, str = "OS_90"))
 }
 
 if (stringr::str_to_upper(RI_QUAL_08_VALID_OR_CRUDE) == "CRUDE"){
-  # Note: Early doses are accepted in this analysis;
-  #       all doses are considered valid doses.
+  # Note: Early doses are accepted in this analysis; all doses are considered
+  # valid doses.
   vcqi_global(RI_QUAL_08_TO_FOOTNOTE_2, language_string(language_use = language_use, str = "OS_106"))
 }
 
-# Note: The final measure on this sheet, MOVs per Visit, is not a percent.  It is a ratio.
+# Note: The final measure on this sheet, MOVs per Visit, is not a percent. It
+# is a ratio.
 vcqi_global(RI_QUAL_08_TO_FOOTNOTE_3, language_string(language_use = language_use, str = "OS_166"))
 
 RI_QUAL_08_MV()
@@ -1318,21 +1343,23 @@ vcqi_global(RI_QUAL_09_TO_FOOTNOTE_3, language_string(language_use = language_us
 # A corrected MOV means that the respondent had received a valid dose by the
 # time of the survey.
 vcqi_global(RI_QUAL_09_TO_FOOTNOTE_4, language_string(language_use = language_use, str = "OS_171"))
-# The denominator for Had MOV (%) is the number of respondents who had visits eligible.
+# The denominator for Had MOV (%) is the number of respondents who had visits
+# eligible.
 vcqi_global(RI_QUAL_09_TO_FOOTNOTE_5, language_string(language_use = language_use, str = "OS_172"))
 # The denominator for MOV uncorrected and corrected (%) is the number of MOVs.
 vcqi_global(RI_QUAL_09_TO_FOOTNOTE_6, language_string(language_use = language_use, str = "OS_173"))
-# Note that for individual doses, the % MOV uncorrected + % MOV corrected adds up to 100%.
+# Note that for individual doses, the % MOV uncorrected + % MOV corrected adds
+# up to 100%.
 
-if(stringr::str_to_upper(RI_QUAL_09_VALID_OR_CRUDE) == "VALID"){
-  # Note: Early doses are ignored in this analysis;
-  #       the respondent is considered to have not received them.
+if (stringr::str_to_upper(RI_QUAL_09_VALID_OR_CRUDE) == "VALID"){
+  # Note: Early doses are ignored in this analysis; the respondent is considered
+  # to have not received them.
   vcqi_global(RI_QUAL_09_TO_FOOTNOTE_7, language_string(language_use = language_use, str = "OS_90"))
 }
 
 if (stringr::str_to_upper(RI_QUAL_09_VALID_OR_CRUDE) == "CRUDE"){
-  # Note: Early doses are accepted in this analysis;
-  #       all doses are considered valid doses.
+  # Note: Early doses are accepted in this analysis; all doses are considered
+  # valid doses.
   vcqi_global(RI_QUAL_09_TO_FOOTNOTE_7, language_string(language_use = language_use, str = "OS_106"))
 }
 

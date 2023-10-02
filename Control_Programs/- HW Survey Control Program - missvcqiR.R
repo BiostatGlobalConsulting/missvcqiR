@@ -12,6 +12,13 @@
 # fictional health worker survey.  It serves as a template that users may copy
 # to use with new datasets from real surveys.
 #
+# After copying the program, make a set of edits in Blocks HW-B and HW-D and
+# HW-F below in accordance with guidance in the MISS-VCQI User's Guide.
+#
+# You will find the latest versions of VCQI documentation and information about
+# VCQI programs at the VCQI Resources Website:
+# http://www.biostatglobal.com/VCQI_RESOURCES.html
+#
 # Written by Biostat Global Consulting
 
 # *************************************************
