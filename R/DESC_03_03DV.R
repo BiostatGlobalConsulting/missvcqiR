@@ -34,6 +34,10 @@ DESC_03_03DV <- function(VCP = "DESC_03_03DV"){
     var <- get(DESC_03_VARIABLES[v],dat)
     varlabel <- attr(var,"label")
 
+    if (is.null(varlabel)){
+      varlabel <- ""
+    }
+
     var <- zap_labels(var)
     if (class(var) == "character"){
       dat <- dat %>% mutate(!!va := ifelse(!!va == "", NA_character_, !!va))

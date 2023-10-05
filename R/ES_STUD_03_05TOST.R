@@ -1,4 +1,4 @@
-#' Export datasets to Excel for ES_STUD_03
+#' Export datasets to Excel for ES_STUD_03 with long table
 #'
 #' @param VCP VCQI current program name to be logged, default to be the function name
 #'
@@ -22,6 +22,8 @@ ES_STUD_03_05TOST <- function(VCP = "ES_STUD_03_05TOST"){
   rm(list = c("TO_ES_STUD_03_T", "TO_ES_STUD_03_T_columnlabel", "TO_ES_STUD_03_T_formatnum","TO_ES_STUD_03_T_colformat"),
      envir = .GlobalEnv) %>% suppressWarnings()
   rm(list = c("TO_ES_STUD_03_A", "TO_ES_STUD_03_A_columnlabel", "TO_ES_STUD_03_A_formatnum","TO_ES_STUD_03_A_colformat"),
+     envir = .GlobalEnv) %>% suppressWarnings()
+  rm(list = c("TO_ES_STUD_03_AL", "TO_ES_STUD_03_AL_columnlabel", "TO_ES_STUD_03_AL_formatnum","TO_ES_STUD_03_AL_colformat"),
      envir = .GlobalEnv) %>% suppressWarnings()
 
   vc <- str_to_lower(ES_STUD_03_VALID_OR_CRUDE)
@@ -330,6 +332,43 @@ ES_STUD_03_05TOST <- function(VCP = "ES_STUD_03_05TOST"){
   doselist <- doselist[-1]
   print(doselist)
 
+  # Frist create AL since it does not require changing var names
+  dat_long <- get(paste0("TO_ES_STUD_03_A_",start))
+  dat_long <- dat_long %>% mutate(Dose = start) %>% arrange(level4id)
+  dat_long [nrow(dat_long)+1,] <- NA #Add an empty row for better looking
+
+  label_long <- get(paste0("TO_ES_STUD_03_A_",start,"_columnlabel"), envir = .GlobalEnv)
+  format_long <- get(paste0("TO_ES_STUD_03_A_",start,"_formatnum"), envir = .GlobalEnv)
+  colf_long <- get(paste0("TO_ES_STUD_03_A_",start,"_colformat"), envir = .GlobalEnv)
+
+  for (d in seq_along(doselist)){
+    dat2_long <- get(paste0("TO_ES_STUD_03_A_",doselist[d]))
+    dat2_long <- dat2_long %>% mutate(Dose = doselist[d]) %>% arrange(level4id)
+    dat2_long [nrow(dat2_long)+1,] <- NA #Add an empty row for better looking
+
+    dat_long <- rbind(dat_long,dat2_long)
+
+  } #end of doselist d loop
+
+  dat_long <- dat_long %>% relocate(Dose, .after = name) %>% mutate(level4id = row_number(),
+                                                                    Dose = ifelse(is.na(name),NA,Dose))
+
+  # replace "BCG" with "the dose: for label
+  for (l in seq_along(label_long)){
+    label_long[l] <- gsub("BCG", "the dose", label_long[l], fixed = TRUE)
+  }
+
+  assign("TO_ES_STUD_03_AL",dat_long,envir = .GlobalEnv)
+  assign("TO_ES_STUD_03_AL_columnlabel",label_long,envir = .GlobalEnv)
+  assign("TO_ES_STUD_03_AL_formatnum",format_long,envir = .GlobalEnv)
+  assign("TO_ES_STUD_03_AL_colformat",colf_long,envir = .GlobalEnv)
+
+  # Now export to excel
+  export_ALT_to_excel(indicator = "ES_STUD_03_b_al",
+                        sheet = paste0("ES_STUD_03 ",ANALYSIS_COUNTER," - ",
+                                       language_string(language_use = language_use, str = "OS_70"),"6b long"), #Table6b long
+                        tablename = "TO_ES_STUD_03_AL")
+
   # Open the first dataset
   dat <- get(paste0("TO_ES_STUD_03_A_",start))
 
@@ -377,9 +416,12 @@ ES_STUD_03_05TOST <- function(VCP = "ES_STUD_03_05TOST"){
      envir = .GlobalEnv) %>% suppressWarnings()
   rm(list = c("TO_ES_STUD_03_A", "TO_ES_STUD_03_A_columnlabel", "TO_ES_STUD_03_A_formatnum","TO_ES_STUD_03_A_colformat"),
      envir = .GlobalEnv) %>% suppressWarnings()
+  rm(list = c("TO_ES_STUD_03_AL", "TO_ES_STUD_03_AL_columnlabel", "TO_ES_STUD_03_AL_formatnum","TO_ES_STUD_03_AL_colformat"),
+     envir = .GlobalEnv) %>% suppressWarnings()
 
   rm(TO_ES_STUD_03_T_CN, envir = .GlobalEnv) %>% suppressWarnings()
   rm(TO_ES_STUD_03_A_CN, envir = .GlobalEnv) %>% suppressWarnings()
+  rm(TO_ES_STUD_03_AL_CN, envir = .GlobalEnv) %>% suppressWarnings()
 
   vcqi_log_comment(VCP, 5, "Flow", "Exiting")
 }

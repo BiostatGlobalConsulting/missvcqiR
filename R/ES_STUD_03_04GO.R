@@ -31,55 +31,55 @@ ES_STUD_03_04GO <- function(VCP = "ES_STUD_03_04GO"){
   # bb
   # Make the first part for invalid doses
   print(paste0(str_to_upper(bb),": Invalid..."))
-  make_count_output_database_MV(numerator = paste0("total_invalid_",vc),
+  make_count_output_database(numerator = paste0("total_invalid_",vc),
                                 denominator = paste0("total_non_elig_doses_",vc),
                                 estlabel = paste0(str_to_title(bb)," : ",
                                                   language_string(language_use = language_use, str = "OS_58"),
                                                   " : ",pvc, " (%)"),
                                 vid = paste0("total_invalid_",vcf),
-                                measureid = "ES_STUD_03_b_t")
+                                measureid = "ES_STUD_03_b_t",keepnumerator = TRUE)
   # Valid doses and MOVs
   print(paste0(str_to_upper(bb),": Valid and MOV..."))
-  make_count_output_database_MV(numerator = paste0("total_correct_validdose_",vc),
+  make_count_output_database(numerator = paste0("total_correct_validdose_",vc),
                                 denominator = paste0("total_elig_doses_",vc),
                                 estlabel = paste0(str_to_title(bb)," : ",
                                                   language_string(language_use = language_use, str = "OS_60"),
                                                   " : ",pvc, " (%)"),
                                 vid = paste0("total_valid_",vcf),
-                                measureid = "ES_STUD_03_b_t")
-  make_count_output_database_MV(numerator = paste0("total_mov_",vc),
+                                measureid = "ES_STUD_03_b_t",keepnumerator = TRUE)
+  make_count_output_database(numerator = paste0("total_mov_",vc),
                                 denominator = paste0("total_elig_doses_",vc),
                                 estlabel = paste0(str_to_title(bb)," : ",
                                                   language_string(language_use = language_use, str = "OS_22"),
                                                   " : ",pvc, " (%)"),
                                 vid = paste0("total_mov_",vcf),
-                                measureid = "ES_STUD_03_b_t")
+                                measureid = "ES_STUD_03_b_t",keepnumerator = TRUE)
   # ba
   # Make the first part for invalid doses
   print(paste0(str_to_upper(ba),": Invalid..."))
-  make_count_output_database_MV(numerator = paste0("total_invalid_",vc),
+  make_count_output_database(numerator = paste0("total_invalid_",vc),
                                 denominator = paste0("total_non_elig_doses_",vc),
                                 estlabel = paste0(str_to_title(ba)," : ",
                                                   language_string(language_use = language_use, str = "OS_58"),
                                                   " : ",pvc, " (%)"),
                                 vid = paste0("total_invalid_",vcf),
-                                measureid = "ES_STUD_03_a_t")
+                                measureid = "ES_STUD_03_a_t",keepnumerator = TRUE)
   # Valid doses and MOVs
   print(paste0(str_to_upper(ba),": Valid and MOV..."))
-  make_count_output_database_MV(numerator = paste0("total_correct_validdose_",vc),
+  make_count_output_database(numerator = paste0("total_correct_validdose_",vc),
                                 denominator = paste0("total_elig_doses_",vc),
                                 estlabel = paste0(str_to_title(ba)," : ",
                                                   language_string(language_use = language_use, str = "OS_60"),
                                                   " : ",pvc, " (%)"),
                                 vid = paste0("total_valid_",vcf),
-                                measureid = "ES_STUD_03_a_t")
-  make_count_output_database_MV(numerator = paste0("total_mov_",vc),
+                                measureid = "ES_STUD_03_a_t",keepnumerator = TRUE)
+  make_count_output_database(numerator = paste0("total_mov_",vc),
                                 denominator = paste0("total_elig_doses_",vc),
                                 estlabel = paste0(str_to_title(ba)," : ",
                                                   language_string(language_use = language_use, str = "OS_22"),
                                                   " : ",pvc, " (%)"),
                                 vid = paste0("total_mov_",vcf),
-                                measureid = "ES_STUD_03_a_t")
+                                measureid = "ES_STUD_03_a_t",keepnumerator = TRUE)
 
   # Create tables for Antigens
   vloop1 <- str_to_lower(RI_SINGLE_DOSE_LIST)
@@ -105,56 +105,56 @@ ES_STUD_03_04GO <- function(VCP = "ES_STUD_03_04GO"){
       # bb
       # Make the first part for invalid doses
       print(paste0(str_to_upper(bb),": Invalid..."))
-      make_count_output_database_MV(numerator = paste0("invalid_",vloop[v],"_",vc),
+      make_count_output_database(numerator = paste0("invalid_",vloop[v],"_",vc),
                                     denominator = paste0(vloop[v],"_non_elig_doses_",vc),
                                     estlabel = paste0(str_to_title(bb)," : ",
                                                       language_string(language_use = language_use, str = "OS_59"),
                                                       " ", str_to_upper(vloop[v])," : ",pvc, " (%)"),
                                     vid = paste0(vloop[v],"_invalid_",vcf),
-                                    measureid = "ES_STUD_03_b_a")
+                                    measureid = "ES_STUD_03_b_a",keepnumerator = TRUE)
       # Valid doses and MOVs
       print(paste0(str_to_upper(bb),": Valid and MOV..."))
-      make_count_output_database_MV(numerator = paste0("correct_validdose_",vloop[v],"_",vc),
+      make_count_output_database(numerator = paste0("correct_validdose_",vloop[v],"_",vc),
                                     denominator = paste0(vloop[v],"_elig_doses_",vc),
                                     estlabel = paste0(str_to_title(bb)," : ",
                                                       language_string(language_use = language_use, str = "OS_61"),
                                                       " ", str_to_upper(vloop[v])," : ",pvc, " (%)"),
                                     vid = paste0(vloop[v],"_valid_",vcf),
-                                    measureid = "ES_STUD_03_b_a")
-      make_count_output_database_MV(numerator = paste0("mov_",vloop[v],"_",vc),
+                                    measureid = "ES_STUD_03_b_a",keepnumerator = TRUE)
+      make_count_output_database(numerator = paste0("mov_",vloop[v],"_",vc),
                                     denominator = paste0(vloop[v],"_elig_doses_",vc),
                                     estlabel = paste0(str_to_title(bb)," : ",
                                                       language_string(language_use = language_use, str = "OS_23"),
                                                       " ", str_to_upper(vloop[v])," : ",pvc, " (%)"),
                                     vid = paste0(vloop[v],"_mov_",vcf),
-                                    measureid = "ES_STUD_03_b_a")
+                                    measureid = "ES_STUD_03_b_a",keepnumerator = TRUE)
 
       # ba
       # Make the first part for invalid doses
       print(paste0(str_to_upper(ba),": Invalid..."))
-      make_count_output_database_MV(numerator = paste0("invalid_",vloop[v],"_",vc),
+      make_count_output_database(numerator = paste0("invalid_",vloop[v],"_",vc),
                                     denominator = paste0(vloop[v],"_non_elig_doses_",vc),
                                     estlabel = paste0(str_to_title(ba)," : ",
                                                       language_string(language_use = language_use, str = "OS_59"),
                                                       " ", str_to_upper(vloop[v])," : ",pvc, " (%)"),
                                     vid = paste0(vloop[v],"_invalid_",vcf),
-                                    measureid = "ES_STUD_03_a_a")
+                                    measureid = "ES_STUD_03_a_a",keepnumerator = TRUE)
       # Valid doses and MOVs
       print(paste0(str_to_upper(ba),": Valid and MOV..."))
-      make_count_output_database_MV(numerator = paste0("correct_validdose_",vloop[v],"_",vc),
+      make_count_output_database(numerator = paste0("correct_validdose_",vloop[v],"_",vc),
                                     denominator = paste0(vloop[v],"_elig_doses_",vc),
                                     estlabel = paste0(str_to_title(ba)," : ",
                                                       language_string(language_use = language_use, str = "OS_61"),
                                                       " ", str_to_upper(vloop[v])," : ",pvc, " (%)"),
                                     vid = paste0(vloop[v],"_valid_",vcf),
-                                    measureid = "ES_STUD_03_a_a")
-      make_count_output_database_MV(numerator = paste0("mov_",vloop[v],"_",vc),
+                                    measureid = "ES_STUD_03_a_a",keepnumerator = TRUE)
+      make_count_output_database(numerator = paste0("mov_",vloop[v],"_",vc),
                                     denominator = paste0(vloop[v],"_elig_doses_",vc),
                                     estlabel = paste0(str_to_title(ba)," : ",
                                                       language_string(language_use = language_use, str = "OS_23"),
                                                       " ", str_to_upper(vloop[v])," : ",pvc, " (%)"),
                                     vid = paste0(vloop[v],"_mov_",vcf),
-                                    measureid = "ES_STUD_03_a_a")
+                                    measureid = "ES_STUD_03_a_a",keepnumerator = TRUE)
 
     }
   } #end of vloop v loop

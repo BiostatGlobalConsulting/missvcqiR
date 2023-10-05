@@ -18,30 +18,30 @@ HW_BAR_01_04GO <- function(VCP = "HW_BAR_01_04GO"){
   vcqi_log_comment(VCP, 5, "Flow", "Starting")
 
   print("No barriers")
-  make_unwtd_output_database_MV(variable = "no_barriers",
+  make_unwtd_output_database(variable = "no_barriers",
                              estlabel = "No Barriers",
                              vid = 0,
-                             measureid = "HW_BAR_01")
+                             measureid = "HW_BAR_01",keepnumerator = TRUE)
   print("Knowledge barriers")
-  make_unwtd_output_database_MV(variable = "knowledge_barriers",
+  make_unwtd_output_database(variable = "knowledge_barriers",
                              estlabel = "Knowledge Barriers",
                              vid = 1,
-                             measureid = "HW_BAR_01")
+                             measureid = "HW_BAR_01",keepnumerator = TRUE)
   print("Attitude barriers")
-  make_unwtd_output_database_MV(variable = "attitude_barriers",
+  make_unwtd_output_database(variable = "attitude_barriers",
                              estlabel = "Attitude Barriers",
                              vid = 2,
-                             measureid = "HW_BAR_01")
+                             measureid = "HW_BAR_01",keepnumerator = TRUE)
   print("Any barriers")
-  make_unwtd_output_database_MV(variable = "any_barriers",
+  make_unwtd_output_database(variable = "any_barriers",
                              estlabel = "Any Barriers",
                              vid = 3,
-                             measureid = "HW_BAR_01")
+                             measureid = "HW_BAR_01",keepnumerator = TRUE)
   print("Both barriers")
-  make_unwtd_output_database_MV(variable = "both_barriers",
+  make_unwtd_output_database(variable = "both_barriers",
                              estlabel = "Both Barriers",
                              vid = 4,
-                             measureid = "HW_BAR_01")
+                             measureid = "HW_BAR_01",keepnumerator = TRUE)
 
   vcqi_log_comment(VCP, 5, "Flow", "Exiting")
 }

@@ -179,9 +179,13 @@ make_DESC_0203_output_database <- function(
   # Record and save the labels for pct_*
   for (k in seq_along(vlist)){
     varlabel <- attr(get(vlist[k], dat),"label")
+    if (is.null(varlabel)){
+      varlabel <- ""
+    }
     label_temp <- data.frame(var = paste0("pct",vorder[k]), label = varlabel)
     DESC_labels <- rbind(DESC_labels,label_temp)
   }
+
   assign(paste0("DESC_",mid,"_labels_",tempvid),DESC_labels, envir = .GlobalEnv)
 
 

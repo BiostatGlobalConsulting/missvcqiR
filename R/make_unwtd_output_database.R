@@ -13,7 +13,7 @@
 #' @rawNamespace import(rlang, except = c(local_options,with_options))
 #' @import haven
 
-# make_unwtd_output_database_MV R version 1.00 - Biostat Global Consulting - 2022-12-16
+# make_unwtd_output_database R version 1.00 - Biostat Global Consulting - 2022-12-16
 # *******************************************************************************
 # Change log
 
@@ -22,13 +22,13 @@
 # *******************************************************************************
 
 
-make_unwtd_output_database_MV <- function(
+make_unwtd_output_database <- function(
     variable,
     estlabel,
     vid,
     measureid,
-    VCP = "make_unwtd_output_database_MV",
-    keepnumerator = TRUE,
+    VCP = "make_unwtd_output_database",
+    keepnumerator = FALSE,
     ...){
 
   vcqi_log_comment(VCP, 5, "Flow", "Starting")

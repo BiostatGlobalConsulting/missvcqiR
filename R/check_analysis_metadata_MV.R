@@ -40,6 +40,7 @@
 # 2023-02-07  1.12      Mia Yu          Added part for customized level4 Excel cell formats
 # 2023-07-29  1.13      Mia Yu          Remove HH14 from missing value check
 # 2023-08-28  1.14      Mia Yu          Copied and revised from check_analysis_metadata
+# 2023-10-03  1.15      Mia Yu          Set default value of LEVEL2_ID
 # *******************************************************************************
 
 # Note: sections of this program that check FMTID are not implemented (2022-10-07)
@@ -69,6 +70,15 @@ check_analysis_metadata_MV <- function(VCP = "check_analysis_metadata_MV"){
       halt_message = errormsgs
     )
   }
+
+  # Provide the variable name that uniquely identifies each facility
+  vcqi_global(LEVEL_3_ID, "ID02AIid")
+
+  # At this time, this global is required. Set its default value here.
+  if (!vcqi_object_exists("LEVEL_2_ID")){
+    vcqi_global(LEVEL_2_ID,"ID02AD")
+  }
+
 
   # This syntax should be set in Block E, set as default if user failed to specify
   if(vcqi_object_exists("VCQI_SVYDESIGN_SYNTAX") == FALSE){

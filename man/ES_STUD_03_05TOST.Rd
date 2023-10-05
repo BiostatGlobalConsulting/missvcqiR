@@ -2,7 +2,7 @@
 % Please edit documentation in R/ES_STUD_03_05TOST.R
 \name{ES_STUD_03_05TOST}
 \alias{ES_STUD_03_05TOST}
-\title{Export datasets to Excel for ES_STUD_03}
+\title{Export datasets to Excel for ES_STUD_03 with long table}
 \usage{
 ES_STUD_03_05TOST(VCP = "ES_STUD_03_05TOST")
 }
@@ -13,5 +13,5 @@ ES_STUD_03_05TOST(VCP = "ES_STUD_03_05TOST")
 Sheet(s) in tabular output Excel file in VCQI_OUTPUT_FOLDER
 }
 \description{
-Export datasets to Excel for ES_STUD_03
+Export datasets to Excel for ES_STUD_03 with long table
 }

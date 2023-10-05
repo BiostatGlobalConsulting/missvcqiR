@@ -32,6 +32,8 @@
 # 2022-10-08  1.04      Mia Yu          Package version
 # 2022-10-11  1.05      Mia Yu          Update the usage of vcqi_object_exists
 # 2022-10-24  1.06      Mia Yu          Add vcqi_halt_immediately
+# 2023-09-30  1.07      Mia Yu          Added multi lingual globals for labels;
+#                                       Format the variable if it is "numerator"
 # *******************************************************************************
 
 make_table_column <- function(
@@ -88,7 +90,7 @@ make_table_column <- function(
     } else if (tempvar == "icc"){
       formatnum <- 2
       tempformat <- list(NA)
-    } else if (tempvar %in% c("n", "nwtd", "nwtd_est")){
+    } else if (tempvar %in% c("n", "nwtd", "nwtd_est","numerator")){
       formatnum <- 3
       tempformat <- list(NA)
     } else if (tempvar == "deff"){
@@ -111,25 +113,25 @@ make_table_column <- function(
   # If label was not provided for common variables, lets set those
   if (is.na(templabel)){
     if (tempvar == "stderr"){
-      templabel = "StdErr (%)"
+      templabel = language_string(language_use = language_use, str = "OS_318") #"StdErr (%)"
     }
     if (tempvar == "lcb"){
-      templabel = "95% LCB (%)"
+      templabel = language_string(language_use = language_use, str = "OS_319") #"95% LCB (%)"
     }
     if (tempvar == "ucb"){
-      templabel = "95% UCB (%)"
+      templabel = language_string(language_use = language_use, str = "OS_320") #"95% UCB (%)"
     }
     if (tempvar == "deff"){
-      templabel = "DEFF"
+      templabel = language_string(language_use = language_use, str = "OS_321") #"DEFF"
     }
     if (tempvar == "icc"){
-      templabel = "ICC"
+      templabel = language_string(language_use = language_use, str = "OS_322") #"ICC"
     }
     if (tempvar == "n"){
-      templabel = "N"
+      templabel = language_string(language_use = language_use, str = "OS_48") #"N"
     }
     if (tempvar == "nwtd"){
-      templabel = "Weighted N"
+      templabel = language_string(language_use = language_use, str = "OS_323") #"Weighted N"
     }
   }
 
@@ -250,7 +252,7 @@ make_table_column <- function(
         mutate(tempciul = ifelse(round(ciul) == 100, "100", tempciul)) %>%
         mutate(ci = ifelse(!is.na(cill) & !is.na(ciul), paste0("(" ,tempcill,", ",tempciul,")"), NA)) %>%
         select(-c(tempcill,tempciul))
-      templabel = "95% CI (%)"
+      templabel = language_string(language_use = language_use, str = "OS_4") #"95% CI (%)"
     }
 
     if (noannotate == FALSE){

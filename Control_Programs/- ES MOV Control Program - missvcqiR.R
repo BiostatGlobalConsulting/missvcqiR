@@ -93,9 +93,6 @@ vcqi_global(VCQI_CM_DATASET, "CM_new_vars.dta")
 # Can only take the value of 1 variable name
 vcqi_global(LEVEL_2_ID, "ID02AD")
 
-# Provide the variable name that uniquely identifies each facility, typically ID02AIid
-vcqi_global(LEVEL_3_ID, "ID02AIid")
-
 # Set language for output tables
 # This can be set to ENGLISH, SPANISH, FRENCH or PORTUGUESE
 # May also set to EN for ENGLISH
@@ -489,7 +486,7 @@ vcqi_global(DESC_02_TO_SUBTITLE, NA)
 # want to include another, start with the number 4.
 # We are not using it here, but clear it out in case it was used earlier.
 vcqi_global(DESC_02_TO_FOOTNOTE_4, NA)
-DESC_02_MV(cleanup = TRUE)
+DESC_02(cleanup = TRUE)
 
 # ..............................................................................
 # Create table for Caregiver's Sex
@@ -508,7 +505,7 @@ vcqi_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str =
 # No subtitle or additional footnotes
 vcqi_global(DESC_02_TO_SUBTITLE, NA)
 vcqi_global(DESC_02_TO_FOOTNOTE_4, NA)
-DESC_02_MV(cleanup = TRUE)
+DESC_02(cleanup = TRUE)
 
 # ..............................................................................
 # Where does your child usually receive vaccinations?
@@ -533,7 +530,7 @@ vcqi_global(DESC_02_RELABEL_LABEL_3, language_string(language_use = language_use
 vcqi_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str = "OS_87")) # Caregiver's Education
 vcqi_global(DESC_02_TO_SUBTITLE, NA)
 vcqi_global(DESC_02_TO_FOOTNOTE_4, NA)
-DESC_02_MV(cleanup = TRUE)
+DESC_02(cleanup = TRUE)
 
 # ..............................................................................
 # Create table for Caregiver's Occupation
@@ -552,7 +549,7 @@ vcqi_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str =
 # No subtitle or additional footnotes
 vcqi_global(DESC_02_TO_SUBTITLE, NA)
 vcqi_global(DESC_02_TO_FOOTNOTE_4, NA)
-DESC_02_MV(cleanup = TRUE)
+DESC_02(cleanup = TRUE)
 
 # ..............................................................................
 # Create table for Child's Age
@@ -572,7 +569,7 @@ vcqi_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str =
 vcqi_global(DESC_02_TO_SUBTITLE, NA)
 #Note: Age groupings based on variable ES03AA_1_1
 vcqi_global(DESC_02_TO_FOOTNOTE_4, paste0(language_string(language_use = language_use, str = "OS_95"), " ES03AA_1_1."))
-DESC_02_MV(cleanup = TRUE)
+DESC_02(cleanup = TRUE)
 
 # ..............................................................................
 # Create table for Child's Sex
@@ -591,7 +588,7 @@ vcqi_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str =
 # No subtitle or additional footnotes
 vcqi_global(DESC_02_TO_SUBTITLE, NA)
 vcqi_global(DESC_02_TO_FOOTNOTE_4, NA)
-DESC_02_MV(cleanup = TRUE)
+DESC_02(cleanup = TRUE)
 
 # ..............................................................................
 # Create table for Vaccination Data
@@ -610,7 +607,7 @@ vcqi_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str =
 # No subtitle or additional footnotes
 vcqi_global(DESC_02_TO_SUBTITLE, NA)
 vcqi_global(DESC_02_TO_FOOTNOTE_4, NA)
-DESC_02_MV(cleanup = TRUE)
+DESC_02(cleanup = TRUE)
 
 # ..............................................................................
 # Where does your child usually receive vaccinations?
@@ -639,7 +636,7 @@ vcqi_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str =
 vcqi_global(DESC_02_TO_SUBTITLE, NA)
 # Looks at question ES04AK and identifies if the child lives within the same municipality as the facility per caregiver's response
 vcqi_global(DESC_02_TO_FOOTNOTE_4, language_string(language_use = language_use, str = "OS_101"))
-DESC_02_MV(cleanup = TRUE)
+DESC_02(cleanup = TRUE)
 
 # ..............................................................................
 # Run program to create coverage categories
@@ -691,7 +688,7 @@ vcqi_global(DESC_02_TO_FOOTNOTE_9, paste0("* ",language_string(language_use = la
 # Undervaccinated: Missing one or more vaccines for his/her age
 vcqi_global(DESC_02_TO_FOOTNOTE_10,paste0("* ",language_string(language_use = language_use, str = "OS_112")))
 
-DESC_02_MV(cleanup = TRUE)
+DESC_02(cleanup = TRUE)
 
 # ..............................................................................
 # Study day table 1
@@ -738,7 +735,7 @@ if (stringr::str_to_upper(DESC_02_COVG_CRUDE_OR_VALID) == "CRUDE"){
 # at least one dose date
 vcqi_global(DESC_02_TO_FOOTNOTE_6, language_string(language_use = language_use, str = "OS_89"))
 
-DESC_02_MV(cleanup = TRUE)
+DESC_02(cleanup = TRUE)
 
 # ..............................................................................
 # Version 2 of Study Day Table 2
@@ -801,7 +798,7 @@ vcqi_global(DESC_02_TO_FOOTNOTE_11, language_string(language_use = language_use,
 #[6] Experienced MOV but were not asked why not vaccinated
 vcqi_global(DESC_02_TO_FOOTNOTE_12, language_string(language_use = language_use, str = "OS_128"))
 
-DESC_02_MV(cleanup = TRUE)
+DESC_02(cleanup = TRUE)
 
 # ..............................................................................
 # Now demonstrate using DESC_03 on a multiple-choice question where the
@@ -850,7 +847,7 @@ vcqi_global(DESC_03_TO_FOOTNOTE_6, language_string(language_use = language_use, 
 # Note: Number of children who had cards means they had card with valid dob and
 # at least one dose date
 
-DESC_03_MV(cleanup = TRUE)
+DESC_03(cleanup = TRUE)
 
 # ..............................................................................
 # Study table 4 completed with ES_STUD_01 Indicator
@@ -986,7 +983,7 @@ vcqi_global(DESC_03_TO_FOOTNOTE_5, paste0(language_string(language_use = languag
 vcqi_global(DESC_03_TO_FOOTNOTE_6, paste0(language_string(language_use = language_use, str = "OS_146"), " 1C"))
 # [3] Details in Table MOV reasons 1C
 
-DESC_03_MV(cleanup = TRUE)
+DESC_03(cleanup = TRUE)
 
 # ..............................................................................
 # Create table for tab MOV reasons 1A
@@ -1042,7 +1039,7 @@ vcqi_global(DESC_03_TO_FOOTNOTE_8, language_string(language_use = language_use, 
 # May not equal the row total because individuals were allowed to check more
 # than one from 3.#
 
-DESC_03_MV(cleanup = TRUE)
+DESC_03(cleanup = TRUE)
 
 # ..............................................................................
 # Create table for tab MOV reasons 1B
@@ -1080,7 +1077,7 @@ vcqi_global(DESC_03_N_LABEL, language_string(language_use = language_use, str = 
 vcqi_global(DESC_03_TO_FOOTNOTE_4, language_string(language_use = language_use, str = "OS_157"))
 # Note: Denominators for b-m is column n
 
-DESC_03_MV(cleanup = TRUE)
+DESC_03(cleanup = TRUE)
 
 # ..............................................................................
 # Create table for tab MOV reasons 1C
@@ -1116,7 +1113,7 @@ vcqi_global(DESC_03_N_LABEL, language_string(language_use = language_use, str = 
 vcqi_global(DESC_03_TO_FOOTNOTE_4, language_string(language_use = language_use, str = "OS_159"))
 # Note: Denominators for b-j is column k
 
-DESC_03_MV(cleanup = TRUE)
+DESC_03(cleanup = TRUE)
 
 # ..............................................................................
 # Create table for MOV reasons overview 1
@@ -1151,7 +1148,7 @@ vcqi_global(DESC_03_TO_FOOTNOTE_5, paste0(language_string(language_use = languag
 vcqi_global(DESC_03_TO_FOOTNOTE_6, paste0(language_string(language_use = language_use, str = "OS_146"), " 2C"))
 # [3] Details in Table MOV reasons 2C
 
-DESC_03_MV(cleanup = TRUE)
+DESC_03(cleanup = TRUE)
 
 # ..............................................................................
 # Create table for tab MOV reasons 2A
@@ -1207,7 +1204,7 @@ vcqi_global(DESC_03_TO_FOOTNOTE_8, language_string(language_use = language_use, 
 # May not equal the row total because individuals were allowed to check more
 # than one from 3.#
 
-DESC_03_MV(cleanup = TRUE)
+DESC_03(cleanup = TRUE)
 
 # ..............................................................................
 # Create table for tab MOV reasons 2B
@@ -1249,7 +1246,7 @@ vcqi_global(DESC_03_TO_FOOTNOTE_4, language_string(language_use = language_use, 
 vcqi_global(DESC_03_TO_FOOTNOTE_5, language_string(language_use = language_use, str = "OS_157"))
 # Note: Denominators for b-m is column n
 
-DESC_03_MV(cleanup = TRUE)
+DESC_03(cleanup = TRUE)
 
 # ..............................................................................
 # Create table for tab MOV reasons 2C
@@ -1290,7 +1287,7 @@ vcqi_global(DESC_03_TO_FOOTNOTE_4, language_string(language_use = language_use, 
 vcqi_global(DESC_03_TO_FOOTNOTE_5, language_string(language_use = language_use, str = "OS_159"))
 # Note: Denominators for b-j is column k
 
-DESC_03_MV(cleanup = TRUE)
+DESC_03(cleanup = TRUE)
 
 # ..............................................................................
 
@@ -1321,6 +1318,7 @@ if (stringr::str_to_upper(RI_QUAL_08_VALID_OR_CRUDE) == "CRUDE"){
 # Note: The final measure on this sheet, MOVs per Visit, is not a percent. It
 # is a ratio.
 vcqi_global(RI_QUAL_08_TO_FOOTNOTE_3, language_string(language_use = language_use, str = "OS_166"))
+vcqi_global(SORT_PLOT_LOW_TO_HIGH, 0)
 
 RI_QUAL_08_MV()
 

@@ -9,7 +9,7 @@
 #' @import openxlsx
 #' @importFrom rlang abort
 
-# vcqi_halt_immediately R version 1.06 - Biostat Global Consulting - 2022-12-06
+# vcqi_halt_immediately R version 1.07 - Biostat Global Consulting - 2023-10-03
 # ******************************************************************************
 # Change log
 
@@ -23,6 +23,8 @@
 # 2022-11-03  1.05      Caitlin Clary   Backup process if logfile doesn't have
 #                                       the correct headers
 # 2022-12-06  1.06      Caitlin Clary   Backup process if Log sheet is missing in TO
+# 2023-10-03  1.07      Mia Yu          Add call to miss_vcqi_halt_immediately
+#                                       if used in MISS VCQI
 # ******************************************************************************
 
 # IN PROGRESS
@@ -31,6 +33,10 @@ vcqi_halt_immediately <- function(
     VCP = "vcqi_halt_immediately",
     halt_message = NA
 ){
+
+  if(vcqi_object_exists("VCQI_HALT_PROGRAM_NAME")){
+    miss_vcqi_halt_immediately()
+  }
 
   vcqi_log_comment(VCP, 5, "Flow", "Starting")
 

@@ -198,10 +198,10 @@ DESC_03_00GC <- function(VCP = "DESC_03_00GC"){
 
   # Set default N and NWTD labels if not specified
   if (!vcqi_object_exists("DESC_03_N_LABEL")){
-    vcqi_global(DESC_03_N_LABEL, "N")
+    vcqi_global(DESC_03_N_LABEL, language_string(language_use = language_use, str = "OS_48")) #N
   }
   if (!vcqi_object_exists("DESC_03_NWTD_LABEL")){
-    vcqi_global(DESC_03_NWTD_LABEL, "Weighted N")
+    vcqi_global(DESC_03_NWTD_LABEL, language_string(language_use = language_use, str = "OS_323")) #Weighted N
   }
 
   # Confirm DESC_03_WEIGHTED is valid & defined
