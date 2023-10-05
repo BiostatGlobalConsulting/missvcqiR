@@ -6,12 +6,13 @@
 #'
 #' @import stringr
 
-# DESC_02_00GC R version 1.00 - Biostat Global Consulting - 2023-05-27
+# DESC_02_00GC R version 1.01 - Biostat Global Consulting - 2023-09-28
 # *******************************************************************************
 # Change log
 
 # Date 			  Version 	Name			      What Changed
 # 2023-05-27  1.00      Mia Yu          Original R package version
+# 2023-09-28  1.01      Mia Yu          Added multi lingual globals for N and NWTD
 # *******************************************************************************
 
 DESC_02_00GC <- function(VCP = "DESC_02_00GC"){
@@ -152,10 +153,10 @@ DESC_02_00GC <- function(VCP = "DESC_02_00GC"){
   # Set default N and NWTD labels if not specified
 
   if (!vcqi_object_exists("DESC_02_N_LABEL")){
-    vcqi_global(DESC_02_N_LABEL, "N")
+    vcqi_global(DESC_02_N_LABEL, language_string(language_use = language_use, str = "OS_48")) #N
   }
   if (!vcqi_object_exists("DESC_02_NWTD_LABEL")){
-    vcqi_global(DESC_02_NWTD_LABEL, "Weighted N")
+    vcqi_global(DESC_02_NWTD_LABEL, language_string(language_use = language_use, str = "OS_323")) #Weighted N
   }
 
   # Confirm DESC_02_DENOMINATOR is valid and defined

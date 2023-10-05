@@ -29,6 +29,8 @@ miss_vcqi_multi_lingual_strings <- function(VCP = "miss_vcqi_multi_lingual_strin
   errormsgs <- NULL
   warningmsgs <- NULL
 
+  vcqi_global(VCQI_HALT_PROGRAM_NAME,"miss_vcqi_halt_immediately")
+
   if (!vcqi_object_exists("OUTPUT_LANGUAGE")){
     language <- "ENGLISH"
   } else {

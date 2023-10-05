@@ -6,34 +6,42 @@
 #'
 #' @import stringr
 
-# DESC_03_05TOST_MV R version 1.01 - Biostat Global Consulting - 2023-08-21
+# DESC_03_05TOST R version 1.01 - Biostat Global Consulting - 2023-09-29
 # *******************************************************************************
 # Change log
 
 # Date 			  Version 	Name			      What Changed
 # 2023-06-06  1.00      Mia Yu          Original R package version
 # 2023-08-21  1.01      Mia Yu          Trim the sheet name if too long
+# 2023-09-29  1.02      Mia Yu          Added multi lingual globals
 # *******************************************************************************
 
 
-DESC_03_05TOST_MV <- function(VCP = "DESC_03_05TOST_MV"){
+DESC_03_05TOST <- function(VCP = "DESC_03_05TOST"){
   vcqi_log_comment(VCP, 5, "Flow", "Starting")
 
   if (str_to_upper(DESC_03_WEIGHTED) == "YES"){
-    vcqi_global(DESC_03_TO_FOOTNOTE_1,"Abbreviations: CI=Confidence Interval")
-    vcqi_global(DESC_03_TO_FOOTNOTE_2,"Respondents could select more than one response to this question.")
-    vcqi_global(DESC_03_TO_FOOTNOTE_3, paste0("Note: This measure is a population estimate that incorporates survey weights.",
-                " The CI is calculated with software that take the complex survey design into account."))
+    vcqi_global(DESC_03_TO_FOOTNOTE_1,language_string(language_use = language_use, str = "OS_344"))
+                #Abbreviations: CI=Confidence Interval
+    vcqi_global(DESC_03_TO_FOOTNOTE_2,language_string(language_use = language_use, str = "OS_248"))
+                #Respondents could select more than one response to this question.
+    vcqi_global(DESC_03_TO_FOOTNOTE_3,language_string(language_use = language_use, str = "OS_51"))
+                #Note: This measure is a population estimate that incorporates survey weights.
+                # The CI is calculated with software that take the complex survey design into account.
   }
 
   if (str_to_upper(DESC_03_WEIGHTED) == "NO"){
-    vcqi_global(DESC_03_TO_FOOTNOTE_1,"Note: This measure is an unweighted summary of proportions from the survey sample.")
-    vcqi_global(DESC_03_TO_FOOTNOTE_2,"Respondents could select more than one response to this question.")
+    vcqi_global(DESC_03_TO_FOOTNOTE_1,language_string(language_use = language_use, str = "OS_52"))
+                #Note: This measure is an unweighted summary of proportions from the survey sample.
+    vcqi_global(DESC_03_TO_FOOTNOTE_2,language_string(language_use = language_use, str = "OS_248"))
+                #Respondents could select more than one response to this question.
     if (str_to_upper(DESC_03_DENOMINATOR) == "ALL"){
-      vcqi_global(DESC_03_TO_FOOTNOTE_3,"Denominator (N) is the total number of respondents.")
+      vcqi_global(DESC_03_TO_FOOTNOTE_3,language_string(language_use = language_use, str = "OS_16"))
+                  #Denominator (N) is the total number of respondents.
     }
     if (str_to_upper(DESC_03_DENOMINATOR) == "RESPONDED"){
-      vcqi_global(DESC_03_TO_FOOTNOTE_3,"Denominator (N) is limited to respondents who answered the question.")
+      vcqi_global(DESC_03_TO_FOOTNOTE_3,language_string(language_use = language_use, str = "OS_15"))
+                  #Denominator (N) is limited to respondents who answered the question.
     }
   }
 
@@ -90,14 +98,14 @@ DESC_03_05TOST_MV <- function(VCP = "DESC_03_05TOST_MV"){
       tablename = "TO_DESC_03",
       dbfilename = paste0("DESC_03_", ANALYSIS_COUNTER,"_", zpc,"_",vid, "_database_",DESC_03_VORDER[i],".rds"),
       variable = "estimate", replacevar = NA, noannotate = TRUE,
-      label = paste0(pcti, " (%)"))
+      label = paste0(pcti, " ", language_string(language_use = language_use, str = "OS_1"))) #(%)
 
     if (wtd == 1 & suppress_cis != 1){
       make_table_column(
         tablename = "TO_DESC_03",
         dbfilename = paste0("DESC_03_", ANALYSIS_COUNTER,"_", zpc,"_",vid, "_database_",DESC_03_VORDER[i],".rds"),
         variable = "ci", replacevar = NA, noannotate = TRUE,
-        label = "95% CI (%)")
+        label = language_string(language_use = language_use, str = "OS_4")) #95% CI (%)
     }
 
     file.remove(paste0(VCQI_OUTPUT_FOLDER,"/DESC_03_",ANALYSIS_COUNTER,"_", zpc,"_",vid, "_database_",DESC_03_VORDER[i],".rds"))

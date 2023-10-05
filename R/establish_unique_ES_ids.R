@@ -14,12 +14,13 @@
 #' @examples
 #' establish_unique_ES_ids()
 
-# establish_unique_ES_ids R version 1.00 - Biostat Global Consulting - 2023-08-29
+# establish_unique_ES_ids R version 1.01 - Biostat Global Consulting - 2023-10-03
 # *******************************************************************************
 # Change log
 
 # Date 			  Version 	Name			      What Changed
 # 2023-08-29  1.00      Mia Yu          Original R package version
+# 2023-10-03  1.01      Mia Yu          Removed level2 placeholder code
 # *******************************************************************************
 
 #NOTE: did not include any code in the Stata version that is related to level2
@@ -84,21 +85,6 @@ establish_unique_ES_ids <- function(VCP = "establish_unique_ES_ids"){
 
     saveRDS(dat, paste0(VCQI_OUTPUT_FOLDER,"/ES_with_ids.rds"))
     saveRDS(dat, paste0(VCQI_OUTPUT_FOLDER,"/RI_with_ids.rds"))
-
-    if (!vcqi_object_exists("LEVEL_2_ID")){
-      dat2 <- data.frame(level2id = 1, level2name = "Null Level 2 Placeholder")
-      save(dat2, paste0(VCQI_OUTPUT_FOLDER,"/level2_placeholder_name_dataset.rds"))
-      assign(LEVEL2_NAME_DATASET, paste0(VCQI_OUTPUT_FOLDER,"/level2_placeholder_name_dataset.rds"), envir = .GlobalEnv)
-
-      dat2 <- dat2 %>% select(-c(level2name)) %>% mutate(level2order = 1)
-      save(dat2, paste0(VCQI_OUTPUT_FOLDER,"/level2_placeholder_order_dataset.rds"))
-      assign(LEVEL2_ORDER_DATASET, paste0(VCQI_OUTPUT_FOLDER,"/level2_placeholder_order_dataset.rds"), envir = .GlobalEnv)
-
-      dat2 <- vcqi_read(LEVEL3_NAME_DATASET) %>%
-        mutate(level2id = 1,level2nameforlevel3 = "Null Level 2 Placeholder")
-      save(dat2, paste0(VCQI_OUTPUT_FOLDER,"/level2namesforlevel3.rds"))
-
-    }
   }
 
   vcqi_log_comment(VCP, 5, "Flow", "Exiting")

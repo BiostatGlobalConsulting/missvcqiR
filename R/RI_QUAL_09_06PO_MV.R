@@ -86,7 +86,7 @@ RI_QUAL_09_06PO_MV <- function(VCP = "RI_QUAL_09_06PO_MV"){
         savedata <- NA
       }
 
-      vcqi_to_uwplot_MV(database = paste0(VCQI_OUTPUT_FOLDER,"/RI_QUAL_09_",ANALYSIS_COUNTER,"_",MOV_OUTPUT_DOSE_LIST[d],"_plot_database.rds"),
+      vcqi_to_uwplot(database = paste0(VCQI_OUTPUT_FOLDER,"/RI_QUAL_09_",ANALYSIS_COUNTER,"_",MOV_OUTPUT_DOSE_LIST[d],"_plot_database.rds"),
                      title = title,
                      name = paste0("RI_QUAL_09_",ANALYSIS_COUNTER,"_uwplot_",MOV_OUTPUT_DOSE_LIST[d]),
                      savedata = savedata)
@@ -108,7 +108,7 @@ RI_QUAL_09_06PO_MV <- function(VCP = "RI_QUAL_09_06PO_MV"){
         savedata <- NA
       }
 
-      vcqi_to_uwplot_MV(database = paste0(VCQI_OUTPUT_FOLDER,"/RI_QUAL_09_",ANALYSIS_COUNTER,"_",MOV_OUTPUT_DOSE_LIST[d],"_corplot_database.rds"),
+      vcqi_to_uwplot(database = paste0(VCQI_OUTPUT_FOLDER,"/RI_QUAL_09_",ANALYSIS_COUNTER,"_",MOV_OUTPUT_DOSE_LIST[d],"_corplot_database.rds"),
                      title = title,
                      name = paste0("RI_QUAL_09_",ANALYSIS_COUNTER,"_uwplot_",MOV_OUTPUT_DOSE_LIST[d],"_cor"),
                      savedata = savedata)
@@ -172,7 +172,7 @@ RI_QUAL_09_06PO_MV <- function(VCP = "RI_QUAL_09_06PO_MV"){
       savedata <- NA
     }
 
-    vcqi_to_uwplot_MV(database = paste0(VCQI_OUTPUT_FOLDER,"/RI_QUAL_09_",ANALYSIS_COUNTER,"_anydose_plot_database.rds"),
+    vcqi_to_uwplot(database = paste0(VCQI_OUTPUT_FOLDER,"/RI_QUAL_09_",ANALYSIS_COUNTER,"_anydose_plot_database.rds"),
                    title = title,
                    name = paste0("RI_QUAL_09_",ANALYSIS_COUNTER,"_uwplot_anydose"),
                    savedata = savedata)
@@ -193,7 +193,7 @@ RI_QUAL_09_06PO_MV <- function(VCP = "RI_QUAL_09_06PO_MV"){
       savedata <- NA
     }
 
-    vcqi_to_uwplot_MV(database = paste0(VCQI_OUTPUT_FOLDER,"/RI_QUAL_09_",ANALYSIS_COUNTER,"_anydose_corplot_database.rds"),
+    vcqi_to_uwplot(database = paste0(VCQI_OUTPUT_FOLDER,"/RI_QUAL_09_",ANALYSIS_COUNTER,"_anydose_corplot_database.rds"),
                    title = title,
                    name = paste0("RI_QUAL_09_",ANALYSIS_COUNTER,"_uwplot_anydose_cor"),
                    savedata = savedata)

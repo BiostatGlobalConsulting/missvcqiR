@@ -13,7 +13,7 @@
 #' @rawNamespace import(rlang, except = c(local_options,with_options))
 #' @import haven
 
-# make_count_output_database_MV R version 1.02 - Biostat Global Consulting - 2022-10-20
+# make_count_output_database R version 1.02 - Biostat Global Consulting - 2022-10-20
 # *******************************************************************************
 # Change log
 
@@ -23,8 +23,8 @@
 # 2022-10-20  1.02      Mia Yu          Add variable labels
 # *******************************************************************************
 
-make_count_output_database_MV <- function(numerator, denominator, estlabel, vid, measureid,
-                                       VCP = "make_count_output_database_MV",keepnumerator = TRUE){
+make_count_output_database <- function(numerator, denominator, estlabel, vid, measureid,
+                                       VCP = "make_count_output_database",keepnumerator = FALSE){
 
   vcqi_log_comment(VCP, 5, "Flow", "Starting")
 
@@ -160,7 +160,9 @@ make_count_output_database_MV <- function(numerator, denominator, estlabel, vid,
   dat$name <- haven::labelled(dat$name, label = "Stratum name for table output") %>% suppressWarnings()
   dat$outcome <- haven::labelled(dat$outcome, label = "Outcome") %>% suppressWarnings()
   dat$estimate <- haven::labelled(dat$estimate, label = templabel) %>% suppressWarnings()
-  dat$numerator <- haven::labelled(dat$numerator, label = "Numerator") %>% suppressWarnings()
+  if ("numerator" %in% names(dat)){
+    dat$numerator <- haven::labelled(dat$numerator, label = "Numerator") %>% suppressWarnings()
+  }
 
   saveRDS(dat, filename)
 

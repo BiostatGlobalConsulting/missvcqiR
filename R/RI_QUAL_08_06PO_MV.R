@@ -38,7 +38,7 @@ RI_QUAL_08_06PO_MV <- function(VCP = "RI_QUAL_08_06PO_MV"){
                           " ",str_to_upper(MOV_OUTPUT_DOSE_LIST[d])) #RI - Visits with MOSV for `=upper("`d'")'
       title <- create_multi_lingual_plot_title(title_string = vcf)
 
-      vcqi_to_uwplot_MV(database = paste0(VCQI_OUTPUT_FOLDER,"/RI_QUAL_08_",ANALYSIS_COUNTER,"_",MOV_OUTPUT_DOSE_LIST[d],"_database.rds"),
+      vcqi_to_uwplot(database = paste0(VCQI_OUTPUT_FOLDER,"/RI_QUAL_08_",ANALYSIS_COUNTER,"_",MOV_OUTPUT_DOSE_LIST[d],"_database.rds"),
                      title = title,
                      name = paste0("RI_QUAL_08_",ANALYSIS_COUNTER,"_uwplot_",MOV_OUTPUT_DOSE_LIST[d]),
                      savedata = savedata)
@@ -59,7 +59,7 @@ RI_QUAL_08_06PO_MV <- function(VCP = "RI_QUAL_08_06PO_MV"){
     #RI - Visits with MOSV for Any Dose
     title <- create_multi_lingual_plot_title(title_string = language_string(language_use = language_use, str = "OS_67"))
 
-    vcqi_to_uwplot_MV(database = paste0(VCQI_OUTPUT_FOLDER,"/RI_QUAL_08_",ANALYSIS_COUNTER,"_any_database.rds"),
+    vcqi_to_uwplot(database = paste0(VCQI_OUTPUT_FOLDER,"/RI_QUAL_08_",ANALYSIS_COUNTER,"_any_database.rds"),
                    title = "RI - Visits with MOV for Any Dose",
                    name = paste0("RI_QUAL_08_",ANALYSIS_COUNTER,"_uwplot_any"),
                    savedata = savedata)

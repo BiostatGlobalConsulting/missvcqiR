@@ -90,10 +90,6 @@ vcqi_global(VCQI_CM_DATASET, "CM_test_data.dta")
 # variable can be provided.
 vcqi_global(LEVEL_2_ID, "ID02AD")
 
-# Provide the name of the variable that uniquely identifies each facility,
-# typically ID02AIid
-vcqi_global(LEVEL_3_ID, "ID02AIid")
-
 # Set language for output tables
 # This can be set to ENGLISH, SPANISH, FRENCH or PORTUGUESE
 # May also set to EN for ENGLISH
@@ -268,7 +264,7 @@ vcqi_global(
 vcqi_global(DESC_02_TO_SUBTITLE, NA)
 vcqi_global(DESC_02_TO_FOOTNOTE_4, NA)
 
-DESC_02_MV(cleanup = TRUE)
+DESC_02(cleanup = TRUE)
 
 # ..............................................................................
 vcqi_global(DESC_02_DATASET, "HW_with_ids.rds")
@@ -290,7 +286,7 @@ vcqi_global(
 vcqi_global(DESC_02_TO_SUBTITLE, NA)
 vcqi_global(DESC_02_TO_FOOTNOTE_4, NA)
 
-DESC_02_MV(cleanup = TRUE)
+DESC_02(cleanup = TRUE)
 
 # ..............................................................................
 vcqi_global(DESC_02_DATASET, "HW_with_ids.rds")
@@ -315,7 +311,7 @@ vcqi_global(
   DESC_02_TO_FOOTNOTE_4,
   language_string(language_use = language_use, str = "OS_177"))
 
-DESC_02_MV(cleanup = TRUE)
+DESC_02(cleanup = TRUE)
 
 # ..............................................................................
 vcqi_global(DESC_03_DATASET, "HW_with_ids.rds")
@@ -337,7 +333,7 @@ vcqi_global(
   DESC_03_TO_FOOTNOTE_4,
   language_string(language_use = language_use, str = "OS_179"))
 
-DESC_03_MV(cleanup = TRUE)
+DESC_03(cleanup = TRUE)
 
 # ..............................................................................
 vcqi_global(DESC_02_DATASET, "HW_with_ids.rds")
@@ -362,7 +358,7 @@ vcqi_global(
   DESC_02_TO_FOOTNOTE_4,
   language_string(language_use = language_use, str = "OS_181"))
 
-DESC_02_MV(cleanup = TRUE)
+DESC_02(cleanup = TRUE)
 
 # ..............................................................................
 vcqi_global(DESC_02_DATASET, "HW_with_ids.rds")
@@ -386,7 +382,7 @@ vcqi_global(
   DESC_02_TO_FOOTNOTE_4,
   language_string(language_use = language_use, str = "OS_183"))
 
-DESC_02_MV(cleanup = TRUE)
+DESC_02(cleanup = TRUE)
 
 # ..............................................................................
 vcqi_global(DESC_02_DATASET, "HW_with_ids.rds")
@@ -413,7 +409,7 @@ vcqi_global(
   DESC_02_TO_FOOTNOTE_4,
   language_string(language_use = language_use, str = "OS_185"))
 
-DESC_02_MV(cleanup = TRUE)
+DESC_02(cleanup = TRUE)
 
 # ..............................................................................
 # Calculate whether the workers had knowledge & attitude barriers
@@ -563,7 +559,7 @@ vcqi_global(DESC_03_N_LABEL,
 vcqi_global(DESC_03_TO_FOOTNOTE_4,
             language_string(language_use = language_use, str = "OS_239"))
 
-DESC_03_MV(cleanup = TRUE)
+DESC_03(cleanup = TRUE)
 
 # *************************************************
 # Code Block: HW-G             (Do not change) ----

@@ -6,9 +6,9 @@
 #' @export
 #'
 #' @examples
-#' DESC_03_MV()
+#' DESC_03()
 
-# DESC_03_MV R version 1.00 - Biostat Global Consulting - 2023-06-04
+# DESC_03 R version 1.00 - Biostat Global Consulting - 2023-06-04
 # *******************************************************************************
 # Change log
 
@@ -16,7 +16,7 @@
 # 2023-06-04  1.00      Mia Yu          Original R package version
 # *******************************************************************************
 
-DESC_03_MV <- function(VCP = "DESC_03_MV", cleanup = FALSE){
+DESC_03 <- function(VCP = "DESC_03", cleanup = FALSE){
   vcqi_log_comment(VCP, 5, "Flow", "Starting")
 
   print(paste0("Calculating ", VCP, " ..."))
@@ -41,7 +41,7 @@ DESC_03_MV <- function(VCP = "DESC_03_MV", cleanup = FALSE){
 
   if(EXPORT_TO_EXCEL %in% 1){
     print("Exporting to Excel")
-    DESC_03_05TOST_MV()
+    DESC_03_05TOST()
   }
 
   # * Clear out globals if specified

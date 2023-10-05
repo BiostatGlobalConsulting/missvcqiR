@@ -31,7 +31,7 @@ RI_QUAL_09_MV <- function(VCP = "RI_QUAL_09_MV"){
 
     if (VCQI_PREPROCESS_DATA %in% 1){
       print("Pre-processing dataset")
-      RI_QUAL_09_01PP_MV()
+      RI_QUAL_09_01PP()
     }
 
     if (VCQI_GENERATE_DVS %in% 1){
