@@ -88,11 +88,6 @@ vcqi_global(ES_SURVEY_DATASET, "ES New Var Names.dta")
 # Name of dataset that holds cluster metadata
 vcqi_global(VCQI_CM_DATASET, "CM_new_vars.dta")
 
-# If you would like to use ID02AB, ID02AD, ID02AF and/or ID02AH as a level2 stratifier
-# Please list the variable name below
-# Can only take the value of 1 variable name
-vcqi_global(LEVEL_2_ID, "ID02AD")
-
 # Set language for output tables
 # This can be set to ENGLISH, SPANISH, FRENCH or PORTUGUESE
 # May also set to EN for ENGLISH
@@ -199,26 +194,6 @@ vcqi_global(RI_MULTI_3_DOSE_LIST, c("PENTA", "PCV", "POLIO"))
 # (RI_MULTI_9_DOSE_LIST). In this example we have single doses, two-dose series,
 # and three-dose series, and we do not define the RI_MULTI_4_DOSE_LIST through
 # RI_MULTI_9_DOSE_LIST globals.
-
-# ..............................................................................
-# Do you want to shift doses?
-# ..............................................................................
-
-# This can be done with multi-dose vaccines and/or boosters
-
-# Number of dose series you would like to shift
-# Set to 0 if you do not wish to implement any shifts
-vcqi_global(NUM_DOSE_SHIFTS, 0)
-
-vcqi_global(SHIFTTO_1, c("penta1", "penta2", "penta3")) # List of doses where evidence will be shifted *to*
-vcqi_global(SHIFTFROM_1, c("penta4", "penta5")) # List of doses where evidence will be shifted *from*
-vcqi_global(SHIFTWITHIN_1, 0) # Set to 1 to shift dates in a series down to fill holes in evidence
-vcqi_global(DROPDUP_1, 0) # Set to 1 to convert duplicate dates in a series to missing
-
-vcqi_global(SHIFTTO_2, c("polio1", "polio2", "polio3")) # List of doses where evidence will be shifted *to*
-vcqi_global(SHIFTFROM_2, c("polio4", "polio5")) # List of doses where evidence will be shifted *from*
-vcqi_global(SHIFTWITHIN_2, 0) # Set to 1 to shift dates in a series down to fill holes in evidence
-vcqi_global(DROPDUP_2, 0) # Set to 1 to convert duplicate dates in a series to missing
 
 # ..............................................................................
 # Parameters to describe the analysis being requested
