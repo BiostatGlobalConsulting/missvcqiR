@@ -24,7 +24,7 @@
 # *************************************************
 # Code Block: HW-A             (Do not change) ----
 #
-# Load the VCQI package
+# Load the MISS-VCQI package
 library(missvcqiR, attach.required = TRUE)
 
 # Start with clear memory
@@ -252,25 +252,54 @@ vcqi_global(ANALYSIS_COUNTER, 1)
 # Summarize responses to some multiple-choice questions using DESC_02
 # ..............................................................................
 
+# See the MISS-VCQI R User's Guide for more information on the MISS-VCQI
+# indicators and the options that can be set in the control program. The DESC_02
+# example below has explanatory comments for this example, but more detail is
+# available in the User's Guide.
+
+# Name of the dataset that contains the variable to be summarized
 vcqi_global(DESC_02_DATASET, "HW_with_ids.rds")
+
+# Variable to summarize. In this example we are summarizing HW03AA (health
+# worker sex).
 vcqi_global(DESC_02_VARIABLES, "HW03AA")
+
+# Calculation weighted or unweighted? In ES and HW surveys, this should almost
+# always be "NO" (unweighted).
 vcqi_global(DESC_02_WEIGHTED, "NO")
+
+# Which respondents to include in denominator: "ALL" = all respondents,
+# "RESPONDED" = respondents who answered this question. If the calculation is
+# weighted, this value should be "ALL".
 vcqi_global(DESC_02_DENOMINATOR, "ALL")
 
+# Number of replacement labels for levels of the variable being summarized. In
+# this example we will replace the label for one level:
 vcqi_global(DESC_02_N_RELABEL_LEVELS, 1)
+
+# For each level being relabeled, create DESC_02_RELABEL_LEVEL_<n> and
+# DESC_02_RELABEL_LABEL_<n> values to indicate the level being relabeled and the
+# label value to use. Here the level being updated is NA and the label being
+# used is the word "Missing" or its translation from the MISS VCQI Label Phrases
+# - En Fr Es Pt.xlsx translation phrases spreadsheet.
 vcqi_global(DESC_02_RELABEL_LEVEL_1, NA)
-vcqi_global(
-  DESC_02_RELABEL_LABEL_1,
+vcqi_global(DESC_02_RELABEL_LABEL_1,
   language_string(language_use = language_use, str = "OS_91")) # Missing
 
-# Health Worker Sex
+# Set table title. In this example, we are using the value "Health Worker Sex"
+# or its translation from the MISS VCQI Label Phrases - En Fr Es Pt.xlsx
+# translation phrases spreadsheet.
 vcqi_global(
   DESC_02_TO_TITLE,
   language_string(language_use = language_use, str = "OS_174"))
 
+# If desired, define a table subtitle or additional table footnotes (there are
+# three default footnotes for DESC_02 tables, so start additional footnotes
+# at DESC_02_TO_FOOTNOTE_4)
 vcqi_global(DESC_02_TO_SUBTITLE, NA)
 vcqi_global(DESC_02_TO_FOOTNOTE_4, NA)
 
+# Run DESC_02 for this variable
 DESC_02(cleanup = TRUE)
 
 # ..............................................................................

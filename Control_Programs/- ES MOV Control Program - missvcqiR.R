@@ -106,9 +106,7 @@ vcqi_global(OUTPUT_LANGUAGE, "ENGLISH")
 # ..............................................................................
 # These parameters may change from survey to survey
 
-#  See:
-#  http://www.who.int/immunization/policy/Immunization_routine_table2.pdf?ua=1
-#  http://apps.who.int/immunization_monitoring/globalsummary/schedules
+#  See: http://apps.who.int/immunization_monitoring/globalsummary/schedules
 #
 #  Single-dose antigens will use a parameter named <dose>_min_age_days (required)
 #  Single-dose antigens may use a parameter named <dose>_max_age_days (optional)
