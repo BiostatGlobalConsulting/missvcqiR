@@ -8,17 +8,18 @@
 #' @import stringr
 #' @rawNamespace import(rlang, except = c(local_options,with_options))
 
-# format_desc0203_database R version 1.00 - Biostat Global Consulting - 2023-08-03
+# format_desc0203_database R version 1.01 - Biostat Global Consulting - 2023-09-29
 # *******************************************************************************
 # Change log
 
 # Date 			  Version 	Name			      What Changed
 # 2023-08-03  1.00      Mia Yu          Original R package version
+# 2023-09-29  1.01      Mia Yu          Added multi lingual globals
 # *******************************************************************************
 
 
 format_desc0203_database <- function(VCP = "format_desc0203_database", i, db, wtd, indicator, datname, vid) {
-  #browser()
+
   dat2 <- vcqi_read(datname)
 
   # If the analysis is not weighted, include a column with n at the far right
@@ -36,11 +37,14 @@ format_desc0203_database <- function(VCP = "format_desc0203_database", i, db, wt
 
       dat2 <- dat2 %>% mutate(tempvar1 = round(!!pct*n))
 
-      dat2$tempvar1 <- haven::labelled(dat2$tempvar1, label = paste0(pctl, " (N)"))
+      dat2$tempvar1 <- haven::labelled(dat2$tempvar1,
+                                       label = paste0(pctl, " ",language_string(language_use = language_use, str = "OS_2")))
+                                       #(N)
       dat2 <- dat2 %>% relocate(tempvar1, .before = !!pct)
       names(dat2)[which(names(dat2) == "tempvar1")] <- paste0("n",i)
-      assign(paste0("n",i),paste0(pctl, " (N)"), envir = .GlobalEnv)
-
+      assign(paste0("n",i),paste0(pctl, " ", language_string(language_use = language_use, str = "OS_2")),
+             envir = .GlobalEnv)
+             #(N)
     }
   }
 
@@ -51,10 +55,13 @@ format_desc0203_database <- function(VCP = "format_desc0203_database", i, db, wt
 
       dat2 <- dat2 %>% mutate(tempvar1 = round(!!pct*nwtd, digits = 1))
 
-      dat2$tempvar1 <- haven::labelled(dat2$tempvar1, label = paste0(pctl, " (Weighted N)"))
+      dat2$tempvar1 <- haven::labelled(dat2$tempvar1,
+                                       label = paste0(pctl, " ",language_string(language_use = language_use, str = "OS_3")))
+                                                      #(Weighted N)
       dat2 <- dat2 %>% relocate(tempvar1, .before = !!pct)
       names(dat2)[which(names(dat2) == "tempvar1")] <- paste0("nwtd",i)
-      assign(paste0("nwtd",i),paste0(pctl, " (Weighted N)"), envir = .GlobalEnv)
+      assign(paste0("nwtd",i),paste0(pctl, " ", language_string(language_use = language_use, str = "OS_3")),
+             envir = .GlobalEnv) #(Weighted N)
 
     }
   }
@@ -74,7 +81,6 @@ format_desc0203_database <- function(VCP = "format_desc0203_database", i, db, wt
   assign(paste0("pct",i), pctl, envir = .GlobalEnv)
 
   # Only keep the variables that are necessary
-  #TODO: double check this works
   vartokeep <- grep(glob2rx(paste0("*",i)), names(dat2), value=TRUE)
   dat2 <- dat2 %>% select(c(level,name,level4id,level4name, all_of(vartokeep)))
 

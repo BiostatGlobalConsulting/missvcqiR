@@ -26,13 +26,13 @@ ES_STUD_02_04GO <- function(VCP = "ES_STUD_02_04GO"){
   for (d in seq_along(MOV_OUTPUT_DOSE_LIST)){
     print(MOV_OUTPUT_DOSE_LIST[d])
 
-    make_unwtd_output_database_MV(variable = paste0("table5_dv_",MOV_OUTPUT_DOSE_LIST[d],"_valid_",vc),
+    make_unwtd_output_database(variable = paste0("table5_dv_",MOV_OUTPUT_DOSE_LIST[d],"_valid_",vc),
                                   estlabel = paste0("Received valid dose for ",
                                                     str_to_upper(MOV_OUTPUT_DOSE_LIST[d]),
                                                     " - ", pvc, " (%)"),
                                   vid = paste0(MOV_OUTPUT_DOSE_LIST[d],"_valid_",vcf),
                                   measureid = "ES_STUD_02", keepnumerator = FALSE)
-    make_unwtd_output_database_MV(variable = paste0("table5_dv_",MOV_OUTPUT_DOSE_LIST[d],"_mov_",vc),
+    make_unwtd_output_database(variable = paste0("table5_dv_",MOV_OUTPUT_DOSE_LIST[d],"_mov_",vc),
                                   estlabel = paste0("Experienced MOV for ",
                                                     str_to_upper(MOV_OUTPUT_DOSE_LIST[d]),
                                                     " - ", pvc, " (%)"),
@@ -42,28 +42,28 @@ ES_STUD_02_04GO <- function(VCP = "ES_STUD_02_04GO"){
 
   print("Totals...")
 
-  make_unwtd_output_database_MV(variable = paste0("table5_any_valid_",vc),
+  make_unwtd_output_database(variable = paste0("table5_any_valid_",vc),
                                 estlabel = paste0("Received 1+ valid doses - ",
                                                   pvc, " (%)"),
                                 vid = paste0("any_valid_",vcf),
-                                measureid = "ES_STUD_02")
-  make_unwtd_output_database_MV(variable = paste0("table5_any_mov_",vc),
+                                measureid = "ES_STUD_02",keepnumerator = TRUE)
+  make_unwtd_output_database(variable = paste0("table5_any_mov_",vc),
                                 estlabel = paste0("Experienced 1+ MOVs doses - ",
                                                   pvc, " (%)"),
                                 vid = paste0("any_mov_",vcf),
-                                measureid = "ES_STUD_02")
-  make_count_output_database_MV(numerator = paste0("table5_mov_count_",vc),
+                                measureid = "ES_STUD_02",keepnumerator = TRUE)
+  make_count_output_database(numerator = paste0("table5_mov_count_",vc),
                              denominator = paste0("table5_elig_count_",vc),
                                 estlabel = paste0("Eligible doses not administered -",
                                                   pvc, " (%)"),
                                 vid = paste0("total_movs_",vcf),
-                                measureid = "ES_STUD_02")
+                                measureid = "ES_STUD_02",keepnumerator = TRUE)
 
   # To create database for Table5 endcap N
-  make_unwtd_output_database_MV(variable = "table5_dv_had_card_endcap",
+  make_unwtd_output_database(variable = "table5_dv_had_card_endcap",
                                 estlabel = "Had card with dob and 1+ doses",
                                 vid = "had_card",
-                                measureid = "ES_STUD_02")
+                                measureid = "ES_STUD_02",keepnumerator = TRUE)
 
   vcqi_log_comment(VCP, 5, "Flow", "Exiting")
 }

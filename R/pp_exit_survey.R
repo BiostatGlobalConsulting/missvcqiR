@@ -76,17 +76,6 @@ pp_exit_survey <- function(VCP = "pp_exit_survey"){
   # Only keep if survey completed
   dat <- dat %>% filter(ES01AE %in% 1)
 
-  # Confirm that all Exit Survey Specific globals are set
-
-  var <- c("LEVEL_2_ID", "LEVEL_3_ID")
-  for (v in seq_along(var)){
-    if (!vcqi_object_exists(var[v])){
-      errormsgs <- c(errormsgs,paste0("Global ",var[v], " is required to run miss-vcqi programs"))
-      vcqi_log_comment(VCP,1,"Error", paste0("Global ",var[v], " is required to run miss-vcqi programs"))
-      exitflag <- 1
-    }
-  } #end of var v loop
-
   # If there is a dose shift, check the required variables for each shift
   if (!vcqi_object_exists("NUM_DOSE_SHIFTS")){vcqi_global(NUM_DOSE_SHIFTS,0)}
   if (NUM_DOSE_SHIFTS >=  1) {

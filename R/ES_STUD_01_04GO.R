@@ -26,7 +26,7 @@ ES_STUD_01_04GO <- function(VCP = "ES_STUD_01_04GO"){
   for (d in seq_along(MOV_OUTPUT_DOSE_LIST)){
     print(MOV_OUTPUT_DOSE_LIST[d])
 
-    make_unwtd_output_database_MV(variable = paste0("table4_dv_",MOV_OUTPUT_DOSE_LIST[d],"_",vc),
+    make_unwtd_output_database(variable = paste0("table4_dv_",MOV_OUTPUT_DOSE_LIST[d],"_",vc),
                                   estlabel = paste0("Received invalid dose for ",
                                                     str_to_upper(MOV_OUTPUT_DOSE_LIST[d]),
                                                     " - ", pvc, " (%)"),
@@ -36,11 +36,11 @@ ES_STUD_01_04GO <- function(VCP = "ES_STUD_01_04GO"){
 
   print("Totals...")
 
-  make_unwtd_output_database_MV(variable = paste0("table4_dv_not_elig_",vc),
+  make_unwtd_output_database(variable = paste0("table4_dv_not_elig_",vc),
                                 estlabel = paste0("Received 1+ invalid doses - ",
                                                   pvc, " (%)"),
                                 vid = paste0("any_invalid_",vcf),
-                                measureid = "ES_STUD_01")
+                                measureid = "ES_STUD_01",keepnumerator = TRUE)
 
   vcqi_log_comment(VCP, 5, "Flow", "Exiting")
 }

@@ -17,29 +17,31 @@
 create_multi_lingual_plot_title <- function(title_string){
   print(title_string)
 
-  worldlength = sapply(strsplit(title_string, " "), length)
+  l = nchar(title_string)
 
-  final_title <- title_string
+  if (l > 40){
+    wordlength = sapply(strsplit(title_string, " "), length)
 
-  if (worldlength > 5){
-    title1 <- word(title_string, start = 1, end = 5)
-    title2 <- word(title_string, start = 6, end = worldlength)
-    final_title <- paste0(title1, "\n", title2)
-  }
+    final_title <- stringr::word(title_string,1)
+    currentline <- stringr::word(title_string,1)
 
-  if (worldlength > 10){
-    title1 <- word(title_string, start = 1, end = 5)
-    title2 <- word(title_string, start = 6, end = 10)
-    title3 <- word(title_string, start = 11, end = worldlength)
-    final_title <- paste0(title1, "\n", title2, "\n", title3)
-  }
+    for (i in 2:wordlength){
 
-  if (worldlength > 15){
-    title1 <- word(title_string, start = 1, end = 5)
-    title2 <- word(title_string, start = 6, end = 10)
-    title3 <- word(title_string, start = 11, end = 15)
-    title4 <- word(title_string, start = 11, end = worldlength)
-    final_title <- paste0(title1, "\n", title2, "\n", title3, "\n", title4)
+      t <- paste0(currentline, " ", stringr::word(title_string,i))
+      check <- stringr::str_trim(t)
+
+      if (nchar(check) > 40){
+        currentline <- stringr::word(title_string,i)
+        final_title <- paste0(final_title, "\n", stringr::word(title_string,i))
+      } else {
+        currentline <- paste0(currentline, " ", stringr::word(title_string,i))
+        final_title <- paste0(final_title, " ", stringr::word(title_string,i))
+      }
+
+    } #end of wordlength i loop
+
+  } else {
+    final_title <- title_string
   }
 
   return(final_title)
