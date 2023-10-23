@@ -89,14 +89,6 @@ vcqi_global(HW_SURVEY_DATASET, "HW_test_data.dta")
 # Name of dataset that holds facility data
 vcqi_global(VCQI_CM_DATASET, "CM_test_data.dta")
 
-# NOTE: the two globals below will be used in the generate_hw_derived_variables
-# program to create the level2namesforlevel3 dataset
-
-# If you would like to use ID02AB, ID02AD, ID02AF and/or ID02AH as a level2
-# stratifier, please list the variable name below. Only one level2 stratifier
-# variable can be provided.
-vcqi_global(LEVEL_2_ID, "ID02AD")
-
 # Set language for output tables
 # This can be set to ENGLISH, SPANISH, FRENCH or PORTUGUESE
 # May also set to EN for ENGLISH
