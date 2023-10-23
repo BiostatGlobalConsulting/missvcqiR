@@ -14,7 +14,7 @@
 #' @examples
 #' calculate_MOV_flags()
 
-# calculate_MOV_flags R version 1.06 - Biostat Global Consulting - 2023-07-14
+# calculate_MOV_flags R version 1.07 - Biostat Global Consulting - 2023-07-14
 # ******************************************************************************
 # Change log
 
@@ -31,6 +31,10 @@
 # 2023-07-14  1.06      Caitlin Clary   When RI_RECORDS_SOUGHT_FOR_ALL = 1, no
 #                                       longer mix and match card and register
 #                                       within a single child's record
+# 2023-10-23  1.07      Caitlin Clary   In step 02, fix bugs with (a) rows with
+#                                       missing visit dates; (b) doses with no
+#                                       visit dates in dataset being dropped
+#                                       (can't drop bc used in code downstream)
 # ******************************************************************************
 
 calculate_MOV_flags <- function(VCP = "calculate_MOV_flags"){
@@ -254,7 +258,7 @@ calculate_MOV_flags <- function(VCP = "calculate_MOV_flags"){
       # Generate a string D/T/M (date/tick/missing) for doses in a series
       # Note: This variable will be used at bottom of code when updating MOV flags
 
-      if(!is.null(multi)){
+      if (!is.null(multi)){
         for(d in 1:nrow(multi)){
           dn <- multi$dose[d]
           di <- seq(1, multi$dosecount[d], by = 1)
@@ -307,14 +311,27 @@ calculate_MOV_flags <- function(VCP = "calculate_MOV_flags"){
       no_dates <- datsummary %>%
         filter(n_dates %in% 0) %>% pull(visitdose)
 
+      no_dates_doses <- no_dates %>%
+        stringr::str_replace(., "_card_date", "")
+
+      # Note - downstream we'll restore variables for doses in no_dates, which
+      # are needed later in this program
+
       dat <- dat %>%
-        # filter(!is.na(visitdate)) %>%
-        filter(!is.na(visitdate) | (is.na(visitdate) & visitdose %in% no_dates)) %>%
+        filter(!is.na(visitdate)) %>%
+        #filter(!is.na(visitdate) | (is.na(visitdate) & visitdose %in% no_dates)) %>%
         mutate(visitdose = str_replace(visitdose, "_card_date", ""),
                test = 1) %>%
         pivot_wider(names_from = "visitdose",
                     values_from = "test",
                     names_prefix = "got_")
+
+      if (length(no_dates_doses) > 0){
+        for (ds in seq_along(no_dates_doses)){
+          dosevar_d <- rlang::sym(paste0("got_", no_dates_doses[ds]))
+          dat <- dat %>% mutate(!!dosevar_d := 0)
+        }
+      }
 
       # Logic for MISS-VCQI - handling the faux "visit" dose, which is handled
       # differently the two times MISS-VCQI calls calculate_MOV_flags
@@ -338,7 +355,7 @@ calculate_MOV_flags <- function(VCP = "calculate_MOV_flags"){
 
           var_i <- var_i[var_i %in% names(dat)]
 
-          temp <- dat %>% select(contains(var_i))
+          temp <- dat %>% select(all_of(var_i))
           vars_to_drop <- names(temp)
           temp <- temp %>%
             mutate(var = coalesce(!!! select(., everything())))
@@ -355,7 +372,7 @@ calculate_MOV_flags <- function(VCP = "calculate_MOV_flags"){
 
       # Define vector for ordering variables (except <dose>_str vars)
       tempvarnames <- c("respid", "dob", "visitdate")
-      if(vcqi_object_exists("RI_SINGLE_DOSE_LIST")){
+      if (vcqi_object_exists("RI_SINGLE_DOSE_LIST")){
         for(s in seq_along(RI_SINGLE_DOSE_LIST)){
           tempvarnames <- c(
             tempvarnames,
@@ -363,7 +380,7 @@ calculate_MOV_flags <- function(VCP = "calculate_MOV_flags"){
             paste0("got_", str_to_lower(RI_SINGLE_DOSE_LIST[s]), "_tick"))}
       }
 
-      if(!is.null(multi)){
+      if (!is.null(multi)){
         for(s in 1:nrow(multi)){
           tempvarnames <- c(
             tempvarnames,
