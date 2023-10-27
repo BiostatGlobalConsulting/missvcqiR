@@ -62,7 +62,7 @@ RI_QUAL_09_05TOST <- function(VCP = "RI_QUAL_09_05TOST"){
     if (dose == "anydose"){
       dat <- dat %>% mutate(n_partial = n_mov - n_uncor_mov - n_cor_mov,
                             pct_partial = ifelse((n_mov > 0) %in% TRUE, (n_partial/n_mov) * 100, NA))
-      dat <- dat %>% mutate(pct_partial = ifelse(is.na(pct_partial), 0, pct_partial))
+      dat <- dat %>% mutate(pct_partial = ifelse(is.na(pct_partial) & !is.na(n_mov), 0, pct_partial))
     }
 
     # generate a new 0/1 flag that indicates which rows in the output
