@@ -108,13 +108,13 @@ RI_QUAL_09_05TOST <- function(VCP = "RI_QUAL_09_05TOST"){
         tablename = "TO_RI_QUAL_09",
         dbfilename = paste0("RI_QUAL_09_",ANALYSIS_COUNTER,"_",ldose,"_TO.rds"),
         variable = "n_cor_mov", replacevar = NA, noannotate = TRUE,
-        label = paste0("MOV corrected for ", udose, " (N)"), varformat = list("#,##0"))
+        label = paste0("MOSV corrected for ", udose, " (N)"), varformat = list("#,##0"))
 
       make_table_column(
         tablename = "TO_RI_QUAL_09",
         dbfilename = paste0("RI_QUAL_09_",ANALYSIS_COUNTER,"_",ldose,"_TO.rds"),
         variable = "pct_cor", replacevar = NA, noannotate = TRUE,
-        label = paste0("MOV corrected for ", udose, " (%)"))
+        label = paste0("MOSV corrected for ", udose, " (%)"))
 
       make_table_column(
         tablename = "TO_RI_QUAL_09",
@@ -130,49 +130,49 @@ RI_QUAL_09_05TOST <- function(VCP = "RI_QUAL_09_05TOST"){
         tablename = "TO_RI_QUAL_09",
         dbfilename = paste0("RI_QUAL_09_",ANALYSIS_COUNTER,"_",ldose,"_TO.rds"),
         variable = "n_mov", replacevar = NA, noannotate = TRUE,
-        label = "Had MOV for any dose (N)", varformat = list("#,##0"))
+        label = "Had MOSV for any dose (N)", varformat = list("#,##0"))
 
       make_table_column(
         tablename = "TO_RI_QUAL_09",
         dbfilename = paste0("RI_QUAL_09_",ANALYSIS_COUNTER,"_",ldose,"_TO.rds"),
         variable = "pct_mov", replacevar = NA, noannotate = TRUE,
-        label = "Had MOV for any dose (%)")
+        label = "Had MOSV for any dose (%)")
 
       make_table_column(
         tablename = "TO_RI_QUAL_09",
         dbfilename = paste0("RI_QUAL_09_",ANALYSIS_COUNTER,"_",ldose,"_TO.rds"),
         variable = "n_uncor_mov", replacevar = NA, noannotate = TRUE,
-        label = "All MOVs were uncorrected (N)", varformat = list("#,##0"))
+        label = "All MOSVs were uncorrected (N)", varformat = list("#,##0"))
 
       make_table_column(
         tablename = "TO_RI_QUAL_09",
         dbfilename = paste0("RI_QUAL_09_",ANALYSIS_COUNTER,"_",ldose,"_TO.rds"),
         variable = "pct_uncor", replacevar = NA, noannotate = TRUE,
-        label = "All MOVs were uncorrected (%)")
+        label = "All MOSVs were uncorrected (%)")
 
       make_table_column(
         tablename = "TO_RI_QUAL_09",
         dbfilename = paste0("RI_QUAL_09_",ANALYSIS_COUNTER,"_",ldose,"_TO.rds"),
         variable = "n_cor_mov", replacevar = NA, noannotate = TRUE,
-        label = "All MOVs were corrected (N)", varformat = list("#,##0"))
+        label = "All MOSVs were corrected (N)", varformat = list("#,##0"))
 
       make_table_column(
         tablename = "TO_RI_QUAL_09",
         dbfilename = paste0("RI_QUAL_09_",ANALYSIS_COUNTER,"_",ldose,"_TO.rds"),
         variable = "pct_cor", replacevar = NA, noannotate = TRUE,
-        label = "All MOVs were corrected (%)")
+        label = "All MOSVs were corrected (%)")
 
       make_table_column(
         tablename = "TO_RI_QUAL_09",
         dbfilename = paste0("RI_QUAL_09_",ANALYSIS_COUNTER,"_",ldose,"_TO.rds"),
         variable = "n_partial", replacevar = NA, noannotate = TRUE,
-        label = "Some (not all) MOVs were corrected (N)", varformat = list("#,##0"))
+        label = "Some (not all) MOSVs were corrected (N)", varformat = list("#,##0"))
 
       make_table_column(
         tablename = "TO_RI_QUAL_09",
         dbfilename = paste0("RI_QUAL_09_",ANALYSIS_COUNTER,"_",ldose,"_TO.rds"),
         variable = "pct_partial", replacevar = NA, noannotate = TRUE,
-        label = "Some (not all) MOVs were corrected (%)")
+        label = "Some (not all) MOSVs were corrected (%)")
 
       make_table_column(
         tablename = "TO_RI_QUAL_09",
