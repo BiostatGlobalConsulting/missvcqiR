@@ -15,11 +15,22 @@ vcqi_mdy(m, d, y)
 }
 \value{
 A vector of dates
+
+A vector of dates
 }
 \description{
 Parse date from individual month, day, and year components like lubridate::mdy, returning NA if any element is missing
 }
 \examples{
+vcqi_mdy(1,2,2022)
+vcqi_mdy(10,NA,2022)
+
+month <- c(1,2,4,5)
+date <- c(12,14,16,NA)
+year <- rep(2022,4)
+vcqi_mdy(month,date,year)
+Parse date from individual month, day, and year components like lubridate::mdy, returning NA if any element is missing
+
 vcqi_mdy(1,2,2022)
 vcqi_mdy(10,NA,2022)
 
