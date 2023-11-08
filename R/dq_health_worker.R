@@ -32,9 +32,9 @@ dq_health_worker <- function(...){
              tag = "Missing HW01AA - Questionnaire number",idlist = idvars,checklist = c("HW01AA"),fix = TRUE)
 
   # Confirm questionnaire number is unique
-  dat2 <- dat %>% group_by(HW01AA) %>% mutate(HW01AA_check = row_number()) %>% ungroup()
+  dat2 <- dat %>% group_by(HW01AA) %>% mutate(n = row_number()) %>% ungroup()
 
-  assertlist(dat = dat2, var = c("HW01AA"), f = "dat$HW01AA_check %in% 1",
+  assertlist(dat = dat2, var = c("HW01AA"), f = "dat$n %in% 1",
              tag = "HW01AA - Questionnaire number should be unique",idlist = idvars,checklist = c("HW01AA"),fix = TRUE)
 
 
@@ -59,11 +59,11 @@ dq_health_worker <- function(...){
                "ID02AF", "ID02AG", "ID02AH", "ID02AIname", "ID02AIid")
   for (v in seq_along(idcheck)){
     vartype = get(idcheck[v],dat)
-    if(any(class(vartype) == "numeric")){
+    if(any("numeric" %in% class(vartype)) | any("double" %in% class(vartype))){
       assertlist(dat = dat, var = idcheck[v], f = paste0("!is.na(dat$",idcheck[v],")"),
                  tag = paste0(idcheck[v], " cannot be missing as required variable"),
                  idlist = idvars,checklist = idcheck[v],fix = TRUE)
-    } else if (any(class(vartype) == "character")){
+    } else if (any("character" %in% class(vartype))){
       assertlist(dat = dat, var = idcheck[v], f = paste0("!is.na(dat$",idcheck[v],") & dat$",idcheck[v]," != ''"),
                  tag = paste0(idcheck[v], " cannot be missing as required variable"),
                  idlist = idvars,checklist = idcheck[v],fix = TRUE)
@@ -73,7 +73,7 @@ dq_health_worker <- function(...){
 
   numvar <- c("ID02AB", "ID02AD", "ID02AF", "ID02AH", "ID02AIid")
   for (v in seq_along(numvar)){
-    assertlist(dat = dat, var = numvar[v], f = paste0("is.numeric(dat$",numvar[v],")"),
+    assertlist(dat = dat, var = numvar[v], f = paste0("!('character' %in% class(dat$",numvar[v],"))"),
                tag = paste0("Variable type for ",numvar[v], " cannot be string"),
                idlist = idvars,checklist = numvar[v],fix = TRUE)
   } #end of numvar v loop
@@ -82,7 +82,11 @@ dq_health_worker <- function(...){
              tag = "Interview Month invalid",idlist = idvars,checklist = c("ID02AJm"),fix = TRUE)
 
   assertlist(dat = dat, var = c("ID02AJd"), f = "dat$ID02AJd <= 28",
-             condition = "dat$ID02AJm %in% 2",
+             condition = "dat$ID02AJm %in% 2 & !(dat$ID02AJy %in% c(2012,2016,2020,2024,2028,2032,2036,2040,2044,2048))",
+             tag = "Interview Day Invalid",
+             idlist = idvars,checklist = c("ID02AJm", "ID02AJd"),fix = TRUE)
+  assertlist(dat = dat, var = c("ID02AJd"), f = "dat$ID02AJd <= 29",
+             condition = "dat$ID02AJm %in% 2 & dat$ID02AJy %in% c(2012,2016,2020,2024,2028,2032,2036,2040,2044,2048)",
              tag = "Interview Day Invalid",
              idlist = idvars,checklist = c("ID02AJm", "ID02AJd"),fix = TRUE)
   assertlist(dat = dat, var = c("ID02AJd"), f = "dat$ID02AJd <= 31",
@@ -117,12 +121,12 @@ dq_health_worker <- function(...){
 
   assertlist(dat = dat, var = c("HW03AD_1"), f = "dat$HW03AD_1 %in% c(1,2) | is.na(dat$HW03AD_1)",
              tag = "HW03AD_1 - Invalid response",idlist = idvars,checklist = c("HW03AD_1"),fix = TRUE)
-  assertlist(dat = dat, var = c("HW03AE_1"), f = "is.numeric(dat$HW03AE_1)",
+  assertlist(dat = dat, var = c("HW03AE_1"), f = "!('character' %in% class(dat$HW03AE_1))",
              tag = "HW03AE_1 must be numeric if not missing",idlist = idvars,checklist = c("HW03AE_1"),fix = TRUE)
 
   assertlist(dat = dat, var = c("HW03AD_2"), f = "dat$HW03AD_2 %in% c(1,2) | is.na(dat$HW03AD_2)",
              tag = "HW03AD_2 - Invalid response",idlist = idvars,checklist = c("HW03AD_2"),fix = TRUE)
-  assertlist(dat = dat, var = c("HW03AE_2"), f = "is.numeric(dat$HW03AE_2)",
+  assertlist(dat = dat, var = c("HW03AE_2"), f = "!('character' %in% class(dat$HW03AE_2))",
              tag = "HW03AE_2 must be numeric if not missing",idlist = idvars,checklist = c("HW03AE_2"),fix = TRUE)
 
   assertlist(dat = dat, var = c("HW03AE_2"), f = "dat$HW03AE_2 <= 11",
