@@ -16,12 +16,14 @@
 #' @import haven
 #' @import stringr
 
-# make_DESC_0203_output_database R version 1.00 - Biostat Global Consulting - 2023-05-25
+# make_DESC_0203_output_database R version 1.01 - Biostat Global Consulting - 2023-11-10
 # *******************************************************************************
 # Change log
 
 # Date 			  Version 	Name			      What Changed
 # 2023-05-25  1.00      Mia Yu          Original R Package version
+# 2023-11-10  1.01      Caitlin Clary   If input variable doesn't have a label
+#                                       (label attr = NULL), use variable name
 # *******************************************************************************
 
 # NOTE: functional, with some details pending (see TO DO notes)
@@ -35,26 +37,30 @@ make_DESC_0203_output_database <- function(
     VCP = "make_DESC_0203_output_database",
     ...){
 
-  if(!is.null(printprogress)){
+  if (!is.null(printprogress)){
     print(printprogress)
   }
 
   vcqi_log_comment(VCP, 5, "Flow", "Starting")
-  #browser()
-  # This program is used for DESC_02 and DESC_03...sort out which
-  # is calling it now and set the appropriate local macro
+
+  # This program is used for DESC_02 and DESC_03...sort out which is calling it
+  # now and set the appropriate local macro
 
   templabel <- label
   tempvid <- vid
   tempmeasure <- measureid
+
+  if (is.null(templabel)){
+    templabel <- variable
+  }
 
   if (tempmeasure == "DESC_02"){
     mid <- "02"
   } else if (tempmeasure == "DESC_03"){
     mid <- "03"
   } else {
-    errormsgs <- paste0("MEASUREID should be DESC_02 or DESC_03 to call ",VCP)
-    vcqi_log_comment(VCP, 1, "Error",paste0("MEASUREID should be DESC_02 or DESC_03 to call ",VCP))
+    errormsgs <- paste0("MEASUREID should be DESC_02 or DESC_03 to call ", VCP)
+    vcqi_log_comment(VCP, 1, "Error", paste0("MEASUREID should be DESC_02 or DESC_03 to call ", VCP))
     vcqi_global(VCQI_ERROR, 1)
     vcqi_halt_immediately(
       halt_message = errormsgs
@@ -72,7 +78,7 @@ make_DESC_0203_output_database <- function(
 
   # Set survey design based on VCQI_SVYDESIGN_SYNTAX
 
-  weight <- get(paste0("DESC_",mid,"_WEIGHTED"), envir = .GlobalEnv)
+  weight <- get(paste0("DESC_", mid, "_WEIGHTED"), envir = .GlobalEnv)
   if (str_to_upper(weight) == "YES"){
     svy_design <- get("VCQI_SVYDESIGN_SYNTAX", envir = .GlobalEnv)
 
@@ -103,7 +109,7 @@ make_DESC_0203_output_database <- function(
   # Build the lists of variables to post
   vlist <- NULL
   vorder <- NULL
-  level_count_without_subtotals <- get(paste0("DESC_",mid,"_LVL_COUNT_",tempvid), envir = .GlobalEnv)
+  level_count_without_subtotals <- get(paste0("DESC_", mid, "_LVL_COUNT_", tempvid), envir = .GlobalEnv)
 
   if (!vcqi_object_exists(paste0("DESC_",mid,"_SHOW_SUBTOTALS_ONLY"))){
     for (i in 1:level_count_without_subtotals){
@@ -128,7 +134,7 @@ make_DESC_0203_output_database <- function(
                 vlist <- c(vlist, paste0("desc",mid,"_",tempvid,"_st",k))
               }
             }
-          } #end of sub_count k loop
+          } # end of sub_count k loop
         }
       }
 

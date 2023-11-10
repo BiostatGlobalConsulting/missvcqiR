@@ -10,12 +10,15 @@
 #' @import haven
 #' @importFrom utils stack
 
-# DESC_02_03DV R version 1.00 - Biostat Global Consulting - 2023-05-23
+# DESC_02_03DV R version 1.01 - Biostat Global Consulting - 2023-11-10
 # *******************************************************************************
 # Change log
 
 # Date 			  Version 	Name			      What Changed
 # 2023-05-23  1.00      Mia Yu          Original R package version
+# 2023-11-10  1.01      Caitlin Clary   When relabeling variable levels, avoid
+#                                       errors when original variable doesn't
+#                                       have value labels
 # *******************************************************************************
 
 DESC_02_03DV <- function(VCP = "DESC_02_03DV"){
@@ -48,7 +51,7 @@ DESC_02_03DV <- function(VCP = "DESC_02_03DV"){
       }
     }
 
-    # * What are the observed values of `v'?
+    # What are the observed values of `v'?
     llist <- sort(unique(var),na.last = TRUE)
 
     if (missing != "TRUE"){
@@ -58,13 +61,24 @@ DESC_02_03DV <- function(VCP = "DESC_02_03DV"){
       }
     }
 
+    if (!is.null(attr(var, "labels"))){
+      original_var_labelled <- TRUE
+    } else {
+      original_var_labelled <- FALSE
+    }
+
     # What values of `v' are listed in its value label (if applicable)?
-    if (!is.null(attr(var,"labels"))){
+    if (!is.null(attr(var, "labels"))){
       labels <- unique(stack(attr(var, 'labels')))
       lalist <- as.character(labels$ind)
       valist <- sort(labels$values,na.last = TRUE)
       llist <- unique(c(valist,llist))
-    }
+    } else {
+      # Set default label information if the original variable doesn't have
+      # value labels
+      labels <- llist
+      lalist <- as.character(llist)
+      }
 
     # detach the value labels from the variable
     var <- zap_labels(var)
@@ -83,10 +97,14 @@ DESC_02_03DV <- function(VCP = "DESC_02_03DV"){
     }
 
     lcounter <- 1
+
     for (l in seq_along(llist)){
 
-      dat <- dat %>% mutate(tempvar1 = ifelse((((!!va == llist[l]) %in% TRUE) | (is.na(!!va) & is.na(llist[l]))) & psweight > 0 & !is.na(psweight),
-                                              1, 0))
+      dat <- dat %>%
+        mutate(tempvar1 = ifelse(
+          (((!!va == llist[l]) %in% TRUE) | (is.na(!!va) & is.na(llist[l]))) &
+            psweight > 0 & !is.na(psweight),
+          1, 0))
       assign(paste0("DESC02_VALUE_LEVEL_", lcounter), llist[l], envir = .GlobalEnv)
       dat <- dat %>% mutate(tempvar1 = ifelse((
           is.na(!!va) & (str_to_upper(DESC_02_DENOMINATOR) == "RESPONDED") & psweight > 0 & !is.na(psweight)),
@@ -96,10 +114,30 @@ DESC_02_03DV <- function(VCP = "DESC_02_03DV"){
         dat$tempvar1 <- haven::labelled(dat$tempvar1, label = llist[l]) %>% suppressWarnings()
       }
 
+      # if (vtype == "number"){
+      #   if (length(which(labels$values %in% llist[l])) > 0){
+      #     m <- which(labels$values %in% llist[l])
+      #     dat$tempvar1 <- haven::labelled(dat$tempvar1, label = lalist[m]) %>% suppressWarnings()
+      #   }
+      # }
+
+      # Updated 2023-11-10 - labels object only has 'values' slot if the
+      # original variable had value labels; make robust to unlabeled variables
+      # being summarized
       if (vtype == "number"){
-        if (length(which(labels$values %in% llist[l])) > 0){
-          m <- which(labels$values %in% llist[l])
-          dat$tempvar1 <- haven::labelled(dat$tempvar1, label = lalist[m]) %>% suppressWarnings()
+
+        if (original_var_labelled %in% TRUE){
+          if (length(which(labels$values %in% llist[l])) > 0){
+            m <- which(labels$values %in% llist[l])
+            dat$tempvar1 <- haven::labelled(dat$tempvar1, label = lalist[m]) %>%
+              suppressWarnings()
+          }
+        } else {
+          if (length(labels %in% llist[l]) > 0){
+            m <- which(labels %in% llist[l])
+            dat$tempvar1 <- haven::labelled(dat$tempvar1, label = lalist[m]) %>%
+              suppressWarnings()
+          }
         }
       }
 
@@ -112,7 +150,8 @@ DESC_02_03DV <- function(VCP = "DESC_02_03DV"){
             if ((as.character(llist[l]) == as.character(relabelva)) %in% TRUE |
                 (is.na(as.character(llist[l])) & is.na(as.character(relabelva)))) {
               dat$tempvar1 <- haven::zap_label(dat$tempvar1)
-              dat$tempvar1 <- haven::labelled(dat$tempvar1, label = relabella) %>% suppressWarnings()
+              dat$tempvar1 <- haven::labelled(dat$tempvar1, label = relabella) %>%
+                suppressWarnings()
             }
           } #end of DESC_02_N_RELABEL_LEVELS i loop
         }
@@ -164,7 +203,7 @@ DESC_02_03DV <- function(VCP = "DESC_02_03DV"){
         } #end of DESC_02_N_SUBTOTALS i loop
       }
 
-      # Do vcqi_global in seperate steps since the name depends on another global
+      # Do vcqi_global in separate steps since the name depends on another global
       assign(paste0("DESC_02_ST_COUNT_",vcounter), DESC_02_N_SUBTOTALS, envir = .GlobalEnv)
       vcqi_log_comment(VCP, 3, "Global", paste0("Global value DESC_02_ST_COUNT_", vcounter, " is ", DESC_02_N_SUBTOTALS))
 
