@@ -506,7 +506,9 @@ calculate_MOV_flags <- function(VCP = "calculate_MOV_flags"){
                   group_by(person) %>%
                   mutate(!!ageat := max(tempage, na.rm = TRUE),
                          !!flagdose := max(!!gotdose, na.rm = TRUE)
-                  )
+                  ) %>% suppressWarnings()
+                dat <- dat %>% mutate(!!ageat := ifelse((!!ageat == Inf | !!ageat == -Inf) %in% TRUE, NA, !!ageat))
+                dat <- dat %>% mutate(!!flagdose := ifelse((!!flagdose == Inf | !!flagdose == -Inf) %in% TRUE, NA, !!flagdose))
 
                 # For crude doses, replace eligible with 0 if child got an early dose
                 # Note: comment says this is for crude doses, but in Stata they commented out the condition
@@ -571,7 +573,9 @@ calculate_MOV_flags <- function(VCP = "calculate_MOV_flags"){
                   group_by(person) %>%
                   mutate(!!ageat := max(tempage, na.rm = TRUE),
                          !!flagdose := max(!!gotdose, na.rm = TRUE)
-                  ) %>% ungroup()
+                  ) %>% ungroup() %>% suppressWarnings()
+                dat <- dat %>% mutate(!!ageat := ifelse((!!ageat == Inf | !!ageat == -Inf) %in% TRUE, NA, !!ageat))
+                dat <- dat %>% mutate(!!flagdose := ifelse((!!flagdose == Inf | !!flagdose == -Inf) %in% TRUE, NA, !!flagdose))
 
                 # For crude doses, replace eligible with 0 if child got an early dose
                 # Note: comment says this is for crude doses, but in Stata they commented out the condition
@@ -650,7 +654,8 @@ calculate_MOV_flags <- function(VCP = "calculate_MOV_flags"){
 
             # calculate and remember the age at which they got this dose
             dat <- dat %>% mutate(drop = tempvar3 * age)
-            dat <- dat %>% group_by(person) %>% arrange(person) %>% mutate(tempvar4 = max(drop,na.rm = TRUE)) %>% ungroup()
+            dat <- dat %>% group_by(person) %>% arrange(person) %>% mutate(tempvar4 = max(drop,na.rm = TRUE)) %>% ungroup() %>% suppressWarnings()
+            dat <- dat %>% mutate(tempvar4 = ifelse((tempvar4 == Inf | tempvar4 == -Inf) %in% TRUE, NA, tempvar4))
             dat <- select(dat, -c(drop))
 
             # later we will drop all rows but one for this person, so
@@ -659,7 +664,8 @@ calculate_MOV_flags <- function(VCP = "calculate_MOV_flags"){
               group_by(person) %>%
               arrange(person) %>%
               mutate(tempvar5 = max(tempvar3, na.rm = TRUE)) %>%
-              ungroup()
+              ungroup() %>% suppressWarnings()
+            dat <- dat %>% mutate(tempvar5 = ifelse((tempvar5 == Inf | tempvar5 == -Inf) %in% TRUE, NA, tempvar5))
 
             # DAR: changing this to be true for both crude & valid
 
