@@ -35,7 +35,7 @@ DESC_03_03DV <- function(VCP = "DESC_03_03DV"){
     varlabel <- attr(var,"label")
 
     if (is.null(varlabel)){
-      varlabel <- ""
+      varlabel <- DESC_03_VARIABLES[v]
     }
 
     var <- zap_labels(var)
