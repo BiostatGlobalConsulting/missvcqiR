@@ -13,7 +13,7 @@
 #' @examples
 #' check_analysis_metadata_MV()
 #'
-# check_analysis_metadata_MV R version 1.14 - Biostat Global Consulting - 2023-08_28
+# check_analysis_metadata_MV R version 1.16 - Biostat Global Consulting - 2023-11-16
 # *******************************************************************************
 # Change log
 
@@ -41,6 +41,7 @@
 # 2023-07-29  1.13      Mia Yu          Remove HH14 from missing value check
 # 2023-08-28  1.14      Mia Yu          Copied and revised from check_analysis_metadata
 # 2023-10-03  1.15      Mia Yu          Set default value of LEVEL2_ID
+# 2023-11-15  1.16      Mia Yu          Add format columns with default settings for level4_layout
 # *******************************************************************************
 
 # Note: sections of this program that check FMTID are not implemented (2022-10-07)
@@ -84,6 +85,10 @@ check_analysis_metadata_MV <- function(VCP = "check_analysis_metadata_MV"){
   if(vcqi_object_exists("VCQI_SVYDESIGN_SYNTAX") == FALSE){
     vcqi_global(VCQI_SVYDESIGN_SYNTAX, list(ids = ~clusterid, weights = ~psweight, strata = ~stratumid))
   }
+
+  # This will set globals for each output in Miss-VCQI based on the value provided
+  # in global OUTPUT_LANGUAGE
+  miss_vcqi_multi_lingual_strings()
 
   # Check for variables if HH and HM datasets are provided
 
@@ -544,7 +549,22 @@ check_analysis_metadata_MV <- function(VCP = "check_analysis_metadata_MV"){
     # If VCQI_LEVEL4_SET_LAYOUT wasn't provided, save default layout here:
     if(exitflag != 1  & !vcqi_object_exists("VCQI_LEVEL4_SET_LAYOUT")){
 
-      layout_temp <- layout_temp %>% mutate(order = 1:n())
+      #2023-11-16 update: add format columns with default settings
+      layout_temp <- layout_temp %>% mutate(order = 1:n(),
+                                            fmtid_for_first_column_r = "regular_left",
+                                            fmtid_for_other_columns_r = "regular_right",
+                                            outlinecolor1_r = "#0000ff",
+                                            outlinecolor2_r = "lightgrey",
+                                            bar_fillcolor1_r = "#2b92be",
+                                            bar_fillcolor2_r = "lightgrey",
+                                            shadecolor1_r = NA,
+                                            shadecolor2_r = NA,
+                                            addline = NA) %>%
+        mutate(fmtid_for_other_columns_r = ifelse(!rowtype %in% "DATA_ROW", NA, fmtid_for_other_columns_r),
+               outlinecolor1_r = ifelse(!rowtype %in% "DATA_ROW", NA, outlinecolor1_r),
+               bar_fillcolor2_r = ifelse(!rowtype %in% "DATA_ROW", NA, bar_fillcolor2_r),
+               bar_fillcolor1_r = ifelse(!rowtype %in% "DATA_ROW", NA, bar_fillcolor1_r),
+               bar_fillcolor2_r = ifelse(!rowtype %in% "DATA_ROW", NA, bar_fillcolor2_r))
 
       saveRDS(layout_temp, file = paste0(VCQI_OUTPUT_FOLDER, "/VCQI_LEVEL4_SET_LAYOUT_automatic.rds"))
       vcqi_global(VCQI_LEVEL4_SET_LAYOUT,
@@ -770,13 +790,19 @@ check_analysis_metadata_MV <- function(VCP = "check_analysis_metadata_MV"){
 
         notempty <- 0
         if ("fmtid_for_first_column_r" %in% names(level4_layout)){
-          if (!(all(level4_layout$fmtid_for_first_column_r == "" | is.na(level4_layout$fmtid_for_first_column_r) | is.null(level4_layout$fmtid_for_first_column_r)))){
+          if (!(all(level4_layout$fmtid_for_first_column_r == "" |
+                    is.na(level4_layout$fmtid_for_first_column_r) |
+                    is.null(level4_layout$fmtid_for_first_column_r) |
+                    level4_layout$fmtid_for_first_column_r == "regular_left"))){
             notempty <- 1
           }
         }
 
         if ("fmtid_for_other_columns_r" %in% names(level4_layout)){
-          if (!(all(level4_layout$fmtid_for_other_columns_r == "" | is.na(level4_layout$fmtid_for_other_columns_r) | is.null(level4_layout$fmtid_for_other_columns_r)))){
+          if (!(all(level4_layout$fmtid_for_other_columns_r == "" |
+                    is.na(level4_layout$fmtid_for_other_columns_r) |
+                    is.null(level4_layout$fmtid_for_other_columns_r) |
+                    level4_layout$fmtid_for_other_columns_r == "regular_right"))){
             notempty <- 1
           }
         }
