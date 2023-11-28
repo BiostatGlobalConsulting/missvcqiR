@@ -13,7 +13,7 @@
 #' @import ggplot2
 #' @import dplyr
 
-# vcqi_to_uwplot R version 1.06 - Biostat Global Consulting - 2023-02-03
+# vcqi_to_uwplot R version 1.07 - Biostat Global Consulting - 2023-08-21
 # *******************************************************************************
 # Change log
 
@@ -26,6 +26,8 @@
 # 2022-12-15  1.04      Mia Yu          Add title etc. to the dataset
 # 2023-01-12  1.05      Mia Yu          Add parts to allow users customize level4 plots
 # 2023-02-03  1.06      Mia Yu          Updated level4 plots customization
+# 2023-08-21  1.07      Mia Yu          Copied from vcqi_to_uwplot and substitue
+#                                       some strings with language_string
 # *******************************************************************************
 
 vcqi_to_uwplot <- function(
@@ -83,21 +85,29 @@ vcqi_to_uwplot <- function(
   # Sort proportions based on user request
   # Default is sorting proportions low at bottom of plot to high at top of plot
 
-  if (SORT_PLOT_LOW_TO_HIGH == 0){
+  if (vcqi_object_exists("SORT_PLOT_LOW_TO_HIGH")){
+    if (SORT_PLOT_LOW_TO_HIGH == 0){
+      # meaning, sort prop high to low
+      dat <- arrange(dat, desc(estimate))
+    } else{
+      dat <- arrange(dat, estimate)
+    }
+  } else{
     # meaning, sort prop high to low
     dat <- arrange(dat, desc(estimate))
-  } else{
-    dat <- arrange(dat, estimate)
   }
+
 
   # If user wants strata plotted in table order, merge the table order
   # and sort accordingly
 
-  if (PLOT_OUTCOMES_IN_TABLE_ORDER == 1){
-    vcqi_log_comment(
-      VCP, 3, "Comment",
-      "User has requested that outcomes be plotted in table order instead of sorting by indicator outcome.")
-    dat <- arrange(dat, desc(level4id))
+  if (vcqi_object_exists("PLOT_OUTCOMES_IN_TABLE_ORDER")){
+    if (PLOT_OUTCOMES_IN_TABLE_ORDER == 1){
+      vcqi_log_comment(
+        VCP, 3, "Comment",
+        "User has requested that outcomes be plotted in table order instead of sorting by indicator outcome.")
+      dat <- arrange(dat, desc(level4id))
+    }
   }
 
   dat <- dat %>%
@@ -105,8 +115,7 @@ vcqi_to_uwplot <- function(
     mutate(rowid = row_number())
 
   if (UWPLOT_ANNOTATE_LOW_MED != 1) {
-    dat <- mutate(
-      dat,
+    dat <- mutate(dat,
       text = paste0(
         sprintf(paste0("%.", VCQI_NUM_DECIMAL_DIGITS,"f"), estimate*100),"% ",
         language_string(language_use = language_use, str = "OS_48"),
@@ -140,13 +149,14 @@ vcqi_to_uwplot <- function(
       vcqi_global(UWPLOT_ANNOTATE_LOW_N, 25)
     }
 
-    dat <- mutate(dat,
-                  text = paste0(
-                    sprintf(paste0("%.", VCQI_NUM_DECIMAL_DIGITS, "f"),
-                            estimate * 100),"% ",
-                    language_string(language_use = language_use, str = "OS_48"),
-                    " = ",
-                    prettyNum(n, big.mark = ",")))
+    dat <- mutate(
+      dat,
+      text = paste0(
+        sprintf(paste0("%.", VCQI_NUM_DECIMAL_DIGITS, "f"),
+                estimate * 100),"% ",
+        language_string(language_use = language_use, str = "OS_48"),
+        " = ",
+        prettyNum(n, big.mark = ",")))
 
     dat <- mutate(
       dat,
@@ -160,13 +170,20 @@ vcqi_to_uwplot <- function(
       dat,
       text = ifelse((n >= UWPLOT_ANNOTATE_LOW_N & n < UWPLOT_ANNOTATE_MED_N) %in% TRUE,
                     paste0("(", sprintf(paste0("%.", VCQI_NUM_DECIMAL_DIGITS, "f"),
-                                       estimate*100), "%) ",
+                                        estimate*100), "%) ",
                            language_string(language_use = language_use, str = "OS_48"),
                            " = ", prettyNum(n, big.mark = ",")),text))
 
-    note <- paste0(
-      "Text at right: Unweighted sample proportion (%) and N \n Parentheses () mean ", UWPLOT_ANNOTATE_LOW_N,
-      " \u2264 N < ", UWPLOT_ANNOTATE_MED_N, ". \u2021 means N < ", UWPLOT_ANNOTATE_LOW_N)
+    # note <- paste0(
+    #   "Text at right: Unweighted sample proportion (%) and N \n Parentheses () mean ", ,
+    #   " \u2264 N < ", UWPLOT_ANNOTATE_MED_N, ". \u2021 means N < ", UWPLOT_ANNOTATE_LOW_N)
+    #TODO: double check this string
+    note <- paste0(language_string(language_use = language_use, str = "OS_71")," \n ",
+                   language_string(language_use = language_use, str = "OS_352")," ",UWPLOT_ANNOTATE_LOW_N,
+                   " \u2264 ", language_string(language_use = language_use, str = "OS_48"),
+                   " < ",UWPLOT_ANNOTATE_MED_N, " ", language_string(language_use = language_use, str = "OS_353"),
+                   " \u2021 ", language_string(language_use = language_use, str = "OS_354"), " ",
+                   language_string(language_use = language_use, str = "OS_48"), " < ", UWPLOT_ANNOTATE_LOW_N,".")
   }
 
   #DEC 15: add title etc. to the dataset

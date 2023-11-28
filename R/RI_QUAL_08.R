@@ -6,9 +6,9 @@
 #' @export
 #'
 #' @examples
-#' RI_QUAL_08_MV()
+#' RI_QUAL_08()
 
-# RI_QUAL_08_MV R version 1.01 - Biostat Global Consulting - 2022-10-12
+# RI_QUAL_08 R version 1.01 - Biostat Global Consulting - 2022-10-12
 # *******************************************************************************
 # Change log
 
@@ -17,7 +17,7 @@
 # 2022-10-12  1.01      Mia Yu          Package version
 # *******************************************************************************
 
-RI_QUAL_08_MV <- function(VCP = "RI_QUAL_08_MV"){
+RI_QUAL_08 <- function(VCP = "RI_QUAL_08"){
   vcqi_log_comment(VCP, 5, "Flow", "Starting")
 
   if (VCQI_NO_DOBS == 1){
@@ -46,7 +46,7 @@ RI_QUAL_08_MV <- function(VCP = "RI_QUAL_08_MV"){
 
     if (MAKE_PLOTS %in% 1){
       print("Making plots")
-      RI_QUAL_08_06PO_MV()
+      RI_QUAL_08_06PO()
     }
   }
 

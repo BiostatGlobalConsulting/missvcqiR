@@ -6,7 +6,7 @@
 #'
 #' @import stringr
 
-# RI_QUAL_08_06PO_MV R version 1.01 - Biostat Global Consulting - 2023-09-12
+# RI_QUAL_08_06PO R version 1.01 - Biostat Global Consulting - 2023-09-12
 # *******************************************************************************
 # Change log
 
@@ -15,7 +15,7 @@
 # 2023-09-12  1.01      Mia Yu          Update to multi-language for MISS VCQI
 # *******************************************************************************
 
-RI_QUAL_08_06PO_MV <- function(VCP = "RI_QUAL_08_06PO_MV"){
+RI_QUAL_08_06PO <- function(VCP = "RI_QUAL_08_06PO"){
   vcqi_log_comment(VCP, 5, "Flow", "Starting")
 
   if (VCQI_MAKE_UW_PLOTS == 1){

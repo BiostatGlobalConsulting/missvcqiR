@@ -12,12 +12,13 @@
 #' @examples
 #' miss_vcqi_multi_lingual_strings()
 
-# miss_vcqi_multi_lingual_strings R version 1.00 - Biostat Global Consulting - 2023-08-10
+# miss_vcqi_multi_lingual_strings R version 1.01 - Biostat Global Consulting - 2023-11-08
 # *******************************************************************************
 # Change log
 
 # Date 			  Version 	Name			      What Changed
 # 2023-08-10  1.00      Mia Yu          Original R package version
+# 2023-11-08  1.01      Mia Yu          Only accepts Multi-Lingual Phrases - En Fr Es Pt.xlsx file
 # *******************************************************************************
 
 
@@ -58,10 +59,7 @@ miss_vcqi_multi_lingual_strings <- function(VCP = "miss_vcqi_multi_lingual_strin
     exitflag <- 1
   } else {
 
-    if (file.exists(paste0(VCQI_DATA_FOLDER,"/MISS VCQI Label Phrases - En Fr Es Pt.xlsx"))){
-      dat <- openxlsx::read.xlsx(xlsxFile = paste0(VCQI_DATA_FOLDER,"/MISS VCQI Label Phrases - En Fr Es Pt.xlsx"),
-                                 sheet = "Latest version")
-    } else if (file.exists(paste0(VCQI_DATA_FOLDER,"/Multi-Lingual Phrases - En Fr Es Pt.xlsx"))){
+    if (file.exists(paste0(VCQI_DATA_FOLDER,"/Multi-Lingual Phrases - En Fr Es Pt.xlsx"))){
       dat <- openxlsx::read.xlsx(xlsxFile = paste0(VCQI_DATA_FOLDER,"/Multi-Lingual Phrases - En Fr Es Pt.xlsx"),
                                  sheet = "Latest version")
     } else {
