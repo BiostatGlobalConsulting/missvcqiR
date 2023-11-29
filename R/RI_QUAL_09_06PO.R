@@ -7,7 +7,7 @@
 #' @import dplyr
 #' @import stringr
 
-# RI_QUAL_09_06PO_MV R version 1.03 - Biostat Global Consulting - 2023-09-12
+# RI_QUAL_09_06PO R version 1.03 - Biostat Global Consulting - 2023-09-12
 # *******************************************************************************
 # Change log
 
@@ -18,7 +18,7 @@
 # 2023-09-12  1.03      Mia Yu          Update with multi-language
 # *******************************************************************************
 
-RI_QUAL_09_06PO_MV <- function(VCP = "RI_QUAL_09_06PO_MV"){
+RI_QUAL_09_06PO <- function(VCP = "RI_QUAL_09_06PO"){
 
   vcqi_log_comment(VCP, 5, "Flow", "Starting")
 

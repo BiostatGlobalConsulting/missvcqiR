@@ -60,7 +60,7 @@ ES_STUD_02_06PO <- function(VCP = "ES_STUD_02_06PO"){
           savedata <- NA
         }
 
-        vcqi_to_uwplot_MV(database = paste0(VCQI_OUTPUT_FOLDER,"/ES_STUD_02_",ANALYSIS_COUNTER,"_",v,"_database.rds"),
+        vcqi_to_uwplot(database = paste0(VCQI_OUTPUT_FOLDER,"/ES_STUD_02_",ANALYSIS_COUNTER,"_",v,"_database.rds"),
                           title = title,
                           name = paste0("ES_STUD_02_",ANALYSIS_COUNTER,"_uwplot_",v),
                           savedata = savedata)
@@ -101,7 +101,7 @@ ES_STUD_02_06PO <- function(VCP = "ES_STUD_02_06PO"){
         savedata <- NA
       }
 
-      vcqi_to_uwplot_MV(database = paste0(VCQI_OUTPUT_FOLDER,"/ES_STUD_02_",ANALYSIS_COUNTER,"_",v,"_database.rds"),
+      vcqi_to_uwplot(database = paste0(VCQI_OUTPUT_FOLDER,"/ES_STUD_02_",ANALYSIS_COUNTER,"_",v,"_database.rds"),
                         title = title,
                         name = paste0("ES_STUD_02_",ANALYSIS_COUNTER,"_uwplot_",v),
                         savedata = savedata)

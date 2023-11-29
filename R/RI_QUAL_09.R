@@ -17,7 +17,7 @@
 # 2022-10-13  1.01      Mia Yu          Package version
 # *******************************************************************************
 
-RI_QUAL_09_MV <- function(VCP = "RI_QUAL_09_MV"){
+RI_QUAL_09 <- function(VCP = "RI_QUAL_09"){
   vcqi_log_comment(VCP, 5, "Flow", "Starting")
 
   if (VCQI_NO_DOBS == 1){
@@ -51,7 +51,7 @@ RI_QUAL_09_MV <- function(VCP = "RI_QUAL_09_MV"){
 
     if (MAKE_PLOTS %in% 1){
       print("Making plots")
-      RI_QUAL_09_06PO_MV()
+      RI_QUAL_09_06PO()
     }
   }
 

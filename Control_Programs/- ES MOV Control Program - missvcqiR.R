@@ -7,6 +7,7 @@
 #
 # Date          Version Number    Name          What Changed
 # 2023-10-02    1.00              BGC           Original R Version
+# 2023-11-28    1.01              BGC           Remove miss_vcqi_multi_lingual_strings from CP
 #
 # This program is configured to analyze the VCQI demonstration datasets from a
 # fictional exit survey.  It serves as a template that users may copy to use
@@ -328,10 +329,6 @@ vcqi_log_global(RI_DOSE_LIST_MINUS_VISIT)
 # ..............................................................................
 # Run MISS-VCQI multi lingual global program
 # ..............................................................................
-
-# This will set globals for each output in MISS-VCQI based on the value provided
-# in global OUTPUT_LANGUAGE
-miss_vcqi_multi_lingual_strings()
 
 # ..............................................................................
 # Run Exit Survey pre-processing program
