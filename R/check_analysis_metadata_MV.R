@@ -822,26 +822,38 @@ check_analysis_metadata_MV <- function(VCP = "check_analysis_metadata_MV"){
 
         # If the user does not define the file but fmtid_for_first_column_r or fmtid_for_other_columns_r is not defined or emtpy
         # Give a message.
-        if (notempty == 0){
-          warningmsgs <- c(warningmsgs,
-                         "A separate user-defined file with format ids for VCQI_LEVEL4_SET_LAYOUT was not provided; VCQI will have access to the default formats from function vcqi_basic_fmtids")
-          vcqi_log_comment(VCP,2,"Warning",
-                           "A separate user-defined file with format ids for VCQI_LEVEL4_SET_LAYOUT was not provided; VCQI will have access to the default formats from function vcqi_basic_fmtids")
+        if (notempty == 0) {
+          warningmsgs <- c(
+            warningmsgs,
+            "A separate user-defined file with format ids for VCQI_LEVEL4_SET_LAYOUT was not provided; VCQI will have access to the default formats from function vcqi_basic_fmtids"
+          )
+          vcqi_log_comment(
+            VCP,
+            2,
+            "Warning",
+            "A separate user-defined file with format ids for VCQI_LEVEL4_SET_LAYOUT was not provided; VCQI will have access to the default formats from function vcqi_basic_fmtids"
+          )
 
-            if (!(all(level4_layout$fmtid_for_other_columns_r == "" |
-                    is.na(level4_layout$fmtid_for_other_columns_r) |
-                    is.null(level4_layout$fmtid_for_other_columns_r) |
-                    level4_layout$fmtid_for_other_columns_r %in% "regular_left"))) {
-              assign("use_basic_fmtids",0, envir = .GlobalEnv)
-            }
-
-            if (!(all(level4_layout$fmtid_for_other_columns_r == "" |
-                    is.na(level4_layout$fmtid_for_other_columns_r) |
-                    is.null(level4_layout$fmtid_for_other_columns_r) |
-                    level4_layout$fmtid_for_other_columns_r %in% "regular_right"))){
-              assign("use_basic_fmtids",0, envir = .GlobalEnv)
+          if ("fmtid_for_other_columns_r" %in% names(level4_layout)) {
+            if (!(all(
+                level4_layout$fmtid_for_other_columns_r == "" |
+                is.na(level4_layout$fmtid_for_other_columns_r) |
+                is.null(level4_layout$fmtid_for_other_columns_r) |
+                level4_layout$fmtid_for_other_columns_r %in% "regular_left"))) {
+              assign("use_basic_fmtids", 0, envir = .GlobalEnv)
             }
           }
+          if ("fmtid_for_other_columns_r" %in% names(level4_layout)) {
+            if (!(all(
+                level4_layout$fmtid_for_other_columns_r == "" |
+                is.na(level4_layout$fmtid_for_other_columns_r) |
+                is.null(level4_layout$fmtid_for_other_columns_r) |
+                level4_layout$fmtid_for_other_columns_r %in% "regular_right"))) {
+              assign("use_basic_fmtids", 0, envir = .GlobalEnv)
+            }
+          }
+
+        }
       } #end of if FMTIDS not defined
 
 

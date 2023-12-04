@@ -570,19 +570,19 @@ gen_MOV_dvs <- function(VCP = "gen_MOV_dvs"){
       dgot <- rlang::sym(paste0("got_",MOV_OUTPUT_DOSE_LIST[d],"_",stype[vc]))
       dmov <- rlang::sym(paste0("mov_",MOV_OUTPUT_DOSE_LIST[d],"_",stype[vc]))
 
-      dat <- dat %>% mutate(tempvar5 = NA) %>%
+      dat <- dat %>% mutate(tempvar5 = NA_integer_) %>%
         mutate(tempvar5 = ifelse((has_card_with_dob_and_dose == 1 & !!delig == 1 & !!dgot == 1) %in% TRUE, 0, tempvar5)) %>% # valid dose
         mutate(tempvar5 = ifelse((has_card_with_dob_and_dose == 1 & !!dmov == 1) %in% TRUE, 1, tempvar5)) # MOV dose
       dat$tempvar5 <- haven::labelled(dat$tempvar5,
                                       label = paste0("MOV (",stype[vc],") - ",str_to_upper(MOV_OUTPUT_DOSE_LIST[d])),
-                                      labels = c("% Not Vx'd (MOV)" = 1, "% Vx'd (valid dose)" = 0))
+                                      labels = c("% Not Vx'd (MOV)" = 1, "% Vx'd (valid dose)" = 0)) %>% suppressWarnings()
 
       # Below Variable Added 1-3-2018 MKT: Needed for table 5 ES_STUD_01_04GO
       #TODO: double check this part
-      dat <- dat %>% mutate(tempvar6 = ifelse(!is.na(tempvar5),ifelse(tempvar5 %in% 1, 0, 1),NA))
+      dat <- dat %>% mutate(tempvar6 = ifelse(!is.na(tempvar5),ifelse(tempvar5 %in% 1, 0, 1),NA_integer_))
       dat$tempvar6 <- haven::labelled(dat$tempvar6,
                                       label = paste0("Valid Vaccinated (",stype[vc],") - ",str_to_upper(MOV_OUTPUT_DOSE_LIST[d])),
-                                      labels = c("Vx'd (valid dose)" = 1, "% Not Vx'd (MOV)" = 0))
+                                      labels = c("Vx'd (valid dose)" = 1, "% Not Vx'd (MOV)" = 0)) %>% suppressWarnings()
 
       dat <- dat %>% mutate(tempvar1 = ifelse(tempvar5 %in% 1, 1, tempvar1)) %>%
         mutate(tempvar1 = ifelse((!!delig == 1 & is.na(tempvar1)) %in% TRUE, 0, tempvar1))
@@ -806,9 +806,9 @@ gen_MOV_dvs <- function(VCP = "gen_MOV_dvs"){
         mutate(tempvar1 = ifelse(is.na(!!var) & !!O2A %in% 1, 0, tempvar1)) %>%
         mutate(tempvar1 = ifelse(!(!!ei) %in% 1, NA, tempvar1))
 
-      dat <- dat %>% mutate(tempvar2 = ifelse(!!O1A %in% 1, !!var, NA)) %>%
+      dat <- dat %>% mutate(tempvar2 = ifelse(!!O1A %in% 1, !!var, NA_integer_)) %>%
         mutate(tempvar2 = ifelse(is.na(!!var) & !!O1A %in% 1, 0, tempvar2)) %>%
-        mutate(tempvar2 = ifelse(!(!!ei) %in% 0, NA, tempvar2))
+        mutate(tempvar2 = ifelse(!(!!ei) %in% 0, NA_integer_, tempvar2))
 
       dat$tempvar1 <- haven::labelled(dat$tempvar1,label = varlabel)
       dat$tempvar2 <- haven::labelled(dat$tempvar2,label = varlabel)
@@ -834,9 +834,9 @@ gen_MOV_dvs <- function(VCP = "gen_MOV_dvs"){
         mutate(tempvar1 = ifelse(is.na(!!var) & !!O2B %in% 1, 0, tempvar1)) %>%
         mutate(tempvar1 = ifelse(!(!!ei) %in% 1, NA, tempvar1))
 
-      dat <- dat %>% mutate(tempvar2 = ifelse(!!O1B %in% 1, !!var, NA)) %>%
+      dat <- dat %>% mutate(tempvar2 = ifelse(!!O1B %in% 1, !!var, NA_integer_)) %>%
         mutate(tempvar2 = ifelse(is.na(!!var) & !!O1B %in% 1, 0, tempvar2)) %>%
-        mutate(tempvar2 = ifelse(!(!!ei) %in% 0, NA, tempvar2))
+        mutate(tempvar2 = ifelse(!(!!ei) %in% 0, NA_integer_, tempvar2))
 
       dat$tempvar1 <- haven::labelled(dat$tempvar1,label = varlabel)
       dat$tempvar2 <- haven::labelled(dat$tempvar2,label = varlabel)
