@@ -299,12 +299,13 @@ ES_STUD_03_03DV <- function(VCP = "ES_STUD_03_03DV"){
   saveRDS(dat,paste0(VCQI_OUTPUT_FOLDER,"/ES_STUD_03_",ANALYSIS_COUNTER,"_pre_collapsed.rds"))
 
   #  Collapse so that it looks at each facility
-  level4 <- rlang::sym(VCQI_LEVEL4_SET_VARLIST)
   groupvar <- c("level1id","level2id","level3id","visitdate","study_day")
-  if (VCQI_LEVEL4_SET_VARLIST %in% groupvar){
-    groupvar <- groupvar[-which(groupvar == VCQI_LEVEL4_SET_VARLIST)]
+  for (v in seq_along(VCQI_LEVEL4_SET_VARLIST)){
+    if (VCQI_LEVEL4_SET_VARLIST[v] %in% groupvar){
+      groupvar <- groupvar[-which(groupvar == VCQI_LEVEL4_SET_VARLIST[v])]
+    }
   }
-  collapsedat <- dat %>% select(!!level4,level1id,level2id,level3id,visitdate,study_day,all_of(clist)) %>%
+  collapsedat <- dat %>% select(all_of(VCQI_LEVEL4_SET_VARLIST),level1id,level2id,level3id,visitdate,study_day,all_of(clist)) %>%
     group_by(across(c(all_of(VCQI_LEVEL4_SET_VARLIST),all_of(groupvar)))) %>%
     summarise(across(all_of(clist), sum))
   # save this file

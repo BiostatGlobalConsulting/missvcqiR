@@ -7,6 +7,7 @@
 #' @import stringr
 #' @importFrom utils glob2rx
 #' @import dplyr
+#' @rawNamespace import(rlang, except = c(local_options, with_options))
 
 # ES_STUD_03_05TOST R version 1.00 - Biostat Global Consulting - 2023-09-11
 # *******************************************************************************
@@ -352,6 +353,13 @@ ES_STUD_03_05TOST <- function(VCP = "ES_STUD_03_05TOST"){
 
   dat_long <- dat_long %>% relocate(Dose, .after = name) %>% mutate(level4id = row_number(),
                                                                     Dose = ifelse(is.na(name),NA,Dose))
+
+  temp <- dat_long %>% select(starts_with("c"))
+  for (n in seq_along(names(temp))){
+    checkvar <- rlang::sym(names(temp)[n])
+    dat_long <- dat_long %>% mutate(check = ifelse(!is.na(!!checkvar),1,0))
+  }
+  dat_long <- dat_long %>% mutate(Dose = ifelse(check == 0,NA,Dose)) %>% select(-c(check))
 
   # replace "BCG" with "the dose: for label
   for (l in seq_along(label_long)){
