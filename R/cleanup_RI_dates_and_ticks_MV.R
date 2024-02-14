@@ -47,9 +47,9 @@
 #' @import haven
 #'
 #' @examples
-#' cleanup_RI_dates_and_ticks()
+#' cleanup_RI_dates_and_ticks_MV()
 
-# cleanup_RI_dates_and_ticks R version 1.11 - Biostat Global Consulting - 2023-08-21
+# cleanup_RI_dates_and_ticks_MV R version 1.11 - Biostat Global Consulting - 2023-08-21
 # *******************************************************************************
 # Change log
 
@@ -70,9 +70,11 @@
 # 2022-10-18  1.09      Caitlin Clary   Added vcqi_halt_immediately call
 # 2022-10-19  1.10      Mia Yu          Add variable labels and VCQI_DOB_PREFER_DOC part
 # 2023-08-21  1.11      Caitlin Clary   Fill holes in history evidence
+# 2024-02-14  1.12      Mia Yu          Use RI_DOSE_LIST_MINUS_VISIT instead of
+#                                       RI_DOSE_LIST
 # *******************************************************************************
 
-cleanup_RI_dates_and_ticks <- function(VCP = "cleanup_RI_dates_and_ticks"){
+cleanup_RI_dates_and_ticks_MV <- function(VCP = "cleanup_RI_dates_and_ticks_MV"){
   vcqi_log_comment(VCP, 5, "Flow", "Starting")
 
   if (VCQI_CHECK_INSTEAD_OF_RUN != 1){
@@ -1030,10 +1032,11 @@ cleanup_RI_dates_and_ticks <- function(VCP = "cleanup_RI_dates_and_ticks"){
       mutate(no_card = 1,
              no_register = 1)
 
-    for(d in seq_along(RI_DOSE_LIST)){
+    #2024-02-14 update: use RI_DOSE_LIST_MINUS_VISIT
+    for(d in seq_along(RI_DOSE_LIST_MINUS_VISIT)){
       for(s in seq_along(type)){
-        datevar <- rlang::sym(paste0(RI_DOSE_LIST[d],"_",type[s],"_date"))
-        tickvar <- rlang::sym(paste0(RI_DOSE_LIST[d],"_",type[s],"_tick"))
+        datevar <- rlang::sym(paste0(RI_DOSE_LIST_MINUS_VISIT[d],"_",type[s],"_date"))
+        tickvar <- rlang::sym(paste0(RI_DOSE_LIST_MINUS_VISIT[d],"_",type[s],"_tick"))
 
         if(type[s] == "card"){
           dat <- mutate(dat,
@@ -1057,9 +1060,9 @@ cleanup_RI_dates_and_ticks <- function(VCP = "cleanup_RI_dates_and_ticks"){
     dat <- mutate(dat,
                   card_date_count = 0,
                   flag_dob_before_dosedate = NA_real_)
-
-    for(d in seq_along(RI_DOSE_LIST)){
-      carddate <- rlang::sym(paste0(RI_DOSE_LIST[d],"_card_date"))
+    #2024-02-14 update: use RI_DOSE_LIST_MINUS_VISIT
+    for(d in seq_along(RI_DOSE_LIST_MINUS_VISIT)){
+      carddate <- rlang::sym(paste0(RI_DOSE_LIST_MINUS_VISIT[d],"_card_date"))
 
       dat <- dat %>%
         mutate(
