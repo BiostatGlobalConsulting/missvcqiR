@@ -5,6 +5,8 @@
 #'
 #' @return A string
 #'
+#' @export
+#'
 #' @import openxlsx
 #' @import stringr
 
