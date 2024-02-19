@@ -2,7 +2,7 @@
 % Please edit documentation in R/vcqi_mdy.R
 \name{vcqi_mdy}
 \alias{vcqi_mdy}
-\title{Parse date from individual month, day, and year components like lubridate::mdy, returning NA if any element is missing}
+\title{Parse date from month, day, year components like lubridate::mdy, return NA if any element is missing}
 \usage{
 vcqi_mdy(m, d, y)
 }
@@ -19,7 +19,7 @@ A vector of dates
 A vector of dates
 }
 \description{
-Parse date from individual month, day, and year components like lubridate::mdy, returning NA if any element is missing
+Parse date from month, day, year components like lubridate::mdy, return NA if any element is missing
 }
 \examples{
 vcqi_mdy(1,2,2022)
