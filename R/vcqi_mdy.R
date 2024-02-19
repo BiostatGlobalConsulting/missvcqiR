@@ -1,4 +1,4 @@
-#' Parse date from individual month, day, and year components like lubridate::mdy, returning NA if any element is missing
+#' Parse date from month, day, year components like lubridate::mdy, return NA if any element is missing
 #'
 #' @param m A character or numeric vector indicating month, NAs allowed
 #' @param d A character or numeric vector indicating day, NAs allowed
