@@ -45,7 +45,7 @@ HW_BAR_01_05TOST <- function(VCP = "HW_BAR_01_05TOST"){
     tablename = "TO_HW_BAR_01",
     dbfilename = paste0("HW_BAR_01_",ANALYSIS_COUNTER,"_",vid,"_database.rds"),
     variable = "numerator", replacevar = NA, noannotate = TRUE,
-    label = paste0(language_string(language_use = language_use, str = "OS_49"),
+    label = paste0(language_string(language_use = language_use, str = "OS_43"),
                    " ",
                    language_string(language_use = language_use, str = "OS_2"))) #Knowledge Barriers (N)
 
@@ -53,7 +53,7 @@ HW_BAR_01_05TOST <- function(VCP = "HW_BAR_01_05TOST"){
     tablename = "TO_HW_BAR_01",
     dbfilename = paste0("HW_BAR_01_",ANALYSIS_COUNTER,"_",vid,"_database.rds"),
     variable = "estimate", replacevar = NA, noannotate = TRUE,
-    label = paste0(language_string(language_use = language_use, str = "OS_49"),
+    label = paste0(language_string(language_use = language_use, str = "OS_43"),
                    " ",
                    language_string(language_use = language_use, str = "OS_1"))) #Knowledge Barriers (%)
 
@@ -64,7 +64,7 @@ HW_BAR_01_05TOST <- function(VCP = "HW_BAR_01_05TOST"){
     tablename = "TO_HW_BAR_01",
     dbfilename = paste0("HW_BAR_01_",ANALYSIS_COUNTER,"_",vid,"_database.rds"),
     variable = "numerator", replacevar = NA, noannotate = TRUE,
-    label = paste0(language_string(language_use = language_use, str = "OS_49"),
+    label = paste0(language_string(language_use = language_use, str = "OS_10"),
                    " ",
                    language_string(language_use = language_use, str = "OS_2"))) #Attitude Barriers (N)
 
@@ -72,7 +72,7 @@ HW_BAR_01_05TOST <- function(VCP = "HW_BAR_01_05TOST"){
     tablename = "TO_HW_BAR_01",
     dbfilename = paste0("HW_BAR_01_",ANALYSIS_COUNTER,"_",vid,"_database.rds"),
     variable = "estimate", replacevar = NA, noannotate = TRUE,
-    label = paste0(language_string(language_use = language_use, str = "OS_49"),
+    label = paste0(language_string(language_use = language_use, str = "OS_10"),
                    " ",
                    language_string(language_use = language_use, str = "OS_1"))) #Attitude Barriers (%)
 
@@ -83,7 +83,7 @@ HW_BAR_01_05TOST <- function(VCP = "HW_BAR_01_05TOST"){
     tablename = "TO_HW_BAR_01",
     dbfilename = paste0("HW_BAR_01_",ANALYSIS_COUNTER,"_",vid,"_database.rds"),
     variable = "numerator", replacevar = NA, noannotate = TRUE,
-    label = paste0(language_string(language_use = language_use, str = "OS_49"),
+    label = paste0(language_string(language_use = language_use, str = "OS_8"),
                    " ",
                    language_string(language_use = language_use, str = "OS_2"))) #Any Barriers (N)
 
@@ -91,7 +91,7 @@ HW_BAR_01_05TOST <- function(VCP = "HW_BAR_01_05TOST"){
     tablename = "TO_HW_BAR_01",
     dbfilename = paste0("HW_BAR_01_",ANALYSIS_COUNTER,"_",vid,"_database.rds"),
     variable = "estimate", replacevar = NA, noannotate = TRUE,
-    label = paste0(language_string(language_use = language_use, str = "OS_49"),
+    label = paste0(language_string(language_use = language_use, str = "OS_8"),
                    " ",
                    language_string(language_use = language_use, str = "OS_1"))) #Any Barriers (%)
 
@@ -102,7 +102,7 @@ HW_BAR_01_05TOST <- function(VCP = "HW_BAR_01_05TOST"){
     tablename = "TO_HW_BAR_01",
     dbfilename = paste0("HW_BAR_01_",ANALYSIS_COUNTER,"_",vid,"_database.rds"),
     variable = "numerator", replacevar = NA, noannotate = TRUE,
-    label = paste0(language_string(language_use = language_use, str = "OS_49"),
+    label = paste0(language_string(language_use = language_use, str = "OS_12"),
                    " ",
                    language_string(language_use = language_use, str = "OS_2"))) #Both Barriers (N)
 
@@ -110,7 +110,7 @@ HW_BAR_01_05TOST <- function(VCP = "HW_BAR_01_05TOST"){
     tablename = "TO_HW_BAR_01",
     dbfilename = paste0("HW_BAR_01_",ANALYSIS_COUNTER,"_",vid,"_database.rds"),
     variable = "estimate", replacevar = NA, noannotate = TRUE,
-    label = paste0(language_string(language_use = language_use, str = "OS_49"),
+    label = paste0(language_string(language_use = language_use, str = "OS_12"),
                    " ",
                    language_string(language_use = language_use, str = "OS_1"))) #Both Barriers (%)
 
