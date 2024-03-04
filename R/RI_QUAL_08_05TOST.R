@@ -26,7 +26,7 @@ RI_QUAL_08_05TOST <- function(VCP = "RI_QUAL_08_05TOST"){
       tablename = "TO_RI_QUAL_08",
       dbfilename = paste0("RI_QUAL_08_",ANALYSIS_COUNTER,"_",MOV_OUTPUT_DOSE_LIST[d],"_database.rds"),
       variable = "estimate", replacevar = NA, noannotate = TRUE,
-      label = paste0("Visits with MOV for",str_to_upper(MOV_OUTPUT_DOSE_LIST[d])," (%)"))
+      label = paste0("Visits with MOV for ",str_to_upper(MOV_OUTPUT_DOSE_LIST[d])," (%)"))
 
     make_table_column(
       tablename = "TO_RI_QUAL_08",
