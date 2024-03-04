@@ -366,7 +366,7 @@ check_ES_analysis_metadata()
 
 # Uses dataset: ${ES_SURVEY_DATASET}_miss_vcqi_ready
 # Saves as dataset: ${ES_SURVEY_DATASET}_miss_vcqi_ready_clean
-cleanup_RI_dates_and_ticks()
+cleanup_RI_dates_and_ticks_MV()
 
 # Call program to create derived variables for table shells
 # Uses "${VCQI_OUTPUT_FOLDER}/${ES_SURVEY_DATASET}_miss_vcqi_ready_clean"
@@ -1259,6 +1259,15 @@ vcqi_global(DESC_03_TO_FOOTNOTE_5, language_string(language_use = language_use, 
 
 DESC_03(cleanup = TRUE)
 
+# Drop rows with no useful cards before calling RI_QUAL_08/09 so the count of those with cards
+# will line up with ES_STUD_*.  (Otherwise the dose VISIT confuses the RI_QUAL_09 counter.)
+
+dat <- vcqi_read(paste0(VCQI_OUTPUT_FOLDER, "/RI_with_ids.rds"))
+saveRDS(dat,paste0(VCQI_OUTPUT_FOLDER, "/RI_with_ids_full_dataset.rds"))
+
+dat <- dat %>% filter(has_card_with_dob_and_dosedate %in% 1)
+saveRDS(dat,paste0(VCQI_OUTPUT_FOLDER, "/RI_with_ids.rds"))
+
 # ..............................................................................
 
 # Take out visit from dose list because don't want to loop over it for the next indicators
@@ -1290,7 +1299,7 @@ if (stringr::str_to_upper(RI_QUAL_08_VALID_OR_CRUDE) == "CRUDE"){
 vcqi_global(RI_QUAL_08_TO_FOOTNOTE_3, language_string(language_use = language_use, str = "OS_166"))
 vcqi_global(SORT_PLOT_LOW_TO_HIGH, 0)
 
-RI_QUAL_08_MV()
+RI_QUAL_08()
 
 # ..............................................................................
 
@@ -1331,7 +1340,7 @@ if (stringr::str_to_upper(RI_QUAL_09_VALID_OR_CRUDE) == "CRUDE"){
   vcqi_global(RI_QUAL_09_TO_FOOTNOTE_7, language_string(language_use = language_use, str = "OS_106"))
 }
 
-RI_QUAL_09_MV()
+RI_QUAL_09()
 
 # *************************************************
 # Code Block: ES-G             (Do not change) ----
