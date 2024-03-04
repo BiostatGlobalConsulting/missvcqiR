@@ -1261,6 +1261,17 @@ DESC_03(cleanup = TRUE)
 
 # ..............................................................................
 
+# Drop rows with no useful cards before calling RI_QUAL_08/09 so the count of
+# those with cards will line up with ES_STUD_*. (Otherwise the dose VISIT
+# confuses the RI_QUAL_09 counter.)
+
+RI_with_ids <- readRDS(paste0(VCQI_OUTPUT_FOLDER, "/RI_with_ids.rds"))
+saveRDS(RI_with_ids, paste0(VCQI_OUTPUT_FOLDER, "/RI_with_ids_full_dataset.rds"))
+
+RI_with_ids <- RI_with_ids[RI_with_ids$has_card_with_dob_and_dosedate %in% 1,]
+
+saveRDS(RI_with_ids, paste0(VCQI_OUTPUT_FOLDER, "/RI_with_ids.rds"))
+
 # Take out visit from dose list because don't want to loop over it for the next indicators
 vcqi_global(RI_DOSE_LIST, RI_DOSE_LIST[-which(RI_DOSE_LIST == "visit")])
 
