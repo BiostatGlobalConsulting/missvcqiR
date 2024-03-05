@@ -16,5 +16,5 @@ Derived variables, databases, tables, and plots
 Calculate percent of children with missed opportunities for simultaneous vaccination (MOV)
 }
 \examples{
-RI_QUAL_09_MV()
+RI_QUAL_09()
 }

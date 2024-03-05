@@ -6,9 +6,9 @@
 #' @export
 #'
 #' @examples
-#' RI_QUAL_09_MV()
+#' RI_QUAL_09()
 
-# RI_QUAL_09_MV R version 1.01 - Biostat Global Consulting - 2022-10-13
+# RI_QUAL_09 R version 1.01 - Biostat Global Consulting - 2022-10-13
 # *******************************************************************************
 # Change log
 
