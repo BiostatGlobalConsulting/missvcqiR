@@ -12,9 +12,9 @@
 #' @import stringr
 #'
 #' @examples
-#' calculate_MOV_flags()
+#' calculate_MOV_flags_MV()
 
-# calculate_MOV_flags R version 1.07 - Biostat Global Consulting - 2023-07-14
+# calculate_MOV_flags_MV R version 1.08 - Biostat Global Consulting - 2024-03-05
 # ******************************************************************************
 # Change log
 
@@ -35,9 +35,12 @@
 #                                       missing visit dates; (b) doses with no
 #                                       visit dates in dataset being dropped
 #                                       (can't drop bc used in code downstream)
+# 2024-03-05	1.08	    Mia YU		      ADD a block of code to generate
+#                                       no_card_visit_only and then employ it
+#                                       whenever generating elig_* or credit_*.
 # ******************************************************************************
 
-calculate_MOV_flags <- function(VCP = "calculate_MOV_flags"){
+calculate_MOV_flags_MV <- function(VCP = "calculate_MOV_flags_MV"){
   vcqi_log_comment(VCP, 5, "Flow", "Starting")
 
   # Run as long as VCQI_CHECK_INSTEAD_OF_RUN isn't set to 1:
@@ -94,7 +97,7 @@ calculate_MOV_flags <- function(VCP = "calculate_MOV_flags"){
           doselist = multi$doselist[x]
         )) %>%
           do.call(rbind, .) %>%
-          full_join(multi, ., by = "doselist")
+          full_join(multi, ., by = "doselist",multiple = "all")
       }
 
       if (RI_RECORDS_NOT_SOUGHT == 1) {
@@ -407,6 +410,22 @@ calculate_MOV_flags <- function(VCP = "calculate_MOV_flags"){
       # ******************************************************************************
       # Right-o...now the dataset is long
 
+      # Special code for MISS VCQI version of the program
+      dat <- dat %>% group_by(respid) %>% mutate(respid_n = n()) %>% ungroup()
+
+      dat <- dat %>% mutate(gotsum = 0)
+      antigen <- c(RI_SINGLE_DOSE_LIST,RI_MULTI_2_DOSE_LIST,RI_MULTI_3_DOSE_LIST)
+      antigen <- antigen[which(!is.na(antigen))]
+      antigen <- antigen[which(!antigen %in% c("", " ", "VISIT"))]
+      antigen <- str_to_lower(antigen)
+      for (d in seq_along(antigen)){
+        var <- rlang::sym(paste0("got_",antigen[d]))
+        dat <- dat %>% mutate(gotsum = ifelse(!!var %in% 1, gotsum+1, gotsum))
+      }
+
+			dat <- dat %>% mutate(no_card_visit_only = ifelse(respid_n %in% 1 & got_visit %in% 1 & gotsum %in% 0, 1,0)) %>%
+			  select(-c(gotsum,respid_n))
+
       # Load up the scalars with the vaccination schedule
 
       # These scalars have already been defined in the control program so there
@@ -462,8 +481,8 @@ calculate_MOV_flags <- function(VCP = "calculate_MOV_flags"){
               if (i == 1){
                 dat <- dat %>%
                   mutate(
-                    !!creditdose := ifelse(age >= minage, 1, 0),
-                    !!eligdose := ifelse(age >= minage, 1, 0)
+                    !!creditdose := ifelse(age >= minage & no_card_visit_only %in% 0, 1, 0),
+                    !!eligdose := ifelse(age >= minage & no_card_visit_only %in% 0, 1, 0)
                   )
 
                 # If early doses count, then child is always eligible
@@ -522,12 +541,12 @@ calculate_MOV_flags <- function(VCP = "calculate_MOV_flags"){
                   mutate(
                     !!creditdose := ifelse(
                       !!flagdoseprev %in% 1 &
-                        age >= (!!agedoseprev + minint), 1, 0
+                        age >= (!!agedoseprev + minint) & no_card_visit_only %in% 0, 1, 0
                     ),
                     !!eligdose := ifelse(
                       !!flagdoseprev %in% 1 &
                         age >= (!!agedoseprev + minint) &
-                        age >= minage, 1, 0
+                        age >= minage & no_card_visit_only %in% 0, 1, 0
                     )
                   )
 
@@ -618,9 +637,9 @@ calculate_MOV_flags <- function(VCP = "calculate_MOV_flags"){
 
             minage <- get(paste0(single_dose[d],"_min_age_days"),envir = parent.frame())
             #can we count the dose if it occurs in this visit?
-            dat <- dat %>% mutate(tempvar1 = if_else(age >= minage, 1, 0))
+            dat <- dat %>% mutate(tempvar1 = if_else(age >= minage & no_card_visit_only %in% 0, 1, 0))
             #would it be an MOV if not given at this visit?
-            dat <- dat %>% mutate(tempvar2 = if_else(age >= minage, 1, 0))
+            dat <- dat %>% mutate(tempvar2 = if_else(age >= minage & no_card_visit_only %in% 0, 1, 0))
 
             #if early doses count, then s/he is always eligible
             if (type[t] == "crude"){

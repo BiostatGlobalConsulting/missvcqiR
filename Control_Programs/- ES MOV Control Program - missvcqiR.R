@@ -392,7 +392,7 @@ vcqi_global(VCQI_TESTING_CODE, 1)
 
 # Uses dataset: RI_with_ids
 # Creates datasets for each step within MOV process...step01-08
-calculate_MOV_flags()  # this program makes RI_MOV_step07, which is needed for merging in "gen_MOV_dvs"
+calculate_MOV_flags_MV()  # this program makes RI_MOV_step07, which is needed for merging in "gen_MOV_dvs"
 
 # The following programs make derived indicator variables for MOV study date tables
 
@@ -1258,15 +1258,6 @@ vcqi_global(DESC_03_TO_FOOTNOTE_5, language_string(language_use = language_use, 
 # Note: Denominators for b-j is column k
 
 DESC_03(cleanup = TRUE)
-
-# Drop rows with no useful cards before calling RI_QUAL_08/09 so the count of those with cards
-# will line up with ES_STUD_*.  (Otherwise the dose VISIT confuses the RI_QUAL_09 counter.)
-
-dat <- vcqi_read(paste0(VCQI_OUTPUT_FOLDER, "/RI_with_ids.rds"))
-saveRDS(dat,paste0(VCQI_OUTPUT_FOLDER, "/RI_with_ids_full_dataset.rds"))
-
-dat <- dat %>% filter(has_card_with_dob_and_dosedate %in% 1)
-saveRDS(dat,paste0(VCQI_OUTPUT_FOLDER, "/RI_with_ids.rds"))
 
 # ..............................................................................
 

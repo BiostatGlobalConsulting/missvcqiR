@@ -61,7 +61,7 @@ calculate_previsit_MOV_flags <- function(VCP = "calculate_previsit_MOV_flags"){
     vcqi_global(SAVE_VCQI_TESTING_CODE,VCQI_TESTING_CODE)
     vcqi_global(VCQI_TESTING_CODE,1)
 
-    calculate_MOV_flags()
+    calculate_MOV_flags_MV()
 
     # Copy output for later merging
     file.copy(from = paste0(VCQI_OUTPUT_FOLDER,"/RI_MOV_flags_to_merge.rds"),
