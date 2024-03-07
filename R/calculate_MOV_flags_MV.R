@@ -414,10 +414,23 @@ calculate_MOV_flags_MV <- function(VCP = "calculate_MOV_flags_MV"){
       dat <- dat %>% group_by(respid) %>% mutate(respid_n = n()) %>% ungroup()
 
       dat <- dat %>% mutate(gotsum = 0)
-      antigen <- c(RI_SINGLE_DOSE_LIST,RI_MULTI_2_DOSE_LIST,RI_MULTI_3_DOSE_LIST)
+
+      # First, list single dose vaccines
+      if (vcqi_object_exists("RI_SINGLE_DOSE_LIST")){
+        antigen <- stringr::str_to_lower(RI_SINGLE_DOSE_LIST)
+      } else{
+        antigen <- NULL
+      }
+      for(i in 2:9){
+        if(vcqi_object_exists(paste0("RI_MULTI_", i, "_DOSE_LIST"))){
+          dl <- get(paste0("RI_MULTI_", i, "_DOSE_LIST"))
+          if(!is.null(dl) & length(dl > 0)){
+            antigen <- c(antigen, stringr::str_to_lower(dl))}
+        }
+      }
       antigen <- antigen[which(!is.na(antigen))]
-      antigen <- antigen[which(!antigen %in% c("", " ", "VISIT"))]
-      antigen <- str_to_lower(antigen)
+      antigen <- antigen[which(!antigen %in% c("", " ", "visit"))]
+
       for (d in seq_along(antigen)){
         var <- rlang::sym(paste0("got_",antigen[d]))
         dat <- dat %>% mutate(gotsum = ifelse(!!var %in% 1, gotsum+1, gotsum))
