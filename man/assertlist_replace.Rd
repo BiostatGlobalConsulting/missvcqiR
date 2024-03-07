@@ -2,20 +2,20 @@
 % Please edit documentation in R/assertlist_replace.R
 \name{assertlist_replace}
 \alias{assertlist_replace}
-\title{This program mimics Stata's assertlist_replace program. Pulls all populated corrected variable values from a worksheet within an assertlist spreadsheet and produce a new corrected dataset}
+\title{This program mimics Stata's assertlist_replace program. This program is used after the user has reviewed the output of assertlist and entered corrected values to pull the corrected values into a new corrected dataset.}
 \usage{
 assertlist_replace(originaldata, excel, sheetname = "checks")
 }
 \arguments{
-\item{originaldata}{the path to the original dataset}
+\item{originaldata}{Path to the dataset that assertlist was initially run on; assertlist_replace will create a new dataset by changing values in originaldata}
 
-\item{excel}{The path to the Excel file that holds the assertlist_clean output with replace values}
+\item{excel}{The path to the Excel file that holds the assertlist_clean output with the user's replacement values}
 
-\item{sheetname}{The name of the worksheet that holds the assertlist_clean output with replace values}
+\item{sheetname}{The name of the worksheet that holds the assertlist_clean output with the user's replacement values}
 }
 \value{
-A dataset with correted value the user specified
+A dataset containing the user-specified replacement values
 }
 \description{
-This program mimics Stata's assertlist_replace program. Pulls all populated corrected variable values from a worksheet within an assertlist spreadsheet and produce a new corrected dataset
+This program mimics Stata's assertlist_replace program. This program is used after the user has reviewed the output of assertlist and entered corrected values to pull the corrected values into a new corrected dataset.
 }

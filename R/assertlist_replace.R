@@ -1,15 +1,17 @@
-#' This program mimics Stata's assertlist_replace program. Pulls all populated corrected variable values from a worksheet within an assertlist spreadsheet and produce a new corrected dataset
+#' This program mimics Stata's assertlist_replace program. This program is used after the user has reviewed the output of assertlist and entered corrected values to pull the corrected values into a new corrected dataset.
 #'
-#' @param originaldata the path to the original dataset
-#' @param excel The path to the Excel file that holds the assertlist_clean output with replace values
-#' @param sheetname The name of the worksheet that holds the assertlist_clean output with replace values
+#' @param originaldata Path to the dataset that assertlist was initially run on; assertlist_replace will create a new dataset by changing values in originaldata
+#' @param excel The path to the Excel file that holds the assertlist_clean output with the user's replacement values
+#' @param sheetname The name of the worksheet that holds the assertlist_clean output with the user's replacement values
 #'
-#' @return A dataset with correted value the user specified
+#' @return A dataset containing the user-specified replacement values
 #'
 #' @import dplyr
 #' @import tidyselect
 #' @rawNamespace import(rlang, except = c(local_options,with_options))
 #' @import openxlsx
+#'
+#' @export
 
 # assertlist_replace R version 1.00 - Biostat Global Consulting - 2023-11-02
 # *******************************************************************************
