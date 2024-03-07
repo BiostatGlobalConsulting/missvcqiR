@@ -1,18 +1,20 @@
-#' This program mimics Stata's asserlist_cleanup program. It cleans up the two dataframes assertlist generates and export them to an Excel file.
+#' This program mimics Stata's assertlist_cleanup program. It cleans up the two data frames assertlist generates and exports them to an Excel file.
 #'
-#' @param summary_dataframe the result summary dataframe that assertlist generates
-#' @param output_dataframe the detailed result dataframe that assertlist generates
+#' @param summary_dataframe the result summary data frame that assertlist generates
+#' @param output_dataframe the detailed result data frame that assertlist generates
 #' @param filename The name of the Excel file
 #' @param sheetname The sheetname of the sheet of the Excel file
-#' @param fix TRUE or FALSE, default to be FALSE. If set to be true, asserlist generates additional columns to help data managers correct (or 'fix') errant data values
+#' @param fix TRUE or FALSE, default to be FALSE. If set to be true, assertlist generates additional columns to help data managers correct (or 'fix') errant data values
 #'
 #' @return An Excel file that holds the output of assertlist
 #'
 #' @import stringr
 #' @import openxlsx
 #' @import dplyr
+#'
+#' @export
 
-# asserlist_cleanup R version 1.00 - Biostat Global Consulting - 2023-11-01
+# assertlist_cleanup R version 1.00 - Biostat Global Consulting - 2023-11-01
 # *******************************************************************************
 # Change log
 
@@ -20,7 +22,7 @@
 # 2023-11-01  1.00      Mia Yu          Original R package version
 # *******************************************************************************
 
-asserlist_cleanup <- function(summary_dataframe, output_dataframe, filename, sheetname,fix = FALSE){
+assertlist_cleanup <- function(summary_dataframe, output_dataframe, filename, sheetname, fix = FALSE){
 
   wb <- createWorkbook()
   addWorksheet(wb, "assertlist summary")
@@ -28,7 +30,6 @@ asserlist_cleanup <- function(summary_dataframe, output_dataframe, filename, she
 
   summary_df = get(summary_dataframe, envir = .GlobalEnv)
   names(summary_df) <- c("Assertion Syntax That Failed", "User Specified Additional Information", "Total Number of Observations Included in Assertion", "Number That Failed Assertion", "Number That Passed Assertion","Note","Variables Provided in IDLIST Option","Variables Provided in CHECKLIST Option")
-
 
   if (vcqi_object_exists(output_dataframe)){
     output_df = get(output_dataframe, envir = .GlobalEnv)
@@ -60,8 +61,6 @@ asserlist_cleanup <- function(summary_dataframe, output_dataframe, filename, she
       )
     }
   }
-
-
 
   writeData(wb, 1, summary_df)
   if (vcqi_object_exists(output_dataframe)){

@@ -2,7 +2,7 @@
 % Please edit documentation in R/assertlist.R
 \name{assertlist}
 \alias{assertlist}
-\title{This program mimics Stata's assertlist program. It lists how many dataset rows contradict the assertion, which row contradict the assertion, and how.}
+\title{This program mimics Stata's assertlist program. It lists how many dataset rows contradict the assertion, which rows contradict the assertion, and how.}
 \usage{
 assertlist(
   dat,
@@ -20,33 +20,33 @@ assertlist(
 )
 }
 \arguments{
-\item{dat}{the datast the user wants to check an assertion}
+\item{dat}{Name of the dataset to use when checking the assertion}
 
-\item{var}{the variable the user wants  to to check an assertion}
+\item{var}{Name of the variable the user wants to use to check an assertion}
 
-\item{f}{An ogical expression that resolves to either TRUE or FALSE for each row of the dataset. All rows where the expression is FALSE will be displayed on the screen (default) or sent to an EXCEL spreadsheet.}
+\item{f}{Assertion to check - a logical expression that resolves to either TRUE or FALSE for each row of the dataset. All rows where the expression is FALSE will be displayed on the screen (default) or sent to an Excel spreadsheet.}
 
-\item{condition}{An ogical expression that resolves to either TRUE or FALSE for each row of the dataset. If specified, the assertion check will only be applied to the subset of rows that meet the condition.}
+\item{condition}{Subset condition - a logical expression that resolves to either TRUE or FALSE for each row of the dataset. If specified, the assertion check will only be applied to the subset of rows that meet the condition.}
 
-\item{idlist}{List of variables that uniquely identify each observation.  These variables will be included in the replace syntax for corrections.}
+\item{idlist}{List of variables that uniquely identify each observation. These variables will be included in the replace syntax for corrections.}
 
-\item{checklist}{List of variables used in exp that you may wish to correct later.  Every variable listed here will receive extra columns in the spreadsheet to facilitate corrections.}
+\item{checklist}{List of variables used in exp that you may wish to correct later. Every variable listed here will receive extra columns in the spreadsheet to facilitate corrections.}
 
-\item{tag}{User-specified string to list with the output (Often a short description of what you tested and why.)}
+\item{tag}{User-specified string to list with the output (often a short description of what you tested and why.)}
 
-\item{assignto}{The name of the datafram that holds the detailed results of assertlist check}
+\item{assignto}{The name of the data frame that holds the detailed results of assertlist check}
 
-\item{combinewith}{The name of the dataframe that the user wants to combines detailed results from previous run with; usually the same as assignto}
+\item{combinewith}{The name of the data frame that the user wants to combine detailed results from previous run with; usually the same as assignto}
 
-\item{overview}{The name of the dataframe that holds the assertlist summary table}
+\item{overview}{The name of the data frame that holds the assertlist summary table}
 
-\item{fix}{TRUE or FALSE, default to be FALSE. If set to be true, asserlist generates additional columns to help data managers correct (or 'fix') errant data values}
+\item{fix}{TRUE or FALSE, default to be FALSE. If set to be true, assertlist generates additional columns to help data managers correct (or 'fix') errant data values}
 
-\item{sum_table}{The name of the dataframe that the user wants to combines assertlist summary from previous run with; usually the same as overview}
+\item{sum_table}{The name of the data frame that the user wants to combine assertlist summary from previous run with; usually the same as overview}
 }
 \value{
-Two datasets: one lists detailed assert results including which row contradict the assertion and how if any, one lits assertion summary including how many observations in the dataset contradict the assertion
+Two datasets: one listing detailed assert results including which rows contradict the assertion and how; the other listing summary results including how many observations in the dataset contradict the assertion
 }
 \description{
-This program mimics Stata's assertlist program. It lists how many dataset rows contradict the assertion, which row contradict the assertion, and how.
+This program mimics Stata's assertlist program. It lists how many dataset rows contradict the assertion, which rows contradict the assertion, and how.
 }

@@ -1,23 +1,25 @@
-#' This program mimics Stata's assertlist program. It lists how many dataset rows contradict the assertion, which row contradict the assertion, and how.
+#' This program mimics Stata's assertlist program. It lists how many dataset rows contradict the assertion, which rows contradict the assertion, and how.
 #'
-#' @param dat the datast the user wants to check an assertion
-#' @param var the variable the user wants  to to check an assertion
-#' @param f An ogical expression that resolves to either TRUE or FALSE for each row of the dataset. All rows where the expression is FALSE will be displayed on the screen (default) or sent to an EXCEL spreadsheet.
-#' @param condition An ogical expression that resolves to either TRUE or FALSE for each row of the dataset. If specified, the assertion check will only be applied to the subset of rows that meet the condition.
-#' @param idlist List of variables that uniquely identify each observation.  These variables will be included in the replace syntax for corrections.
-#' @param checklist List of variables used in exp that you may wish to correct later.  Every variable listed here will receive extra columns in the spreadsheet to facilitate corrections.
-#' @param tag User-specified string to list with the output (Often a short description of what you tested and why.)
-#' @param assignto The name of the datafram that holds the detailed results of assertlist check
-#' @param combinewith The name of the dataframe that the user wants to combines detailed results from previous run with; usually the same as assignto
-#' @param overview The name of the dataframe that holds the assertlist summary table
-#' @param sum_table The name of the dataframe that the user wants to combines assertlist summary from previous run with; usually the same as overview
-#' @param fix TRUE or FALSE, default to be FALSE. If set to be true, asserlist generates additional columns to help data managers correct (or 'fix') errant data values
+#' @param dat Name of the dataset to use when checking the assertion
+#' @param var Name of the variable the user wants to use to check an assertion
+#' @param f Assertion to check - a logical expression that resolves to either TRUE or FALSE for each row of the dataset. All rows where the expression is FALSE will be displayed on the screen (default) or sent to an Excel spreadsheet.
+#' @param condition Subset condition - a logical expression that resolves to either TRUE or FALSE for each row of the dataset. If specified, the assertion check will only be applied to the subset of rows that meet the condition.
+#' @param idlist List of variables that uniquely identify each observation. These variables will be included in the replace syntax for corrections.
+#' @param checklist List of variables used in exp that you may wish to correct later. Every variable listed here will receive extra columns in the spreadsheet to facilitate corrections.
+#' @param tag User-specified string to list with the output (often a short description of what you tested and why.)
+#' @param assignto The name of the data frame that holds the detailed results of assertlist check
+#' @param combinewith The name of the data frame that the user wants to combine detailed results from previous run with; usually the same as assignto
+#' @param overview The name of the data frame that holds the assertlist summary table
+#' @param sum_table The name of the data frame that the user wants to combine assertlist summary from previous run with; usually the same as overview
+#' @param fix TRUE or FALSE, default to be FALSE. If set to be true, assertlist generates additional columns to help data managers correct (or 'fix') errant data values
 #'
-#' @return Two datasets: one lists detailed assert results including which row contradict the assertion and how if any, one lits assertion summary including how many observations in the dataset contradict the assertion
+#' @return Two datasets: one listing detailed assert results including which rows contradict the assertion and how; the other listing summary results including how many observations in the dataset contradict the assertion
 #'
 #' @import dplyr
 #' @import tidyselect
 #' @rawNamespace import(rlang, except = c(local_options,with_options))
+#'
+#' @export
 
 # assertlist R version 1.00 - Biostat Global Consulting - 2023-11-01
 # *******************************************************************************
@@ -134,9 +136,11 @@ assertlist <-
         failN > 1 ~ paste0(failN, " observations failed the assertion")
       )
     )
+
     sum_table = mutate(sum_table,
                        passN = as.numeric(nrow(dat)) - as.numeric(length(rownum)),
                        .before = note)
+
     if (exists(summary, envir = .GlobalEnv)) {
       sumdf <- get(summary, envir = .GlobalEnv)
 
