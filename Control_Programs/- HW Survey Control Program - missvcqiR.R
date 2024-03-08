@@ -85,7 +85,7 @@ vcqi_log_comment(
 # Accepted file types: .rds, .dta, .csv
 
 # Name of dataset that holds HW data
-vcqi_global(HW_SURVEY_DATASET, "HW_test_data.dta")
+vcqi_global(HW_SURVEY_DATASET, "HW_test_data_updated.dta")
 
 # Name of dataset that holds facility data
 vcqi_global(VCQI_CM_DATASET, "CM_test_data.dta")
@@ -184,10 +184,6 @@ vcqi_global(DELETE_TEMP_VCQI_DATASETS, 1)
 # Code Block: HW-E             (Do not change) ----
 
 # Format the VCQI dose list and pre-process survey data
-
-# ..............................................................................
-# Run MISS-VCQI multi lingual global program
-# ..............................................................................
 
 # ..............................................................................
 # Check the user's metadata for completeness and correctness
