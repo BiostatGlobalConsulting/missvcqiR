@@ -329,8 +329,10 @@ gen_MOV_dvs <- function(VCP = "gen_MOV_dvs"){
     conditions2 <- paste0("(has_card_with_dob_and_dose==1 & ", elig, ") %in% TRUE")
     dat <- dat %>% mutate(tempvar1 = ifelse(eval(rlang::parse_expr(conditions2)),1,tempvar1))
 
-    varlabel <- paste0(language_string(language_use = language_use, str = "OS_113", replaceq = TRUE),
-                       " (",vc2,")")
+    varlabel <- paste0(
+      language_string(language_use = language_use, str = "OS_113", replaceq = TRUE),
+      " (", vc2, ")")
+
     f <- paste0("dat$tempvar1 <- haven::labelled(dat$tempvar1, label = '",varlabel,"', labels = c('",label0,
                 "' = 0, '",label1,"' = 1, '",label2,"' = tagged_na('a')))")
     eval(rlang::parse_expr(f))
@@ -830,9 +832,9 @@ gen_MOV_dvs <- function(VCP = "gen_MOV_dvs"){
       var_dat <- get(varlist2[v],dat)
       varlabel <- attr(var_dat,"label")
 
-      dat <- dat %>% mutate(tempvar1 = ifelse(!!O2B %in% 1, !!var, NA)) %>%
+      dat <- dat %>% mutate(tempvar1 = ifelse(!!O2B %in% 1, !!var, NA_integer_)) %>%
         mutate(tempvar1 = ifelse(is.na(!!var) & !!O2B %in% 1, 0, tempvar1)) %>%
-        mutate(tempvar1 = ifelse(!(!!ei) %in% 1, NA, tempvar1))
+        mutate(tempvar1 = ifelse(!(!!ei) %in% 1, NA_integer_, tempvar1))
 
       dat <- dat %>% mutate(tempvar2 = ifelse(!!O1B %in% 1, !!var, NA_integer_)) %>%
         mutate(tempvar2 = ifelse(is.na(!!var) & !!O1B %in% 1, 0, tempvar2)) %>%
