@@ -575,7 +575,7 @@ vcqi_global(DESC_02_TO_FOOTNOTE_4, NA)
 DESC_02(cleanup = TRUE)
 
 # ..............................................................................
-# Where does your child usually receive vaccinations?
+# Is this health center in the municipality where you live?
 vcqi_global(DESC_02_DATASET, "ES_with_ids.rds")
 vcqi_global(DESC_02_VARIABLES, "ES04AK")
 vcqi_global(DESC_02_WEIGHTED, "NO")
