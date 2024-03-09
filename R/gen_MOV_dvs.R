@@ -802,9 +802,9 @@ gen_MOV_dvs <- function(VCP = "gen_MOV_dvs"){
       var_dat <- get(varlist1[v],dat)
       varlabel <- attr(var_dat,"label")
 
-      dat <- dat %>% mutate(tempvar1 = ifelse(!!O2A %in% 1, !!var, NA)) %>%
+      dat <- dat %>% mutate(tempvar1 = ifelse(!!O2A %in% 1, !!var, NA_integer_)) %>%
         mutate(tempvar1 = ifelse(is.na(!!var) & !!O2A %in% 1, 0, tempvar1)) %>%
-        mutate(tempvar1 = ifelse(!(!!ei) %in% 1, NA, tempvar1))
+        mutate(tempvar1 = ifelse(!(!!ei) %in% 1, NA_integer_, tempvar1))
 
       dat <- dat %>% mutate(tempvar2 = ifelse(!!O1A %in% 1, !!var, NA_integer_)) %>%
         mutate(tempvar2 = ifelse(is.na(!!var) & !!O1A %in% 1, 0, tempvar2)) %>%
