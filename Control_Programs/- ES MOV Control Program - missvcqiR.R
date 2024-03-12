@@ -610,7 +610,8 @@ assign_covg_category()
 # Create table for Proportion of Coverage
 vcqi_global(DESC_02_COVG_CRUDE_OR_VALID, "crude")
 vcqi_global(DESC_02_DATASET, "ES_with_ids.rds")
-vcqi_global(DESC_02_VARIABLES, paste0("covg_category_", str_to_lower(DESC_02_COVG_CRUDE_OR_VALID)))
+vcqi_global(DESC_02_VARIABLES,
+            paste0("covg_category_", stringr::str_to_lower(DESC_02_COVG_CRUDE_OR_VALID)))
 vcqi_global(DESC_02_WEIGHTED, "NO")
 vcqi_global(DESC_02_DENOMINATOR, "ALL")
 
@@ -642,7 +643,7 @@ vcqi_global(DESC_02_TO_FOOTNOTE_5, language_string(language_use = language_use, 
 # Note: To be fully vaccinated, the child must have received: $RI_DOSES_TO_BE_FULLY_VACCINATED
 vcqi_global(DESC_02_TO_FOOTNOTE_6,
             paste0(language_string(language_use = language_use, str = "OS_108"),
-                   str_flatten(RI_DOSES_TO_BE_FULLY_VACCINATED, collapse = " ")))
+                   stringr::str_flatten(RI_DOSES_TO_BE_FULLY_VACCINATED, collapse = " ")))
 # Note: The below definitions were taken from the PAHO Methodology
 #      for the Evaluation of Missed Opportunities  for Vaccination Protocol document.
 vcqi_global(DESC_02_TO_FOOTNOTE_7, language_string(language_use = language_use, str = "OS_109"))
@@ -659,7 +660,7 @@ DESC_02(cleanup = TRUE)
 # Study day table 1
 vcqi_global(DESC_02_COVG_CRUDE_OR_VALID, "crude")
 vcqi_global(DESC_02_DATASET, "MOV_dvs.rds")
-vcqi_global(DESC_02_VARIABLES, paste0("table1_dv_", str_to_lower(DESC_02_COVG_CRUDE_OR_VALID)))
+vcqi_global(DESC_02_VARIABLES, paste0("table1_dv_", stringr::str_to_lower(DESC_02_COVG_CRUDE_OR_VALID)))
 vcqi_global(DESC_02_WEIGHTED, "NO")
 vcqi_global(DESC_02_DENOMINATOR, "ALL")
 
@@ -708,7 +709,7 @@ DESC_02(cleanup = TRUE)
 # Study day table 2
 vcqi_global(DESC_02_COVG_CRUDE_OR_VALID, "crude")
 vcqi_global(DESC_02_DATASET, "MOV_dvs.rds")
-vcqi_global(DESC_02_VARIABLES, paste0("table2_dv_", str_to_lower(DESC_02_COVG_CRUDE_OR_VALID)))
+vcqi_global(DESC_02_VARIABLES, paste0("table2_dv_", stringr::str_to_lower(DESC_02_COVG_CRUDE_OR_VALID)))
 vcqi_global(DESC_02_WEIGHTED, "NO")
 vcqi_global(DESC_02_DENOMINATOR, "RESPONDED")
 
@@ -776,10 +777,10 @@ vcqi_global(DESC_03_DATASET, "MOV_dvs.rds")
 vcqi_global(DESC_03_SHORT_TITLE, "Study Day - Table 3")
 vcqi_global(
   DESC_03_VARIABLES,
-  c(paste0("table3_dv_no_errors_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("table3_dv_recd_invalid_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("table3_dv_recd_valid_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("table3_dv_mov_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE))))
+  c(paste0("table3_dv_no_errors_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("table3_dv_recd_invalid_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("table3_dv_recd_valid_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("table3_dv_mov_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE))))
 vcqi_global(DESC_03_WEIGHTED, "NO")
 vcqi_global(DESC_03_DENOMINATOR, "RESPONDED")
 vcqi_global(DESC_03_SELECTED_VALUE, 1)
@@ -921,10 +922,10 @@ vcqi_global(DESC_03_DATASET, "MOV_dvs.rds")
 vcqi_global(DESC_03_SHORT_TITLE, "mov_rsns_all_1")
 vcqi_global(
   DESC_03_VARIABLES,
-  c(paste0("reasons_overview1_A_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("reasons_overview1_B_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("reasons_overview1_C_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("reasons_overview1_D_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE))))
+  c(paste0("reasons_overview1_A_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("reasons_overview1_B_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("reasons_overview1_C_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("reasons_overview1_D_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE))))
 vcqi_global(DESC_03_WEIGHTED, "NO")
 vcqi_global(DESC_03_DENOMINATOR, "RESPONDED")
 vcqi_global(DESC_03_SELECTED_VALUE, 1)
@@ -957,20 +958,20 @@ vcqi_global(DESC_03_DATASET, "MOV_dvs.rds")
 vcqi_global(DESC_03_SHORT_TITLE, "MOV_rsns_1A")
 vcqi_global(
   DESC_03_VARIABLES,
-  c(paste0("ES08AA_1A_01_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("ES08AA_1A_02_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("ES08AA_1A_03_01_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("ES08AA_1A_03_02_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("ES08AA_1A_03_03_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("ES08AA_1A_03_04_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("ES08AA_1A_03_05_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("ES08AA_1A_03_06_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("ES08AA_1A_03_07_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("ES08AA_1A_03_08_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("ES08AA_1A_03_09_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("ES08AA_1A_03_10_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("ES08AA_1A_03_11_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("ES08AA_1A_03_12_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE))))
+  c(paste0("ES08AA_1A_01_ineligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1A_02_ineligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1A_03_01_ineligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1A_03_02_ineligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1A_03_03_ineligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1A_03_04_ineligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1A_03_05_ineligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1A_03_06_ineligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1A_03_07_ineligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1A_03_08_ineligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1A_03_09_ineligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1A_03_10_ineligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1A_03_11_ineligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1A_03_12_ineligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE))))
 vcqi_global(DESC_03_WEIGHTED, "NO")
 vcqi_global(DESC_03_DENOMINATOR, "RESPONDED")
 vcqi_global(DESC_03_SELECTED_VALUE, 1)
@@ -1013,18 +1014,18 @@ vcqi_global(DESC_03_DATASET, "MOV_dvs.rds")
 vcqi_global(DESC_03_SHORT_TITLE, "MOV_rsns_1B")
 vcqi_global(
   DESC_03_VARIABLES,
-  c(paste0("ES08AA_1B_01_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("ES08AA_1B_02_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("ES08AA_1B_03_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("ES08AA_1B_04_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("ES08AA_1B_05_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("ES08AA_1B_06_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("ES08AA_1B_07_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("ES08AA_1B_08_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("ES08AA_1B_09_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("ES08AA_1B_10_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("ES08AA_1B_11_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("ES08AA_1B_12_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE))))
+  c(paste0("ES08AA_1B_01_ineligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1B_02_ineligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1B_03_ineligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1B_04_ineligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1B_05_ineligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1B_06_ineligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1B_07_ineligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1B_08_ineligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1B_09_ineligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1B_10_ineligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1B_11_ineligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1B_12_ineligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE))))
 vcqi_global(DESC_03_WEIGHTED, "NO")
 vcqi_global(DESC_03_DENOMINATOR, "RESPONDED")
 vcqi_global(DESC_03_SELECTED_VALUE, 1)
@@ -1051,15 +1052,15 @@ vcqi_global(DESC_03_DATASET, "MOV_dvs.rds")
 vcqi_global(DESC_03_SHORT_TITLE, "MOV_rsns_1C")
 vcqi_global(
   DESC_03_VARIABLES,
-  c(paste0("ES08AA_1C_01_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("ES08AA_1C_02_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("ES08AA_1C_03_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("ES08AA_1C_04_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("ES08AA_1C_05_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("ES08AA_1C_06_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("ES08AA_1C_07_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("ES08AA_1C_08_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("ES08AA_1C_09_ineligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE))))
+  c(paste0("ES08AA_1C_01_ineligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1C_02_ineligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1C_03_ineligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1C_04_ineligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1C_05_ineligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1C_06_ineligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1C_07_ineligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1C_08_ineligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1C_09_ineligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE))))
 vcqi_global(DESC_03_WEIGHTED, "NO")
 vcqi_global(DESC_03_DENOMINATOR, "RESPONDED")
 vcqi_global(DESC_03_SELECTED_VALUE, 1)
@@ -1087,10 +1088,10 @@ vcqi_global(DESC_03_DATASET, "MOV_dvs.rds")
 vcqi_global(DESC_03_SHORT_TITLE, "mov_rsns_all_2")
 vcqi_global(
   DESC_03_VARIABLES,
-  c(paste0("reasons_overview2_A_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("reasons_overview2_B_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("reasons_overview2_C_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("reasons_overview2_D_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE))))
+  c(paste0("reasons_overview2_A_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("reasons_overview2_B_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("reasons_overview2_C_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("reasons_overview2_D_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE))))
 vcqi_global(DESC_03_WEIGHTED, "NO")
 vcqi_global(DESC_03_DENOMINATOR, "RESPONDED")
 vcqi_global(DESC_03_SELECTED_VALUE, 1)
@@ -1122,20 +1123,20 @@ vcqi_global(DESC_03_DATASET, "MOV_dvs.rds")
 vcqi_global(DESC_03_SHORT_TITLE, "MOV_rsns_2A")
 vcqi_global(
   DESC_03_VARIABLES,
-  c(paste0("ES08AA_1A_01_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("ES08AA_1A_02_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("ES08AA_1A_03_01_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("ES08AA_1A_03_02_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("ES08AA_1A_03_03_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("ES08AA_1A_03_04_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("ES08AA_1A_03_05_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("ES08AA_1A_03_06_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("ES08AA_1A_03_07_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("ES08AA_1A_03_08_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("ES08AA_1A_03_09_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("ES08AA_1A_03_10_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("ES08AA_1A_03_11_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("ES08AA_1A_03_12_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE))))
+  c(paste0("ES08AA_1A_01_eligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1A_02_eligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1A_03_01_eligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1A_03_02_eligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1A_03_03_eligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1A_03_04_eligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1A_03_05_eligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1A_03_06_eligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1A_03_07_eligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1A_03_08_eligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1A_03_09_eligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1A_03_10_eligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1A_03_11_eligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1A_03_12_eligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE))))
 vcqi_global(DESC_03_WEIGHTED, "NO")
 vcqi_global(DESC_03_DENOMINATOR, "RESPONDED")
 vcqi_global(DESC_03_SELECTED_VALUE, 1)
@@ -1178,18 +1179,18 @@ vcqi_global(DESC_03_DATASET, "MOV_dvs.rds")
 vcqi_global(DESC_03_SHORT_TITLE, "MOV_rsns_2B")
 vcqi_global(
   DESC_03_VARIABLES,
-  c(paste0("ES08AA_1B_01_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("ES08AA_1B_02_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("ES08AA_1B_03_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("ES08AA_1B_04_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("ES08AA_1B_05_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("ES08AA_1B_06_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("ES08AA_1B_07_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("ES08AA_1B_08_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("ES08AA_1B_09_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("ES08AA_1B_10_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("ES08AA_1B_11_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("ES08AA_1B_12_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE))))
+  c(paste0("ES08AA_1B_01_eligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1B_02_eligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1B_03_eligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1B_04_eligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1B_05_eligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1B_06_eligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1B_07_eligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1B_08_eligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1B_09_eligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1B_10_eligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1B_11_eligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1B_12_eligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE))))
 vcqi_global(DESC_03_WEIGHTED, "NO")
 vcqi_global(DESC_03_DENOMINATOR, "RESPONDED")
 vcqi_global(DESC_03_SELECTED_VALUE, 1)
@@ -1220,15 +1221,15 @@ vcqi_global(DESC_03_DATASET, "MOV_dvs.rds")
 vcqi_global(DESC_03_SHORT_TITLE, "MOV_rsns_2C")
 vcqi_global(
   DESC_03_VARIABLES,
-  c(paste0("ES08AA_1C_01_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("ES08AA_1C_02_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("ES08AA_1C_03_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("ES08AA_1C_04_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("ES08AA_1C_05_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("ES08AA_1C_06_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("ES08AA_1C_07_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("ES08AA_1C_08_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
-    paste0("ES08AA_1C_09_eligible_", str_to_lower(STUDY_DAY_VALID_OR_CRUDE))))
+  c(paste0("ES08AA_1C_01_eligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1C_02_eligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1C_03_eligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1C_04_eligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1C_05_eligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1C_06_eligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1C_07_eligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1C_08_eligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE)),
+    paste0("ES08AA_1C_09_eligible_", stringr::str_to_lower(STUDY_DAY_VALID_OR_CRUDE))))
 vcqi_global(DESC_03_WEIGHTED, "NO")
 vcqi_global(DESC_03_DENOMINATOR, "RESPONDED")
 vcqi_global(DESC_03_SELECTED_VALUE, 1)
