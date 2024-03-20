@@ -8,7 +8,7 @@
 #' @import dplyr
 #' @import tidyselect
 
-# RI_QUAL_09_01PP R version 1.02 - Biostat Global Consulting - 2023-07-18
+# RI_QUAL_09_01PP R version 1.03 - Biostat Global Consulting - 2024-03-20
 # *******************************************************************************
 # Change log
 
@@ -16,6 +16,7 @@
 # 2022-09-29  1.00      Mia Yu          Original R version
 # 2022-10-13  1.01      Mia Yu          Package version
 # 2023-07-18  1.02      Mia Yu          Keep level*name and match Stata version
+# 2024-03-20  1.03      Mia Yu          Add VCQI_PASS_THRU_VARLIST to selection list
 # *******************************************************************************
 
 
@@ -48,7 +49,8 @@ RI_QUAL_09_01PP <- function(VCP = "RI_QUAL_09_01PP"){
 
   dat <- dat %>% select(level1id,level2id,level3id,stratumid,clusterid,respid,RI01,RI03,RI11,
                         RI12,HH02,HH04,psweight, all_of(VCQI_LEVEL4_SET_VARLIST),all_of(dlist),
-                        all_of(vars),level1name,level2name,level3name)
+                        all_of(vars),level1name,level2name,level3name,
+                        all_of(VCQI_PASS_THRU_VARLIST))
 
   saveRDS(dat,file = paste0(VCQI_OUTPUT_FOLDER,"/RI_QUAL_09_",ANALYSIS_COUNTER,".rds"))
 
