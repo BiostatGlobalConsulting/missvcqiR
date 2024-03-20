@@ -6,7 +6,7 @@
 #'
 #' @import stringr
 
-# DESC_03_05TOST R version 1.01 - Biostat Global Consulting - 2023-09-29
+# DESC_03_05TOST R version 1.01 - Biostat Global Consulting - 2024-03-18
 # *******************************************************************************
 # Change log
 
@@ -14,6 +14,7 @@
 # 2023-06-06  1.00      Mia Yu          Original R package version
 # 2023-08-21  1.01      Mia Yu          Trim the sheet name if too long
 # 2023-09-29  1.02      Mia Yu          Added multi lingual globals
+# 2024-03-18  1.03      Mia Yu          Update the sheet name length max from 30 to 31
 # *******************************************************************************
 
 
@@ -125,8 +126,8 @@ DESC_03_05TOST <- function(VCP = "DESC_03_05TOST"){
 
   sheetname <- paste0("DESC_03_",DESC_03_COUNTER,"_",DESC_03_SHORT_TITLE)
   sheet1 <- paste0(sheetname, " ", ANALYSIS_COUNTER)
-  if(str_count(sheet1) > 30){
-    e <- 30-str_count(paste0(" ", ANALYSIS_COUNTER))
+  if(str_count(sheet1) > 31){
+    e <- 31-str_count(paste0(" ", ANALYSIS_COUNTER))
     sheetname <- substr(sheetname, 1, e)
   }
 

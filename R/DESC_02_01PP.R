@@ -7,12 +7,13 @@
 #' @import dplyr
 #' @import tidyselect
 
-# DESC_02_01PP R version 1.00 - Biostat Global Consulting - 2023-05-23
+# DESC_02_01PP R version 1.01 - Biostat Global Consulting - 2024-03-18
 # *******************************************************************************
 # Change log
 
 # Date 			  Version 	Name			      What Changed
 # 2023-05-23  1.00      Mia Yu          Original R package version
+# 2024-03-18  1.01      Mia Yu          Add VCQI_PASS_THRU_VARLIST to selection list
 # *******************************************************************************
 
 
@@ -35,7 +36,8 @@ DESC_02_01PP <- function(VCP = "DESC_02_01PP"){
   }
 
   dat <- dat %>% select(level1id,level2id,level3id,stratumid,clusterid,respid,
-                        HH02,HH04,psweight,all_of(VCQI_LEVEL4_SET_VARLIST),all_of(DESC_02_VARIABLES))
+                        HH02,HH04,psweight,all_of(VCQI_LEVEL4_SET_VARLIST),all_of(DESC_02_VARIABLES),
+                        all_of(VCQI_PASS_THRU_VARLIST))
 
   saveRDS(dat, file = paste0(VCQI_OUTPUT_FOLDER,"/DESC_02_",ANALYSIS_COUNTER,"_",DESC_02_COUNTER,".rds"))
 
