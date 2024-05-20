@@ -72,6 +72,9 @@ check_analysis_metadata_MV <- function(VCP = "check_analysis_metadata_MV"){
     )
   }
 
+  # Set VCQI_PASS_THRU_VARLIST to be NULL to run DESC_02 and DESC_03 smoothly
+  vcqi_global(VCQI_PASS_THRU_VARLIST, NULL)
+
   # Provide the variable name that uniquely identifies each facility
   vcqi_global(LEVEL_3_ID, "ID02AIid")
 
