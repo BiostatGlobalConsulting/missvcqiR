@@ -13,7 +13,7 @@
 #' @examples
 #' check_analysis_metadata_MV()
 #'
-# check_analysis_metadata_MV R version 1.16 - Biostat Global Consulting - 2023-11-16
+# check_analysis_metadata_MV R version 1.17 - Biostat Global Consulting - 2024-05-20
 # *******************************************************************************
 # Change log
 
@@ -42,6 +42,8 @@
 # 2023-08-28  1.14      Mia Yu          Copied and revised from check_analysis_metadata
 # 2023-10-03  1.15      Mia Yu          Set default value of LEVEL2_ID
 # 2023-11-15  1.16      Mia Yu          Add format columns with default settings for level4_layout
+# 2024-05-20	1.17     	Mia Yu      		Add check for FOOTNOTE_CUTOFF and TITLE_CUTOFF
+#										                    Set to default if not set for QUAL_08 and QUAL_09
 # *******************************************************************************
 
 # Note: sections of this program that check FMTID are not implemented (2022-10-07)
@@ -81,6 +83,14 @@ check_analysis_metadata_MV <- function(VCP = "check_analysis_metadata_MV"){
   # At this time, this global is required. Set its default value here.
   if (!vcqi_object_exists("LEVEL_2_ID")){
     vcqi_global(LEVEL_2_ID,"ID02AD")
+  }
+
+  # check to see if the TITLE and FOOTNOTE CUTOFF globals are set
+  if(!vcqi_object_exists("TITLE_CUTOFF")){
+    vcqi_global(TITLE_CUTOFF,40)
+  }
+  if(!vcqi_object_exists("FOOTNOTE_CUTOFF")){
+    vcqi_global(FOOTNOTE_CUTOFF,100)
   }
 
 

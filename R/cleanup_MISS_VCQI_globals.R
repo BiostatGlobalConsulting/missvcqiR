@@ -73,7 +73,9 @@ cleanup_MISS_VCQI_globals <- function(){
     "OUTPUT_LANGUAGE",
     "language_use",
     "SAVE_VCQI_TESTING_CODE",
-    "STUDY_DAY_VALID_OR_CRUDE"
+    "STUDY_DAY_VALID_OR_CRUDE",
+    "TITLE_CUTOFF",
+    "FOOTNOTE_CUTOFF"
   ), envir = .GlobalEnv) %>% suppressWarnings()
 
   # Remove MISS VCQI objects by pattern:
