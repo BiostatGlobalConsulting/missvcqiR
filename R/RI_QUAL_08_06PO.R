@@ -6,13 +6,15 @@
 #'
 #' @import stringr
 
-# RI_QUAL_08_06PO R version 1.01 - Biostat Global Consulting - 2023-09-12
+# RI_QUAL_08_06PO R version 1.02 - Biostat Global Consulting - 2024-05-21
 # *******************************************************************************
 # Change log
 
 # Date 			  Version 	Name			      What Changed
 # 2022-09-28  1.00      Mia Yu          Original R version
 # 2023-09-12  1.01      Mia Yu          Update to multi-language for MISS VCQI
+# 2024-05-21	1.02	    Mia Yu      		Added multi lignual globals
+#										                    Added call to split_text for title
 # *******************************************************************************
 
 RI_QUAL_08_06PO <- function(VCP = "RI_QUAL_08_06PO"){
@@ -36,10 +38,11 @@ RI_QUAL_08_06PO <- function(VCP = "RI_QUAL_08_06PO"){
 
       vcf <- paste0(language_string(language_use = language_use, str = "OS_66"),
                           " ",str_to_upper(MOV_OUTPUT_DOSE_LIST[d])) #RI - Visits with MOSV for `=upper("`d'")'
-      title <- create_multi_lingual_plot_title(title_string = vcf)
+      title_string <- split_text(text_string = vcf, text_cutoff = TITLE_CUTOFF)
+      #title <- create_multi_lingual_plot_title(title_string = vcf)
 
       vcqi_to_uwplot(database = paste0(VCQI_OUTPUT_FOLDER,"/RI_QUAL_08_",ANALYSIS_COUNTER,"_",MOV_OUTPUT_DOSE_LIST[d],"_database.rds"),
-                     title = title,
+                     title = title_string,
                      name = paste0("RI_QUAL_08_",ANALYSIS_COUNTER,"_uwplot_",MOV_OUTPUT_DOSE_LIST[d]),
                      savedata = savedata)
 
@@ -57,12 +60,14 @@ RI_QUAL_08_06PO <- function(VCP = "RI_QUAL_08_06PO"){
     }
 
     #RI - Visits with MOSV for Any Dose
-    title <- create_multi_lingual_plot_title(title_string = language_string(language_use = language_use, str = "OS_67"))
+    title_string <- split_text(text_string = language_string(language_use = language_use, str = "OS_67"),
+                               text_cutoff = TITLE_CUTOFF)
+    #title <- create_multi_lingual_plot_title(title_string = language_string(language_use = language_use, str = "OS_67"))
 
     vcqi_to_uwplot(database = paste0(VCQI_OUTPUT_FOLDER,"/RI_QUAL_08_",ANALYSIS_COUNTER,"_any_database.rds"),
-                   title = "RI - Visits with MOV for Any Dose",
+                   title = title_string,
                    name = paste0("RI_QUAL_08_",ANALYSIS_COUNTER,"_uwplot_any"),
-                   savedata = savedata)
+                   savedata = savedata) #title = "RI - Visits with MOV for Any Dose"
 
     vcqi_log_comment(VCP, 3, "Comment",
                      "Unweighted proportion plot for any dose was created and exported.")
