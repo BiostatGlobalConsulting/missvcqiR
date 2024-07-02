@@ -621,7 +621,7 @@ gen_MOV_dvs <- function(VCP = "gen_MOV_dvs"){
   # ******************************************************
 
   # Make local macro to use in "if" statement for missing category
-  reasons_var_missing_list <- "((ES08AA_1B_12OS == '' & ES08AA_1C_09OS == '') | (is.na(ES08AA_1B_12OS) & is.na(ES08AA_1C_09OS)))"
+  reasons_var_missing_list <- "((ES08AA_1B_12OS == '' & ES08AA_1C_09OS == '') | (is.na(ES08AA_1B_12OS) & is.na(ES08AA_1C_09OS)) | (ES08AA_1B_12OS == '' & is.na(ES08AA_1C_09OS)) | (is.na(ES08AA_1B_12OS) & ES08AA_1C_09OS == ''))"
   varlist <- c("ES08AA_1A_01", "ES08AA_1A_02", "ES08AA_1A_03","ES08AA_1B_01", "ES08AA_1B_02", "ES08AA_1B_03", "ES08AA_1B_04",
                "ES08AA_1B_05", "ES08AA_1B_06", "ES08AA_1B_07", "ES08AA_1B_08", "ES08AA_1B_09", "ES08AA_1B_10", "ES08AA_1B_11",
                "ES08AA_1B_12", "ES08AA_1C_01", "ES08AA_1C_02", "ES08AA_1C_03", "ES08AA_1C_04", "ES08AA_1C_05", "ES08AA_1C_06",
