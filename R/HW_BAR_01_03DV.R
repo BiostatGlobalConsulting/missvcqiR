@@ -9,12 +9,13 @@
 #' @import stringr
 #' @import haven
 
-# HW_BAR_01_03DV R version 1.00 - Biostat Global Consulting - 2023-08-23
+# HW_BAR_01_03DV R version 1.01 - Biostat Global Consulting - 2024-07-18
 # *******************************************************************************
 # Change log
 
 # Date 			  Version 	Name			      What Changed
 # 2023-08-23  1.00      Mia Yu          Original R package version
+# 2024-07-18  1.01      Caitlin Clary   Fix typo re: HW04AC_5
 # *******************************************************************************
 
 HW_BAR_01_03DV <- function(VCP = "HW_BAR_01_03DV"){
@@ -48,7 +49,7 @@ HW_BAR_01_03DV <- function(VCP = "HW_BAR_01_03DV"){
   dat <- dat %>% mutate(coded_HW11 = ifelse(HW04AB_5 %in% 1, 0, coded_HW11))
 
   # HW04AC should be 5 (None)
-  dat <- dat %>% mutate(coded_HW12 = ifelse(HW04AC_5 %in% 5,1,0))
+  dat <- dat %>% mutate(coded_HW12 = ifelse(HW04AC_5 %in% 1, 1, 0))
   # Reset to 0 if any other values are populated
   dat <- dat %>% mutate(coded_HW12 = ifelse(HW04AC_1 %in% 1, 0, coded_HW12))
   dat <- dat %>% mutate(coded_HW12 = ifelse(HW04AC_2 %in% 1, 0, coded_HW12))

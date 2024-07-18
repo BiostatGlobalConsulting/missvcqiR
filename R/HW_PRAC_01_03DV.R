@@ -9,12 +9,13 @@
 #' @import stringr
 #' @import haven
 
-# HW_PRAC_01_03DV R version 1.00 - Biostat Global Consulting - 2023-08-23
+# HW_PRAC_01_03DV R version 1.01 - Biostat Global Consulting - 2024-07-18
 # *******************************************************************************
 # Change log
 
 # Date 			  Version 	Name			      What Changed
 # 2023-08-23  1.00      Mia Yu          Original R package version
+# 2024-07-18  1.01      Caitlin Clary   Fix HW06AD issue
 # *******************************************************************************
 
 HW_PRAC_01_03DV <- function(VCP = "HW_PRAC_01_03DV"){
@@ -32,16 +33,18 @@ HW_PRAC_01_03DV <- function(VCP = "HW_PRAC_01_03DV"){
   dat <- dat %>% mutate(coded_HW30 = ifelse(HW06AB %in% 5,1,0))
   dat <- dat %>% mutate(coded_HW31 = ifelse(HW06AC %in% 4,1,0))
 
-  for (i in 1:4){
-    var <- rlang::sym(paste0("HW06AD_",i))
-    dat <- dat %>% mutate(coded_HW32 = ifelse(!!var %in% 1, coded_HW32+1, coded_HW32))
+  for (i in 1:5){
+    var <- rlang::sym(paste0("HW06AD_", i))
+    dat <- dat %>%
+      mutate(coded_HW32 = ifelse(!!var %in% 1, coded_HW32+1, coded_HW32))
   } #end of i loop
 
-  dat <- dat %>% mutate(coded_HW32 = ifelse(HW06AD_5 %in% 1,5,coded_HW32))
+  dat <- dat %>% mutate(coded_HW32 = ifelse(HW06AD_6 %in% 1, 5, coded_HW32))
 
   dat <- dat %>% mutate(vacc_practices = 0)
-  dat$vacc_practices <- haven::labelled(dat$vacc_practices,
-                                        label = "Variable that shows the score for vaccination practices - part 1") %>% suppressWarnings()
+  dat$vacc_practices <- haven::labelled(
+    dat$vacc_practices,
+    label = "Variable that shows the score for vaccination practices - part 1") %>% suppressWarnings()
 
   for (i in 29:32){
     var <- rlang::sym(paste0("coded_HW",i))
