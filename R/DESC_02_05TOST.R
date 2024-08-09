@@ -15,6 +15,9 @@
 # 2023-08-21  1.01      Mia Yu          Trim the sheet name if too long
 # 2023-09-29  1.02      Mia Yu          Added multi lingual globals
 # 2024-03-18  1.03      Mia Yu          Update the sheet name length max from 30 to 31
+# 2024-08-09  1.04      Caitlin Clary   If user doesn't specify DESC_02_TO_TITLE
+#                                       then use variable label if available and
+#                                       variable name otherwise
 # *******************************************************************************
 
 
@@ -49,15 +52,32 @@ DESC_02_05TOST <- function(VCP = "DESC_02_05TOST"){
 
   vid <- 1
 
+  set_back_to_blank <- 0
+  if (!vcqi_object_exists("DESC_02_TO_TITLE")){set_back_to_blank <- 1}
+
   zpc <- DESC_02_COUNTER
   if (DESC_02_COUNTER < 10){
     zpc <- paste0("0",zpc) # 0 pad the desc_02 counter
   }
 
   for (d in seq_along(DESC_02_VARIABLES)){
-    rm(list = c("TO_DESC_02","TO_DESC_02_columnlabel","TO_DESC_02_formatnum","TO_DESC_02_colformat"), envir = .GlobalEnv) %>% suppressWarnings()
+    rm(list = c("TO_DESC_02", "TO_DESC_02_columnlabel",
+                "TO_DESC_02_formatnum", "TO_DESC_02_colformat"),
+       envir = .GlobalEnv) %>% suppressWarnings()
 
-    dat <- vcqi_read(paste0(VCQI_OUTPUT_FOLDER,"/DESC_02_", ANALYSIS_COUNTER,"_", zpc,"_",vid, "_database.rds"))
+    dat <- vcqi_read(paste0(VCQI_OUTPUT_FOLDER, "/DESC_02_", ANALYSIS_COUNTER,"_", zpc,"_", vid, "_database.rds"))
+
+    # If user left title global blank, populate with variable label (if variable
+    # label doesn't exist, use variable name)
+    # browser()
+    if (set_back_to_blank %in% 1){
+
+      if (!is.null(attributes(dat$outcome)$label)){
+        vcqi_global(DESC_02_TO_TITLE, attributes(dat$outcome)$label)
+      } else {
+        vcqi_global(DESC_02_TO_TITLE, DESC_02_VARIABLES[d])
+      }
+    }
 
     if ("nwtd" %in% names(dat)){
       wtd <- 1
@@ -141,6 +161,12 @@ DESC_02_05TOST <- function(VCP = "DESC_02_05TOST"){
     rm(list = c("TO_DESC_02","TO_DESC_02_columnlabel","TO_DESC_02_formatnum","TO_DESC_02_colformat"), envir = .GlobalEnv) %>% suppressWarnings()
 
   } # end of DESC_02_VARIABLES d loop
+
+  # If title global was blank, we used variable labels or names - return global
+  # to blank before exiting
+  if (set_back_to_blank %in% 1){
+    vcqi_global(DESC_02_TO_TITLE, NA)
+  }
 
   vcqi_log_comment(VCP, 5, "Flow", "Exiting")
 
