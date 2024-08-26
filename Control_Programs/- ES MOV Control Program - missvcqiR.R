@@ -195,6 +195,26 @@ vcqi_global(RI_MULTI_3_DOSE_LIST, c("PENTA", "PCV", "POLIO"))
 # RI_MULTI_9_DOSE_LIST globals.
 
 # ..............................................................................
+# Which doses should be included in the analysis?
+# ..............................................................................
+
+# Note that these abbreviations must correspond to those used in the names of
+# the dose date and dose tick variables *AND* the names used above in the
+# schedule globals (<dose>_min_age_days and <dose>_min_interval_days and
+# <dose>_max_days.  The variables are named using lower-case acronyms.  The
+# globals here may be upper or mixed case; they will be converted to lower case
+# in the software.
+
+vcqi_global(RI_SINGLE_DOSE_LIST, c("BCG", "OPV0", "IPV1", "VISIT"))
+vcqi_global(RI_MULTI_2_DOSE_LIST, c("MCV", "ROTA"))
+vcqi_global(RI_MULTI_3_DOSE_LIST, c("PENTA", "PCV", "OPV"))
+
+# The R MISS-VCQI software can handle dose lists with up to 9 doses
+# (RI_MULTI_9_DOSE_LIST). In this example we have single doses, two-dose series,
+# and three-dose series, and we do not define the RI_MULTI_4_DOSE_LIST through
+# RI_MULTI_9_DOSE_LIST globals.
+
+# ..............................................................................
 # Parameters to describe the analysis being requested
 # ..............................................................................
 
