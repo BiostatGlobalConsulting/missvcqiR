@@ -12,58 +12,88 @@
 
 # Date 			  Version 	Name			      What Changed
 # 2023-07-24  1.00      Mia Yu          Original R package version
+# 2024-08-29  1.01      Caitlin Clary   Update to use multilingual strings
 # *******************************************************************************
 
 RI_QUAL_08_05TOST <- function(VCP = "RI_QUAL_08_05TOST"){
   vcqi_log_comment(VCP, 5, "Flow", "Starting")
 
-  rm(list = c("TO_RI_QUAL_08", "TO_RI_QUAL_08_columnlabel", "TO_RI_QUAL_08_formatnum","TO_RI_QUAL_08_colformat"), envir = .GlobalEnv) %>% suppressWarnings()
+  rm(list = c("TO_RI_QUAL_08", "TO_RI_QUAL_08_columnlabel",
+              "TO_RI_QUAL_08_formatnum", "TO_RI_QUAL_08_colformat"),
+     envir = .GlobalEnv) %>% suppressWarnings()
 
   for (d in seq_along(MOV_OUTPUT_DOSE_LIST)){
     print(MOV_OUTPUT_DOSE_LIST[d])
 
     make_table_column(
       tablename = "TO_RI_QUAL_08",
-      dbfilename = paste0("RI_QUAL_08_",ANALYSIS_COUNTER,"_",MOV_OUTPUT_DOSE_LIST[d],"_database.rds"),
+      dbfilename = paste0("RI_QUAL_08_", ANALYSIS_COUNTER, "_",
+                          MOV_OUTPUT_DOSE_LIST[d], "_database.rds"),
       variable = "estimate", replacevar = NA, noannotate = TRUE,
-      label = paste0("Visits with MOV for ",str_to_upper(MOV_OUTPUT_DOSE_LIST[d])," (%)"))
+
+      # Visits with MOV for <dose> (%)
+      label = paste0(language_string(language_use = language_use, str = "OS_81"),
+                     " ",
+                     str_to_upper(MOV_OUTPUT_DOSE_LIST[d]),
+                     " ",
+                     language_string(language_use = language_use, str = "OS_1"))
+    )
 
     make_table_column(
       tablename = "TO_RI_QUAL_08",
-      dbfilename = paste0("RI_QUAL_08_",ANALYSIS_COUNTER,"_",MOV_OUTPUT_DOSE_LIST[d],"_database.rds"),
+      dbfilename = paste0("RI_QUAL_08_", ANALYSIS_COUNTER,"_",
+                          MOV_OUTPUT_DOSE_LIST[d], "_database.rds"),
       variable = "n", replacevar = NA, noannotate = TRUE,
-      label = "N")
-  } #end of d loop
+
+      # N
+      label = language_string(language_use = language_use, str = "OS_48"))
+  } # end of d loop
 
   print("Totals...")
 
   make_table_column(
     tablename = "TO_RI_QUAL_08",
-    dbfilename = paste0("RI_QUAL_08_",ANALYSIS_COUNTER,"_any_database.rds"),
+    dbfilename = paste0("RI_QUAL_08_", ANALYSIS_COUNTER, "_any_database.rds"),
     variable = "estimate", replacevar = NA, noannotate = TRUE,
-    label = "Visits with MOV for any dose (%)")
+
+    # Visits with MOV for any dose (%)
+    label = paste0(language_string(language_use = language_use, str = "OS_82"),
+                   " ",
+                   language_string(language_use = language_use, str = "OS_1"))
+  )
 
   make_table_column(
     tablename = "TO_RI_QUAL_08",
-    dbfilename = paste0("RI_QUAL_08_",ANALYSIS_COUNTER,"_any_database.rds"),
+    dbfilename = paste0("RI_QUAL_08_", ANALYSIS_COUNTER, "_any_database.rds"),
     variable = "n", replacevar = NA, noannotate = TRUE,
-    label = "N")
+
+    # N
+    label = language_string(language_use = language_use, str = "OS_48")
+  )
 
   make_table_column(
     tablename = "TO_RI_QUAL_08",
-    dbfilename = paste0("RI_QUAL_08_",ANALYSIS_COUNTER,"_rate_database.rds"),
-    variable = "estimate", replacevar = NA, noannotate = TRUE,noscale= TRUE,
-    label = "MOVs per Visit", varformat = list("0.000"))
+    dbfilename = paste0("RI_QUAL_08_", ANALYSIS_COUNTER, "_rate_database.rds"),
+    variable = "estimate", replacevar = NA, noannotate = TRUE, noscale= TRUE,
+
+    # MOVs per Visit
+    label = language_string(language_use = language_use, str = "OS_47"),
+    varformat = list("0.000"))
 
   make_table_column(
     tablename = "TO_RI_QUAL_08",
-    dbfilename = paste0("RI_QUAL_08_",ANALYSIS_COUNTER,"_rate_database.rds"),
+    dbfilename = paste0("RI_QUAL_08_", ANALYSIS_COUNTER, "_rate_database.rds"),
     variable = "n", replacevar = NA, noannotate = TRUE,
-    label = "N")
+
+    # N
+    label = language_string(language_use = language_use, str = "OS_48")
+  )
 
   export_table_to_excel(indicator = "RI_QUAL_08",brief = FALSE)
 
-  rm(list = c("TO_RI_QUAL_08", "TO_RI_QUAL_08_columnlabel", "TO_RI_QUAL_08_formatnum","TO_RI_QUAL_08_colformat"), envir = .GlobalEnv) %>% suppressWarnings()
+  rm(list = c("TO_RI_QUAL_08", "TO_RI_QUAL_08_columnlabel",
+              "TO_RI_QUAL_08_formatnum", "TO_RI_QUAL_08_colformat"),
+     envir = .GlobalEnv) %>% suppressWarnings()
   rm(TO_RI_QUAL_08_CN, envir = .GlobalEnv) %>% suppressWarnings()
 
   vcqi_log_comment(VCP, 5, "Flow", "Exiting")
