@@ -950,7 +950,7 @@ vcqi_global(DESC_03_WEIGHTED, "NO")
 vcqi_global(DESC_03_DENOMINATOR, "RESPONDED")
 vcqi_global(DESC_03_SELECTED_VALUE, 1)
 
-# Overview of reasons for MOV from respondents who were not eligible for any doses
+# Overview of reasons for MOSV from respondents who were not eligible for any doses
 vcqi_global(DESC_03_TO_TITLE, language_string(language_use = language_use, str = "OS_142"))
 vcqi_global(DESC_03_TO_SUBTITLE,NA)
 
@@ -996,11 +996,11 @@ vcqi_global(DESC_03_WEIGHTED, "NO")
 vcqi_global(DESC_03_DENOMINATOR, "RESPONDED")
 vcqi_global(DESC_03_SELECTED_VALUE, 1)
 
-# Related to Health Workers: Reasons for MOV from respondents who were not
+# Related to Health Workers: Reasons for MOSV from respondents who were not
 # eligible for any doses
 vcqi_global(DESC_03_TO_TITLE, language_string(language_use = language_use, str = "OS_148"))
 # MOV reasons 1A
-vcqi_global(DESC_03_TO_SUBTITLE,paste0(language_string(language_use = language_use, str = "OS_149"), " 1A"))
+vcqi_global(DESC_03_TO_SUBTITLE, paste0(language_string(language_use = language_use, str = "OS_149"), " 1A"))
 
 vcqi_global(DESC_03_LIST_N_BEFORE_PCT, "Yes")
 
@@ -1050,8 +1050,9 @@ vcqi_global(DESC_03_WEIGHTED, "NO")
 vcqi_global(DESC_03_DENOMINATOR, "RESPONDED")
 vcqi_global(DESC_03_SELECTED_VALUE, 1)
 
-# Related to Caregivers: Reasons for MOV from respondents who were not eligible for any doses
-vcqi_global(DESC_03_TO_TITLE, language_string(language_use = language_use, str = "OS_155"))
+# Related to Caregivers: Reasons for MOSV from respondents who were not eligible for any doses
+vcqi_global(DESC_03_TO_TITLE,
+            language_string(language_use = language_use, "OS_539"))
 # MOV reasons 1B
 vcqi_global(DESC_03_TO_SUBTITLE, paste0(language_string(language_use = language_use, str = "OS_149"), " 1B"))
 
@@ -1085,8 +1086,9 @@ vcqi_global(DESC_03_WEIGHTED, "NO")
 vcqi_global(DESC_03_DENOMINATOR, "RESPONDED")
 vcqi_global(DESC_03_SELECTED_VALUE, 1)
 
-# Related to Health Services: Reasons for MOV from respondents who were not eligible for any doses
-vcqi_global(DESC_03_TO_TITLE, language_string(language_use = language_use, str = "OS_155"))
+# Related to Health Services: Reasons for MOSV from respondents who were not eligible for any doses
+vcqi_global(DESC_03_TO_TITLE, language_string(language_use = language_use, str = "OS_540"))
+
 # MOV reasons 1C
 vcqi_global(DESC_03_TO_SUBTITLE, paste0(language_string(language_use = language_use, str = "OS_149"), " 1C"))
 
@@ -1116,7 +1118,7 @@ vcqi_global(DESC_03_WEIGHTED, "NO")
 vcqi_global(DESC_03_DENOMINATOR, "RESPONDED")
 vcqi_global(DESC_03_SELECTED_VALUE, 1)
 
-# Overview of reasons for MOV from respondents who were eligible for 1+ doses
+# Overview of reasons for MOSV from respondents who were eligible for 1+ doses
 vcqi_global(DESC_03_TO_TITLE, language_string(language_use = language_use, str = "OS_160"))
 vcqi_global(DESC_03_TO_SUBTITLE,NA)
 
@@ -1161,8 +1163,9 @@ vcqi_global(DESC_03_WEIGHTED, "NO")
 vcqi_global(DESC_03_DENOMINATOR, "RESPONDED")
 vcqi_global(DESC_03_SELECTED_VALUE, 1)
 
-# Related to Health Workers: Reasons for MOV from respondents who were eligible for 1+ doses
-vcqi_global(DESC_03_TO_TITLE, language_string(language_use = language_use, str = "OS_148"))
+# Related to Health Workers: Reasons for MOSV from respondents who were eligible for 1+ doses
+vcqi_global(DESC_03_TO_TITLE, language_string(language_use = language_use, str = "OS_541"))
+
 # MOV reasons 2A
 vcqi_global(DESC_03_TO_SUBTITLE,paste0(language_string(language_use = language_use, str = "OS_149"), " 2A"))
 
@@ -1215,8 +1218,9 @@ vcqi_global(DESC_03_WEIGHTED, "NO")
 vcqi_global(DESC_03_DENOMINATOR, "RESPONDED")
 vcqi_global(DESC_03_SELECTED_VALUE, 1)
 
-# Related to Caregivers: Reasons for MOV from respondents who were eligible for 1+ doses
-vcqi_global(DESC_03_TO_TITLE, language_string(language_use = language_use, str = "OS_163"))
+# Related to Caregivers: Reasons for MOSV from respondents who were eligible for 1+ doses
+vcqi_global(DESC_03_TO_TITLE, language_string(language_use = language_use, str = "OS_542"))
+
 # MOV reasons 2B
 vcqi_global(DESC_03_TO_SUBTITLE, paste0(language_string(language_use = language_use, str = "OS_149"), " 2B"))
 
@@ -1254,8 +1258,9 @@ vcqi_global(DESC_03_WEIGHTED, "NO")
 vcqi_global(DESC_03_DENOMINATOR, "RESPONDED")
 vcqi_global(DESC_03_SELECTED_VALUE, 1)
 
-# Related to Health Services: Reasons for MOV from respondents who were eligible for 1+ doses
-vcqi_global(DESC_03_TO_TITLE, language_string(language_use = language_use, str = "OS_163"))
+# Related to Health Services: Reasons for MOSV from respondents who were eligible for 1+ doses
+vcqi_global(DESC_03_TO_TITLE, language_string(language_use = language_use, str = "OS_543"))
+
 # MOV reasons 2C
 vcqi_global(DESC_03_TO_SUBTITLE,paste0(language_string(language_use = language_use, str = "OS_149"), " 2C"))
 
