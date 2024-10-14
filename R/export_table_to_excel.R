@@ -185,7 +185,13 @@ export_table_to_excel <- function(indicator, tablename = NULL, sheet = NULL, bri
   format4col <- which(formatnum %in% 4) + 1
   format5col <- which(formatnum %in% 5) + 1
 
-  format1 <- createStyle(numFmt = paste0("0.",rep(0,VCQI_NUM_DECIMAL_DIGITS)))
+  if (VCQI_NUM_DECIMAL_DIGITS > 0){
+  format1 <- createStyle(
+    numFmt = paste0("0.", rep(0, VCQI_NUM_DECIMAL_DIGITS)))
+  } else {
+    format1 <- createStyle(
+      numFmt = paste0("0", rep(0, VCQI_NUM_DECIMAL_DIGITS)))
+  }
   format2 <- createStyle(numFmt = "0.0000")
   format3 <- createStyle(numFmt = "#,##0")
   format4 <- createStyle(numFmt = "0.0")
