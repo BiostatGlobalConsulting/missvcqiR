@@ -48,14 +48,24 @@ DESC_03_05TOST <- function(VCP = "DESC_03_05TOST"){
 
   vid <- DESC_03_COUNTER
 
+  set_back_to_blank <- 0
+  if (!vcqi_object_exists("DESC_03_TO_TITLE")){set_back_to_blank <- 1}
+
   zpc <- DESC_03_COUNTER
   if (DESC_03_COUNTER < 10){
-    zpc <- paste0("0",zpc) # 0 pad the desc_03 counter
+    zpc <- paste0("0", zpc) # 0 pad the desc_03 counter
   }
 
   rm(list = c("TO_DESC_03","TO_DESC_03_columnlabel","TO_DESC_03_formatnum","TO_DESC_03_colformat"), envir = .GlobalEnv) %>% suppressWarnings()
 
   dat <- vcqi_read(paste0(VCQI_OUTPUT_FOLDER,"/DESC_03_", ANALYSIS_COUNTER,"_", zpc,"_",vid, "_database.rds"))
+
+  # If table title isn't specified, use variable label (default set in GO)
+  if (set_back_to_blank %in% 1){
+    if (!is.null(attributes(dat$outcome)$label)){
+      vcqi_global(DESC_03_TO_TITLE, attributes(dat$outcome)$label)
+    }
+  }
 
   if ("nwtd" %in% names(dat)){
     wtd <- 1
@@ -136,6 +146,12 @@ DESC_03_05TOST <- function(VCP = "DESC_03_05TOST"){
   rm(list = c("TO_DESC_03","TO_DESC_03_columnlabel","TO_DESC_03_formatnum","TO_DESC_03_colformat"), envir = .GlobalEnv) %>% suppressWarnings()
 
   rm(list = c(paste0("DESC_03_labels_",DESC_03_COUNTER)), envir = .GlobalEnv) %>% suppressWarnings()
+
+  # If title global was blank, we used variable labels or names - return global
+  # to blank before exiting
+  if (set_back_to_blank %in% 1){
+    vcqi_global(DESC_03_TO_TITLE, NA)
+  }
 
   vcqi_log_comment(VCP, 5, "Flow", "Exiting")
 
