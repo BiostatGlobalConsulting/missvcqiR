@@ -5,12 +5,14 @@
 #' @return Databases in VCQI_OUTPUT_FOLDER
 
 
-# DESC_02_04GO R version 1.00 - Biostat Global Consulting - 2023-05-26
+# DESC_02_04GO R version 1.01 - Biostat Global Consulting - 2024-10-04
 # *******************************************************************************
 # Change log
 
 # Date 			  Version 	Name			      What Changed
 # 2023-05-26  1.00      Mia Yu          Original R package version
+# 2024-10-04  1.01      Caitlin Clary   Use variable name as label if the
+#                                       variable itself is unlabeled
 # *******************************************************************************
 
 
@@ -20,9 +22,19 @@ DESC_02_04GO <- function(VCP = "DESC_02_04GO"){
   vid <- 1
   for (d in seq_along(DESC_02_VARIABLES)){
     rm(list = c(paste0("DESC_02_labels_",vid)), envir = .GlobalEnv) %>% suppressWarnings()
-    dat <- vcqi_read(paste0(VCQI_OUTPUT_FOLDER, "/DESC_02_", ANALYSIS_COUNTER, "_", DESC_02_COUNTER, ".rds"))
+    dat <- vcqi_read(
+      paste0(VCQI_OUTPUT_FOLDER, "/DESC_02_", ANALYSIS_COUNTER,
+             "_", DESC_02_COUNTER, ".rds"))
+
     tempvar <- get(DESC_02_VARIABLES[d], dat)
-    varlabel <- attr(tempvar,"label")
+
+    varlabel <- attr(tempvar, "label")
+
+    # Use the variable name for the table title if the variable is unlabeled
+    if (is.null(varlabel)){
+      varlabel <- DESC_02_VARIABLES[d]
+    }
+
     make_DESC_0203_output_database(variable = DESC_02_VARIABLES[d],
                                    label = varlabel,
                                    vid = vid,

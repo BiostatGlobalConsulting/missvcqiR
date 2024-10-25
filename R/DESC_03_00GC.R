@@ -8,7 +8,7 @@
 #' @rawNamespace import(rlang, except = c(local_options,with_options))
 
 
-# DESC_03_00GC R version 1.00 - Biostat Global Consulting - 2023-06-06
+# DESC_03_00GC R version 1.02 - Biostat Global Consulting - 2024-10-22
 # ###############################################################################
 # Change log
 
@@ -17,6 +17,9 @@
 # 2023-08-21  1.01      Mia Yu          Add the part that check if all variables
 #                                       in DESC_03_VARIABLES have the same # of
 #                                       people who answered the question
+# 2024-10-22  1.02      Caitlin Clary   Revert check requiring all vars in
+#                                       DESC_03_VARIABLES to be defined for the
+#                                       same observations
 # ###############################################################################
 
 DESC_03_00GC <- function(VCP = "DESC_03_00GC"){
@@ -50,25 +53,25 @@ DESC_03_00GC <- function(VCP = "DESC_03_00GC"){
   # concatenate onto the global.
 
   # Strip off the .dta if the user provided it
-  datname <- gsub(".rds","",DESC_03_DATASET)
+  datname <- gsub(".rds", "", DESC_03_DATASET)
 
   if (str_to_upper(datname) %in% c("RI","SIA", "TT")){
-    filename <- paste0(VCQI_OUTPUT_FOLDER, "/", datname,"_with_ids.rds")
+    filename <- paste0(VCQI_OUTPUT_FOLDER, "/", datname, "_with_ids.rds")
     if (file.exists(filename)){
-      vcqi_global(DESC_03_DATASET,paste0(datname,"_with_ids.rds"))
+      vcqi_global(DESC_03_DATASET, paste0(datname, "_with_ids.rds"))
     }
 
     if (!file.exists(filename)){
       if (!file.exists(paste0(VCQI_OUTPUT_FOLDER, "/", datname,".rds"))){
         errormsgs <- c(errormsgs,
-                       paste0("DESC_03_DATASET is ",datname, " but there is no dataset named ",
-                              datname, " or named ",datname,"_with_ids in the VCQI output folder."))
+                       paste0("DESC_03_DATASET is ", datname, " but there is no dataset named ",
+                              datname, " or named ", datname, "_with_ids in the VCQI output folder."))
         vcqi_log_comment(VCP, 1, "Error",
-                         paste0("DESC_03_DATASET is ",datname, " but there is no dataset named ",
-                                datname, " or named ",datname,"_with_ids in the VCQI output folder."))
+                         paste0("DESC_03_DATASET is ", datname, " but there is no dataset named ",
+                                datname, " or named ", datname, "_with_ids in the VCQI output folder."))
         exitflag <- 1
-      } else{
-        vcqi_global(DESC_03_DATASET,paste0(datname,".rds"))
+      } else {
+        vcqi_global(DESC_03_DATASET, paste0(datname, ".rds"))
       }
     }
   }
@@ -99,38 +102,46 @@ DESC_03_00GC <- function(VCP = "DESC_03_00GC"){
     )
   }
 
-  pcount <- 1
+  # pcount <- 1
   for (g in seq_along(DESC_03_VARIABLES)){
+
     if (!DESC_03_VARIABLES[g] %in% names(dat)){
-      errormsgs <- c(errormsgs,paste0("The variable ",DESC_03_VARIABLES[g],
-                                      " provided in global macro DESC_03_VARIABLES does not exist in dataset"))
-      vcqi_log_comment(VCP,1,"Error",
-                       paste0("The variable ",DESC_03_VARIABLES[g],
-                              " provided in global macro DESC_03_VARIABLES does not exist in dataset"))
+      errormsgs <- c(
+        errormsgs,
+        paste0("The variable ", DESC_03_VARIABLES[g],
+               " provided in global macro DESC_03_VARIABLES does not exist in dataset"))
+
+      vcqi_log_comment(
+        VCP, 1, "Error",
+        paste0(
+          "The variable ", DESC_03_VARIABLES[g],
+          " provided in global macro DESC_03_VARIABLES does not exist in dataset"))
+
       exitflag <- 1
-    } else {
-      qvar <- rlang::sym(DESC_03_VARIABLES[g])
-      dat <- dat %>% mutate(tempvar1 = ifelse(!is.na(!!qvar),1,0))
-      if (pcount == 1){
-        g1 <- DESC_03_VARIABLES[g]
-      }
-      if (pcount > 1){
-        var1 <- get("tempvar1",dat)
-        var2 <- get("populated_1",dat)
-        if (any(!(var1 == var2) %in% TRUE)){
-          errormsgs <- c(errormsgs,paste0("The variable ",DESC_03_VARIABLES[g],
-                                          " provided in global macro DESC_03_VARIABLES is not defined for precisely the same observations as ",
-                                          g1, ". Each variable in global macro DESC_03_VARIABLES needs to be defined for the same observations."))
-          vcqi_log_comment(VCP,1,"Error",
-                           paste0("The variable ",DESC_03_VARIABLES[g],
-                                  " provided in global macro DESC_03_VARIABLES is not defined for precisely the same observations as ",
-                                  g1, ". Each variable in global macro DESC_03_VARIABLES needs to be defined for the same observations."))
-          exitflag <- 1
-        }
-      }
-      names(dat)[which(names(dat) == "tempvar1")] <- paste0("populated_",pcount)
-      pcount = pcount + 1
     }
+    # else {
+    #   qvar <- rlang::sym(DESC_03_VARIABLES[g])
+    #   dat <- dat %>% mutate(tempvar1 = ifelse(!is.na(!!qvar),1,0))
+    #   if (pcount == 1){
+    #     g1 <- DESC_03_VARIABLES[g]
+    #   }
+    #   if (pcount > 1){
+    #     var1 <- get("tempvar1",dat)
+    #     var2 <- get("populated_1",dat)
+    #     if (any(!(var1 == var2) %in% TRUE)){
+    #       errormsgs <- c(errormsgs,paste0("The variable ",DESC_03_VARIABLES[g],
+    #                                       " provided in global macro DESC_03_VARIABLES is not defined for precisely the same observations as ",
+    #                                       g1, ". Each variable in global macro DESC_03_VARIABLES needs to be defined for the same observations."))
+    #       vcqi_log_comment(VCP,1,"Error",
+    #                        paste0("The variable ",DESC_03_VARIABLES[g],
+    #                               " provided in global macro DESC_03_VARIABLES is not defined for precisely the same observations as ",
+    #                               g1, ". Each variable in global macro DESC_03_VARIABLES needs to be defined for the same observations."))
+    #       exitflag <- 1
+    #     }
+    #   }
+    #   names(dat)[which(names(dat) == "tempvar1")] <- paste0("populated_",pcount)
+    #   pcount = pcount + 1
+    # }
   } #end of DESC_03_VARIABLES g loop
 
   # Confirm global variables DESC_03_SHORT_TITLE and DESC_03_SELECTED_VALUE are defined
