@@ -69,7 +69,7 @@ DESC_02_05TOST <- function(VCP = "DESC_02_05TOST"){
 
     # If user left title global blank, populate with variable label (if variable
     # label doesn't exist, use variable name)
-    # browser()
+
     if (set_back_to_blank %in% 1){
 
       if (!is.null(attributes(dat$outcome)$label)){
