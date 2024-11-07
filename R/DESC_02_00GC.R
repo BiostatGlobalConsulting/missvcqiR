@@ -256,7 +256,7 @@ DESC_02_00GC <- function(VCP = "DESC_02_00GC"){
         relab_level <- "NO"
       }
 
-      if((!vcqi_object_exists(paste0("DESC_02_RELABEL_LEVEL_",i)) & !is.na(relab_level)) %in% TRUE){
+      if((!exists(paste0("DESC_02_RELABEL_LEVEL_",i)) & !is.na(relab_level)) %in% TRUE){
         errormsgs <- c(errormsgs, paste0("Global variable DESC_02_RELABEL_LEVEL_",i,
                                          " must be defined."))
         vcqi_log_comment(VCP,1,"Error",
@@ -266,7 +266,7 @@ DESC_02_00GC <- function(VCP = "DESC_02_00GC"){
       }
 
       #DESC_02_RELABEL_LABEL_i
-      if(!vcqi_object_exists(paste0("DESC_02_RELABEL_LABEL_",i))){
+      if(!exists(paste0("DESC_02_RELABEL_LABEL_",i))){
         errormsgs <- c(errormsgs, paste0("Global variable DESC_02_RELABEL_LABEL_",i,
                                          " must be defined."))
         vcqi_log_comment(VCP,1,"Error",
