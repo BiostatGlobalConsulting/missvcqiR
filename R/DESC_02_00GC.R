@@ -347,7 +347,7 @@ DESC_02_00GC <- function(VCP = "DESC_02_00GC"){
       for (v in seq_along(DESC_02_VARIABLES)){
         var <- get(DESC_02_VARIABLES[v],dat)
         var2 <- zap_labels(var)
-        if (class(var2) == "character"){
+        if ("character" %in% class(var2)){
           errormsgs <- c(errormsgs, paste0("DESC_02 can only compute subtotals for numeric variables; ",DESC_02_VARIABLES[v],
                                            " is a string variable."))
           vcqi_log_comment(VCP,1,"Error",
