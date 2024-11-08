@@ -42,7 +42,7 @@ DESC_03_03DV <- function(VCP = "DESC_03_03DV"){
     va <- rlang::sym(DESC_03_VARIABLES[v])
     var <- get(DESC_03_VARIABLES[v], dat)
 
-    if (class(var) == "character"){
+    if (any(class(var) == "character")){
       dat <- dat %>%
         mutate(
           !!va := ifelse(!!va == "", NA_character_, !!va),
@@ -51,14 +51,14 @@ DESC_03_03DV <- function(VCP = "DESC_03_03DV"){
         )
     }
 
-    if (class(var) == "numeric"){
+    if (any(class(var) %in% c("numeric", "double", "integer"))){
       dat <- dat %>%
         mutate(
           tempvar0 = ifelse((!!va == DESC_03_SELECTED_VALUE) %in% TRUE, 1, 0),
         )
     }
 
-    if (class(var) == "logical"){
+    if (any(class(var) == "logical")){
       dat <- dat %>%
         mutate(
           !!va := as.numeric(!!va),
@@ -82,7 +82,7 @@ DESC_03_03DV <- function(VCP = "DESC_03_03DV"){
 
     var <- zap_labels(var)
 
-    if (class(var) == "character"){
+    if (any(class(var) == "character")){
       dat <- dat %>%
         mutate(
           !!va := ifelse(!!va == "", NA_character_, !!va),
@@ -91,14 +91,14 @@ DESC_03_03DV <- function(VCP = "DESC_03_03DV"){
         )
     }
 
-    if (class(var) == "numeric"){
+    if (any(class(var) %in% c("numeric", "double", "integer"))){
       dat <- dat %>%
         mutate(
           tempvar1 = ifelse((!!va == DESC_03_SELECTED_VALUE) %in% TRUE, 1, 0),
         )
     }
 
-    if (class(var) == "logical"){
+    if (any(class(var) == "logical")){
       dat <- dat %>%
         mutate(
           !!va := as.numeric(!!va),
@@ -172,7 +172,7 @@ DESC_03_03DV <- function(VCP = "DESC_03_03DV"){
           varlabel <- attr(var, "label")
 
           var <- zap_labels(var)
-          if (class(var) == "character"){
+          if (any(class(var) == "character")){
 
             dat <- dat %>%
               mutate(
@@ -180,7 +180,7 @@ DESC_03_03DV <- function(VCP = "DESC_03_03DV"){
                 tempvar3 = ifelse(is.na(!!va), 0, tempvar3))
           }
 
-          if (class(var) %in% c("numeric", "logical")){
+          if (any(class(var) %in% c("numeric", "double", "integer", "logical"))){
             dat <- dat %>%
               mutate(
                 tempvar2 = ifelse((!!va == DESC_03_SELECTED_VALUE) %in% TRUE, 1, tempvar2),
@@ -189,7 +189,7 @@ DESC_03_03DV <- function(VCP = "DESC_03_03DV"){
             # dat <- dat %>% mutate(tempvar3 = ifelse(is.na(!!va), 0,tempvar3))
           }
 
-          # if (class(var) == "logical"){
+          # if (any(class(var) == "logical")){
           #   dat <- dat %>%
           #     mutate(tempvar2 = ifelse((!!va == DESC_03_SELECTED_VALUE) %in% TRUE, 1, tempvar2))
           #   dat <- dat %>% mutate(tempvar3 = ifelse(is.na(!!va), 0,tempvar3))
