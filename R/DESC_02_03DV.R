@@ -19,6 +19,8 @@
 # 2023-11-10  1.01      Caitlin Clary   When relabeling variable levels, avoid
 #                                       errors when original variable doesn't
 #                                       have value labels
+# 2024-11-11  1.02      Caitlin Clary   Treat empty strings as missing values
+#                                       when denominator = RESPONDED
 # *******************************************************************************
 
 DESC_02_03DV <- function(VCP = "DESC_02_03DV"){
@@ -52,11 +54,11 @@ DESC_02_03DV <- function(VCP = "DESC_02_03DV"){
     }
 
     # What are the observed values of `v'?
-    llist <- sort(unique(var),na.last = TRUE)
+    llist <- sort(unique(var), na.last = TRUE)
 
     if (missing != "TRUE"){
-      if (length(which(is.na(llist))) > 0){
-        na <- which(is.na(llist))
+      if (length(which(is.na(llist) | llist == "")) > 0){
+        na <- which(is.na(llist) | llist == "")
         llist <- llist[-na]
       }
     }
@@ -106,9 +108,14 @@ DESC_02_03DV <- function(VCP = "DESC_02_03DV"){
             psweight > 0 & !is.na(psweight),
           1, 0))
       assign(paste0("DESC02_VALUE_LEVEL_", lcounter), llist[l], envir = .GlobalEnv)
-      dat <- dat %>% mutate(tempvar1 = ifelse((
-          is.na(!!va) & (str_to_upper(DESC_02_DENOMINATOR) == "RESPONDED") & psweight > 0 & !is.na(psweight)),
-        NA, tempvar1))
+      dat <- dat %>%
+        mutate(
+          tempvar1 = ifelse((
+            (is.na(!!va) | !!va == "") &
+              (str_to_upper(DESC_02_DENOMINATOR) == "RESPONDED") &
+              psweight > 0 & !is.na(psweight)),
+            NA, tempvar1)
+        )
 
       if (vtype == "string"){
         dat$tempvar1 <- haven::labelled(dat$tempvar1, label = llist[l]) %>% suppressWarnings()
@@ -187,20 +194,30 @@ DESC_02_03DV <- function(VCP = "DESC_02_03DV"){
                                                     1,tempvar2))
           } #end of j loop
 
-          dat <- dat %>% mutate(tempvar2 = ifelse((
-            is.na(!!va) & (str_to_upper(DESC_02_DENOMINATOR) == "RESPONDED") & psweight > 0 & !is.na(psweight)),
-            NA, tempvar2))
+          dat <- dat %>%
+            mutate(
+              tempvar2 = ifelse((
+                (is.na(!!va) | !!va == "") &
+                  (str_to_upper(DESC_02_DENOMINATOR) == "RESPONDED") &
+                  psweight > 0 & !is.na(psweight)),
+                NA, tempvar2)
+            )
+
           dat$tempvar2 <- haven::labelled(dat$tempvar2, label = sublabel) %>% suppressWarnings()
 
           names(dat)[which(names(dat) == "tempvar2")] <- paste0("desc02_",vcounter,"_st",i)
 
           if (i == 1){
-            dat <- dat %>% relocate(paste0("desc02_",vcounter,"_st",i),.after = paste0("desc02_",vcounter,"_",lcounter-1))
+            dat <- dat %>%
+              relocate(paste0("desc02_", vcounter, "_st", i),
+                       .after = paste0("desc02_", vcounter, "_", lcounter-1))
           }
           if (i > 1){
-            dat <- dat %>% relocate(paste0("desc02_",vcounter,"_st",i),.after = paste0("desc02_",vcounter,"_st",i-1))
+            dat <- dat %>%
+              relocate(paste0("desc02_", vcounter, "_st", i),
+                       .after = paste0("desc02_", vcounter, "_st", i-1))
           }
-        } #end of DESC_02_N_SUBTOTALS i loop
+        } # end of DESC_02_N_SUBTOTALS i loop
       }
 
       # Do vcqi_global in separate steps since the name depends on another global
