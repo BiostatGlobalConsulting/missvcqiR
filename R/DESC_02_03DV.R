@@ -58,9 +58,17 @@ DESC_02_03DV <- function(VCP = "DESC_02_03DV"){
     llist <- sort(unique(var), na.last = TRUE)
 
     if (missing != "TRUE"){
-      if (length(which(is.na(llist) | llist == "")) > 0){
-        na <- which(is.na(llist) | llist == "")
-        llist <- llist[-na]
+
+      if ("character" %in% class(var)){
+        if (length(which(is.na(llist) | llist == "")) > 0){
+          na <- which(is.na(llist) | llist == "")
+          llist <- llist[-na]
+        }
+      } else {
+        if (length(which(is.na(llist))) > 0){
+          na <- which(is.na(llist))
+          llist <- llist[-na]
+        }
       }
     }
 
