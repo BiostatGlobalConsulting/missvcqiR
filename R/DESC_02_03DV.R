@@ -26,7 +26,8 @@
 DESC_02_03DV <- function(VCP = "DESC_02_03DV"){
   vcqi_log_comment(VCP, 5, "Flow", "Starting")
 
-  dat <- vcqi_read(paste0(VCQI_OUTPUT_FOLDER,"/DESC_02_",ANALYSIS_COUNTER,"_",DESC_02_COUNTER,".rds"))
+  dat <- vcqi_read(paste0(VCQI_OUTPUT_FOLDER, "/DESC_02_", ANALYSIS_COUNTER,
+                          "_", DESC_02_COUNTER ,".rds"))
 
   vcounter <- 1
 
@@ -108,14 +109,29 @@ DESC_02_03DV <- function(VCP = "DESC_02_03DV"){
             psweight > 0 & !is.na(psweight),
           1, 0))
       assign(paste0("DESC02_VALUE_LEVEL_", lcounter), llist[l], envir = .GlobalEnv)
-      dat <- dat %>%
-        mutate(
-          tempvar1 = ifelse((
-            (is.na(!!va) | !!va == "") &
-              (str_to_upper(DESC_02_DENOMINATOR) == "RESPONDED") &
-              psweight > 0 & !is.na(psweight)),
-            NA, tempvar1)
-        )
+
+      # Update 2024-11-13: using !!va == "" check on a non-character variable
+      # causes errors, so use different checks depending on variable type
+      if ("character" %in% class(var)){
+        dat <- dat %>%
+          mutate(
+            tempvar1 = ifelse((
+              (is.na(!!va) | !!va == "") &
+                (str_to_upper(DESC_02_DENOMINATOR) == "RESPONDED") &
+                psweight > 0 & !is.na(psweight)),
+              NA, tempvar1)
+          )
+      } else {
+        dat <- dat %>%
+          mutate(
+            tempvar1 = ifelse((
+              is.na(!!va) &
+                str_to_upper(DESC_02_DENOMINATOR) == "RESPONDED" &
+                psweight > 0 & !is.na(psweight)),
+              NA, tempvar1)
+          )
+      }
+
 
       if (vtype == "string"){
         dat$tempvar1 <- haven::labelled(dat$tempvar1, label = llist[l]) %>% suppressWarnings()
