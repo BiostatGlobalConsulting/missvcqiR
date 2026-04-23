@@ -218,14 +218,26 @@ DESC_02_03DV <- function(VCP = "DESC_02_03DV"){
                                                     1,tempvar2))
           } #end of j loop
 
-          dat <- dat %>%
-            mutate(
-              tempvar2 = ifelse((
-                (is.na(!!va) | !!va == "") &
-                  (str_to_upper(DESC_02_DENOMINATOR) == "RESPONDED") &
-                  psweight > 0 & !is.na(psweight)),
-                NA, tempvar2)
-            )
+          # Update 2026-04-23: implement same fix as in tempvar1
+          if ("character" %in% class(var)){
+            dat <- dat %>%
+              mutate(
+                tempvar2 = ifelse((
+                  (is.na(!!va) | !!va == "") &
+                    (str_to_upper(DESC_02_DENOMINATOR) == "RESPONDED") &
+                    psweight > 0 & !is.na(psweight)),
+                  NA, tempvar2)
+              )
+          } else {
+            dat <- dat %>%
+              mutate(
+                tempvar2 = ifelse((
+                  is.na(!!va) &
+                    str_to_upper(DESC_02_DENOMINATOR) == "RESPONDED" &
+                    psweight > 0 & !is.na(psweight)),
+                  NA, tempvar2)
+              )
+          }
 
           dat$tempvar2 <- haven::labelled(dat$tempvar2, label = sublabel) %>% suppressWarnings()
 
