@@ -72,18 +72,18 @@ DESC_02_03DV <- function(VCP = "DESC_02_03DV"){
       }
     }
 
-    if (!is.null(attr(var, "labels"))){
+    if (!is.null(attr(var, "labels", exact = TRUE))){
       original_var_labelled <- TRUE
     } else {
       original_var_labelled <- FALSE
     }
 
     # What values of `v' are listed in its value label (if applicable)?
-    if (!is.null(attr(var, "labels"))){
-      labels <- unique(stack(attr(var, 'labels')))
+    if (!is.null(attr(var, "labels", exact = TRUE))){
+      labels <- unique(stack(attr(var, 'labels', exact = TRUE)))
       lalist <- as.character(labels$ind)
-      valist <- sort(labels$values,na.last = TRUE)
-      llist <- unique(c(valist,llist))
+      valist <- sort(labels$values, na.last = TRUE)
+      llist <- unique(c(valist, llist))
     } else {
       # Set default label information if the original variable doesn't have
       # value labels

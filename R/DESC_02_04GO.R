@@ -28,7 +28,7 @@ DESC_02_04GO <- function(VCP = "DESC_02_04GO"){
 
     tempvar <- get(DESC_02_VARIABLES[d], dat)
 
-    varlabel <- attr(tempvar, "label")
+    varlabel <- attr(tempvar, "label", exact = TRUE)
 
     # Use the variable name for the table title if the variable is unlabeled
     if (is.null(varlabel)){

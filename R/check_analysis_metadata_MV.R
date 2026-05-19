@@ -483,10 +483,10 @@ check_analysis_metadata_MV <- function(VCP = "check_analysis_metadata_MV"){
           variable_label <- ifelse(!is.null(attributes(dvar)$label),
                                    attributes(dvar)$label, VCQI_LEVEL4_SET_VARLIST[v])
 
-          if(is.labelled(dvar)){
+          if (is.labelled(dvar)){
             valuesandlabels <- data.frame(
-              val = attr(dvar, "labels"),
-              lab = names(attr(dvar, "labels"))
+              val = attr(dvar, "labels", exact = TRUE),
+              lab = names(attr(dvar, "labels", exact = TRUE))
             )
           } else {
             valuesandlabels <- data.frame(
@@ -506,9 +506,9 @@ check_analysis_metadata_MV <- function(VCP = "check_analysis_metadata_MV"){
             rowtype = c("LABEL_ONLY", rep("DATA_ROW", nrows-1))
           )
 
-          if(is.labelled(dvar)){
-            layout_rows$label[2:nrows] <- names(attr(dvar, "labels"))
-            layout_rows$value_todrop <- c(NA, attr(dvar, "labels"))
+          if (is.labelled(dvar)){
+            layout_rows$label[2:nrows] <- names(attr(dvar, "labels", exact = TRUE))
+            layout_rows$value_todrop <- c(NA, attr(dvar, "labels", exact = TRUE))
           } else {
             layout_rows$label[2:nrows] <- sort(unique(dvar))
             layout_rows$value_todrop <- c(NA, sort(unique(dvar)))
