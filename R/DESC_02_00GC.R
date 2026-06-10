@@ -357,7 +357,7 @@ DESC_02_00GC <- function(VCP = "DESC_02_00GC"){
         } else {
 
           if (!is.null(attr(var, "labels", exact = TRUE))){
-            labels <- unique(stack(attr(var, 'labels', exact = TRUE))
+            labels <- unique(stack(attr(var, 'labels', exact = TRUE)))
             lalist <- as.character(labels$ind)
             llist <- sort(labels$values)
             llist_str <- llist

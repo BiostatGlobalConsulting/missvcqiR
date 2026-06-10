@@ -35,9 +35,14 @@
 #                                       missing visit dates; (b) doses with no
 #                                       visit dates in dataset being dropped
 #                                       (can't drop bc used in code downstream)
-# 2024-03-05	1.08	    Mia YU		      ADD a block of code to generate
+# 2024-03-05	1.08	    Mia Yu		      ADD a block of code to generate
 #                                       no_card_visit_only and then employ it
 #                                       whenever generating elig_* or credit_*.
+# 2026-06-04  1.08      Caitlin Clary   Multidose series calculations include
+#                                       max_age parameter; update order of some
+#                                       blocks of code; require elig_d_t = 1 to
+#                                       count a corrected MOV (don't count if
+#                                       past max_age)
 # ******************************************************************************
 
 calculate_MOV_flags_MV <- function(VCP = "calculate_MOV_flags_MV"){
@@ -62,7 +67,7 @@ calculate_MOV_flags_MV <- function(VCP = "calculate_MOV_flags_MV"){
         vcqi_global(RI_TEMP_DATASETS, c(RI_TEMP_DATASETS, "RI_MOV_step00.rds"))
       }
 
-      dat <- dat %>%
+      dat <- dat |>
         select(respid, dob_for_valid_dose_calculations,
                ends_with("card_date"), ends_with("card_tick"),
                no_card, ends_with("register_date"), ends_with("register_tick"),
@@ -97,7 +102,7 @@ calculate_MOV_flags_MV <- function(VCP = "calculate_MOV_flags_MV"){
           doselist = multi$doselist[x]
         )) %>%
           do.call(rbind, .) %>%
-          full_join(multi, ., by = "doselist",multiple = "all")
+          full_join(multi, ., by = "doselist", multiple = "all")
       }
 
       if (RI_RECORDS_NOT_SOUGHT == 1) {
@@ -250,7 +255,7 @@ calculate_MOV_flags_MV <- function(VCP = "calculate_MOV_flags_MV"){
           RI_DOSE_LIST[d], "_card_tick))")))
       } # end of dose loop
 
-      dat <- dat %>%
+      dat <- dat |>
         select(respid, dob_for_valid_dose_calculations,
                ends_with("card_date"), ends_with("card_tick"),
                -dob_card_date)
@@ -268,7 +273,7 @@ calculate_MOV_flags_MV <- function(VCP = "calculate_MOV_flags_MV"){
 
           for(i in seq_along(di)){
 
-            dat <- dat %>%
+            dat <- dat |>
               mutate(
                 !!paste0(dn, di[i], "_str1") := case_when(
                   is.na(!!rlang::sym(paste0(dn, di[i], "_card_date"))) &
@@ -280,13 +285,13 @@ calculate_MOV_flags_MV <- function(VCP = "calculate_MOV_flags_MV"){
           }
 
           # Concatenate doses into a string variable
-          tempdat <- dat %>% select(contains("str1") & contains(dn)) %>%
+          tempdat <- dat |> select(contains("str1") & contains(dn)) |>
             unite(tempvar, everything(), sep = "")
 
           dat[paste0(dn, "_str")] <- tempdat$tempvar
 
         } # end multidose (d) loop
-        dat <- dat %>% select(-contains("str1"))
+        dat <- dat |> select(-contains("str1"))
       } # end if (!is.null(multi))
 
       if (VCQI_TESTING_CODE %in% 1){
@@ -303,28 +308,28 @@ calculate_MOV_flags_MV <- function(VCP = "calculate_MOV_flags_MV"){
       # the dose according to tick instead of date, and we carry along the useful
       # character strings for the multi-dose vaccines, as well.
 
-      dat <- dat %>%
+      dat <- dat |>
         pivot_longer(contains("card_date"), names_to = "visitdose",
                      values_to = "visitdate")
 
-      datsummary <- dat %>%
-        group_by(visitdose) %>%
+      datsummary <- dat |>
+        group_by(visitdose) |>
         summarize(n_dates = sum(!is.na(visitdate)))
 
-      no_dates <- datsummary %>%
-        filter(n_dates %in% 0) %>% pull(visitdose)
+      no_dates <- datsummary |>
+        filter(n_dates %in% 0) |> pull(visitdose)
 
-      no_dates_doses <- no_dates %>%
-        stringr::str_replace(., "_card_date", "")
+      no_dates_doses <- no_dates |>
+        stringr::str_replace("_card_date", "")
 
       # Note - downstream we'll restore variables for doses in no_dates, which
       # are needed later in this program
 
-      dat <- dat %>%
-        filter(!is.na(visitdate)) %>%
-        #filter(!is.na(visitdate) | (is.na(visitdate) & visitdose %in% no_dates)) %>%
+      dat <- dat |>
+        filter(!is.na(visitdate)) |>
+        #filter(!is.na(visitdate) | (is.na(visitdate) & visitdose %in% no_dates)) |>
         mutate(visitdose = str_replace(visitdose, "_card_date", ""),
-               test = 1) %>%
+               test = 1) |>
         pivot_wider(names_from = "visitdose",
                     values_from = "test",
                     names_prefix = "got_")
@@ -332,7 +337,7 @@ calculate_MOV_flags_MV <- function(VCP = "calculate_MOV_flags_MV"){
       if (length(no_dates_doses) > 0){
         for (ds in seq_along(no_dates_doses)){
           dosevar_d <- rlang::sym(paste0("got_", no_dates_doses[ds]))
-          dat <- dat %>% mutate(!!dosevar_d := 0)
+          dat <- dat |> mutate(!!dosevar_d := 0)
         }
       }
 
@@ -340,7 +345,7 @@ calculate_MOV_flags_MV <- function(VCP = "calculate_MOV_flags_MV"){
       # differently the two times MISS-VCQI calls calculate_MOV_flags
       if (any(names(dat) %in% "got_visit")){
         if ("visit_card_date" %in% no_dates){
-          dat <- dat %>%
+          dat <- dat |>
             filter(is.na(got_visit))
         }
       }
@@ -358,7 +363,7 @@ calculate_MOV_flags_MV <- function(VCP = "calculate_MOV_flags_MV"){
 
           var_i <- var_i[var_i %in% names(dat)]
 
-          temp <- dat %>% select(all_of(var_i))
+          temp <- dat |> select(all_of(var_i))
           vars_to_drop <- names(temp)
           temp <- temp %>%
             mutate(var = coalesce(!!! select(., everything())))
@@ -368,9 +373,9 @@ calculate_MOV_flags_MV <- function(VCP = "calculate_MOV_flags_MV"){
         } # end d loop (multi doses)
       }
 
-      dat <- dat %>%
-        rename_with(~ paste0("got_", str_replace(., "_card_tick", ""), "_tick"),
-                    .cols = contains("_card_tick")) %>%
+      dat <- dat |>
+        rename_with(~ paste0("got_", str_replace(.x, "_card_tick", ""), "_tick"),
+                    .cols = contains("_card_tick")) |>
         rename(dob = dob_for_valid_dose_calculations)
 
       # Define vector for ordering variables (except <dose>_str vars)
@@ -392,13 +397,13 @@ calculate_MOV_flags_MV <- function(VCP = "calculate_MOV_flags_MV"){
 
       tempvarnames <- tempvarnames[tempvarnames %in% names(dat)]
 
-      dat <- dat %>%
+      dat <- dat |>
         # Order vars using tempvarnames; everything() puts dose_<str> vars at end
-        select(all_of(tempvarnames), everything()) %>%
+        select(all_of(tempvarnames), everything()) |>
         # Replace NAs with 0s in the got_<dose> columns
-        mutate(across(.cols = contains("got_"), ~ifelse(is.na(.), 0, .))) %>%
+        mutate(across(.cols = contains("got_"), ~ifelse(is.na(.x), 0, .x))) |>
         # Make sure all rows are unique
-        unique() %>%
+        unique() |>
         # And drop any rows missing DOB
         filter(!is.na(dob))
 
@@ -411,9 +416,11 @@ calculate_MOV_flags_MV <- function(VCP = "calculate_MOV_flags_MV"){
       # Right-o...now the dataset is long
 
       # Special code for MISS VCQI version of the program
-      dat <- dat %>% group_by(respid) %>% mutate(respid_n = n()) %>% ungroup()
-
-      dat <- dat %>% mutate(gotsum = 0)
+      dat <- dat |>
+        group_by(respid) |>
+        mutate(respid_n = n()) |>
+        ungroup() |>
+        mutate(gotsum = 0)
 
       # First, list single dose vaccines
       if (vcqi_object_exists("RI_SINGLE_DOSE_LIST")){
@@ -424,7 +431,7 @@ calculate_MOV_flags_MV <- function(VCP = "calculate_MOV_flags_MV"){
       for(i in 2:9){
         if(vcqi_object_exists(paste0("RI_MULTI_", i, "_DOSE_LIST"))){
           dl <- get(paste0("RI_MULTI_", i, "_DOSE_LIST"))
-          if(!is.null(dl) & length(dl > 0)){
+          if (!is.null(dl) & length(dl > 0)){
             antigen <- c(antigen, stringr::str_to_lower(dl))}
         }
       }
@@ -432,12 +439,15 @@ calculate_MOV_flags_MV <- function(VCP = "calculate_MOV_flags_MV"){
       antigen <- antigen[which(!antigen %in% c("", " ", "visit"))]
 
       for (d in seq_along(antigen)){
-        var <- rlang::sym(paste0("got_",antigen[d]))
-        dat <- dat %>% mutate(gotsum = ifelse(!!var %in% 1, gotsum+1, gotsum))
+        var <- rlang::sym(paste0("got_", antigen[d]))
+        dat <- dat |>
+          mutate(gotsum = ifelse(!!var %in% 1, gotsum + 1, gotsum))
       }
 
-			dat <- dat %>% mutate(no_card_visit_only = ifelse(respid_n %in% 1 & got_visit %in% 1 & gotsum %in% 0, 1,0)) %>%
-			  select(-c(gotsum,respid_n))
+			dat <- dat |>
+			  mutate(no_card_visit_only = ifelse(
+			    respid_n %in% 1 & got_visit %in% 1 & gotsum %in% 0, 1, 0)) |>
+			  select(-c(gotsum, respid_n))
 
       # Load up the scalars with the vaccination schedule
 
@@ -445,13 +455,13 @@ calculate_MOV_flags_MV <- function(VCP = "calculate_MOV_flags_MV"){
       # is no need to re-define them here.
       # do "${VCQI_PROGRAMS_ROOTPATH}/RI/RI_schedule.do"
 
-      dat <- dat %>%
-        mutate(age = visitdate - dob) %>%
-        relocate(age, .after = visitdate) %>%
+      dat <- dat |>
+        mutate(age = visitdate - dob) |>
+        relocate(age, .after = visitdate) |>
         arrange(respid, age)
 
       # Make a unique id for each person
-      dat <- dat %>% mutate(person = respid) %>%
+      dat <- dat |> mutate(person = respid) |>
         relocate(c(person, age), .after = last_col())
 
       # **********************************************
@@ -481,6 +491,11 @@ calculate_MOV_flags_MV <- function(VCP = "calculate_MOV_flags_MV"){
 
               minage <- get(paste0(dn, i, "_min_age_days"), envir = globalenv())
 
+              if (vcqi_object_exists(paste0(dn, i, "_max_age_days"))){
+                maxage <- get(paste0(dn, i, "_max_age_days"), envir = globalenv())
+              } else {
+                maxage <- Inf}
+
               if (i > 1){
                 minint <- get(paste0(dn, i, "_min_interval_days"), envir = globalenv())
                 agedoseprev <- rlang::sym(paste0("age_at_", dn, i-1, "_", type[ty]))
@@ -488,24 +503,28 @@ calculate_MOV_flags_MV <- function(VCP = "calculate_MOV_flags_MV"){
               }
 
               # Make age_<dose><#>_<type> variable
-              dat <- dat %>%
+              dat <- dat |>
                 mutate(!!agedose := age)
 
               if (i == 1){
-                dat <- dat %>%
+                dat <- dat |>
                   mutate(
-                    !!creditdose := ifelse(age >= minage & no_card_visit_only %in% 0, 1, 0),
-                    !!eligdose := ifelse(age >= minage & no_card_visit_only %in% 0, 1, 0)
+                    !!creditdose := ifelse(age >= minage, 1, 0),
+                    !!eligdose := ifelse(age >= minage, 1, 0),
+
+                    # Set credit and eligibility to 0 if too old
+                    !!creditdose := ifelse(age > maxage, 0, !!creditdose),
+                    !!eligdose := ifelse(age > maxage, 0, !!eligdose)
                   )
 
-                # If early doses count, then child is always eligible
+                # If early doses count, then credit always = 1
                 if (type[ty] == "crude"){
-                  dat <- dat %>%
+                  dat <- dat |>
                     mutate(!!creditdose := 1)
                 }
 
                 # Not eligible and no credit if received per tick mark/history
-                dat <- dat %>%
+                dat <- dat |>
                   mutate(
 
                     !!creditdose := ifelse(stringr::str_sub(!!dosestr, i, i) == "T",
@@ -514,43 +533,43 @@ calculate_MOV_flags_MV <- function(VCP = "calculate_MOV_flags_MV"){
                                          0, !!eligdose)
                   )
 
-                dat <- dat %>%
+                dat <- dat |>
                   mutate(
                     !!gotdose := ifelse(
                       !!creditdose %in% 1 & !!gotseries %in% 1, 1, 0)
                   )
 
-                dat <- dat %>%
-                  group_by(person) %>%
-                  mutate(!!cumdose := cumsum(!!gotdose)) %>%
+                dat <- dat |>
+                  group_by(person) |>
+                  mutate(!!cumdose := cumsum(!!gotdose)) |>
                   ungroup()
 
-                dat <- dat %>%
+                dat <- dat |>
                   mutate(
                     !!gotdose := ifelse(!!gotdose %in% 1 & !!cumdose %in% 1, 1, 0)
-                  ) %>%
+                  ) |>
                   select(-!!cumdose)
 
-                dat <- dat %>%
+                dat <- dat |>
                   mutate(
                     tempage = !!gotdose * age # "dropthis" vars in Stata
-                  ) %>%
-                  group_by(person) %>%
+                  ) |>
+                  group_by(person) |>
                   mutate(!!ageat := max(tempage, na.rm = TRUE),
                          !!flagdose := max(!!gotdose, na.rm = TRUE)
-                  ) %>% suppressWarnings()
-                dat <- dat %>% mutate(!!ageat := ifelse((!!ageat == Inf | !!ageat == -Inf) %in% TRUE, NA, !!ageat))
-                dat <- dat %>% mutate(!!flagdose := ifelse((!!flagdose == Inf | !!flagdose == -Inf) %in% TRUE, NA, !!flagdose))
+                  ) |> suppressWarnings()
+                dat <- dat |> mutate(!!ageat := ifelse((!!ageat == Inf | !!ageat == -Inf) %in% TRUE, NA, !!ageat))
+                dat <- dat |> mutate(!!flagdose := ifelse((!!flagdose == Inf | !!flagdose == -Inf) %in% TRUE, NA, !!flagdose))
 
                 # For crude doses, replace eligible with 0 if child got an early dose
                 # Note: comment says this is for crude doses, but in Stata they commented out the condition
-                dat <- dat %>% mutate(
+                dat <- dat |> mutate(
                   !!eligdose := ifelse(!!flagdose %in% 1 & age > !!ageat,
                                        0, !!eligdose)
                 )
 
               } else if (i > 1){
-                dat <- dat %>%
+                dat <- dat |>
                   mutate(
                     !!creditdose := ifelse(
                       !!flagdoseprev %in% 1 &
@@ -565,7 +584,7 @@ calculate_MOV_flags_MV <- function(VCP = "calculate_MOV_flags_MV"){
 
                 # If early doses count, then child is always eligible
                 if(type[ty] == "crude"){
-                  dat <- dat %>%
+                  dat <- dat |>
                     mutate(!!creditdose := ifelse(
                       !!flagdoseprev %in% 1 & age > !!agedoseprev, 1, 0
                     ))
@@ -573,45 +592,50 @@ calculate_MOV_flags_MV <- function(VCP = "calculate_MOV_flags_MV"){
 
                 # Not eligible/no credit if any of doses 1:i were rec'd by tick
                 # mark or history
-                dat <- dat %>%
+                dat <- dat |>
                   mutate(
                     tempstring = stringr::str_sub(!!dosestr, 1, i),
                     tempanytick = ifelse(stringr::str_detect(tempstring, "T"), 1, 0),
                     !!creditdose := ifelse(tempanytick %in% 1, 0, !!creditdose),
                     !!eligdose := ifelse(tempanytick %in% 1, 0, !!eligdose)
-                  ) %>% select(-c(tempstring,tempanytick))
+                  ) |> select(-c(tempstring, tempanytick))
 
-                dat <- dat %>%
+                dat <- dat |>
                   mutate(
                     !!gotdose := ifelse(
                       !!creditdose %in% 1 & !!gotseries %in% 1, 1, 0)
                   )
 
-                dat <- dat %>%
-                  group_by(person) %>%
-                  mutate(!!cumdose := cumsum(!!gotdose)) %>%
+                dat <- dat |>
+                  group_by(person) |>
+                  mutate(!!cumdose := cumsum(!!gotdose)) |>
                   ungroup()
 
-                dat <- dat %>%
+                dat <- dat |>
                   mutate(
                     !!gotdose := ifelse(!!gotdose %in% 1 & !!cumdose %in% 1, 1, 0)
-                  ) %>%
+                  ) |>
                   select(-!!cumdose)
 
-                dat <- dat %>%
+                dat <- dat |>
                   mutate(
                     tempage = !!gotdose * age # "dropthis" vars in Stata
-                  ) %>%
-                  group_by(person) %>%
+                  ) |>
+                  group_by(person) |>
                   mutate(!!ageat := max(tempage, na.rm = TRUE),
                          !!flagdose := max(!!gotdose, na.rm = TRUE)
-                  ) %>% ungroup() %>% suppressWarnings()
-                dat <- dat %>% mutate(!!ageat := ifelse((!!ageat == Inf | !!ageat == -Inf) %in% TRUE, NA, !!ageat))
-                dat <- dat %>% mutate(!!flagdose := ifelse((!!flagdose == Inf | !!flagdose == -Inf) %in% TRUE, NA, !!flagdose))
+                  ) |> ungroup() |> suppressWarnings()
+
+                dat <- dat |>
+                  mutate(
+                    !!ageat := ifelse((!!ageat == Inf | !!ageat == -Inf) %in% TRUE,
+                                      NA, !!ageat),
+                    !!flagdose := ifelse((!!flagdose == Inf | !!flagdose == -Inf) %in% TRUE,
+                                         NA, !!flagdose))
 
                 # For crude doses, replace eligible with 0 if child got an early dose
                 # Note: comment says this is for crude doses, but in Stata they commented out the condition
-                dat <- dat %>% mutate(
+                dat <- dat |> mutate(
                   !!eligdose := ifelse(!!flagdose %in% 1 & age > !!ageat,
                                        0, !!eligdose)
                 )
@@ -619,104 +643,139 @@ calculate_MOV_flags_MV <- function(VCP = "calculate_MOV_flags_MV"){
 
             } # end i loop
 
-            #Note: paste0("cum_", dn, "_", type[ty]) also created later
+            # Note: paste0("cum_", dn, "_", type[ty]) also created later
             # Cumulative doses of <dn> up to and including this visit
             cum_dn <- rlang::sym(paste0("cum_", dn, "_", type[ty]))
             got_dn <- rlang::sym(paste0("got_", dn))
 
-            dat <- dat %>%
+            dat <- dat |>
               mutate(!!cum_dn := cumsum(!!got_dn))
 
             # label var cum_`d'_`t' "Cumulative doses of `d' (up to and including this visit) - `t'"
 
           } # end t loop
 
-          dat <- dat %>% select(-contains("temp"))
+          dat <- dat |> select(-contains("temp"))
 
         } # end d loop
       } # end if (!is.null(multi))
 
-      # ********************************************************
-      # Set up the same variables for the single-dose vaccines
-      # ********************************************************
+      # ***********************************************************
+      # Set up the same variables for the single-dose vaccines ----
+      # ***********************************************************
       if (vcqi_object_exists("RI_SINGLE_DOSE_LIST")){
         single_dose <- str_to_lower(RI_SINGLE_DOSE_LIST)
-        type <- c("crude","valid")
+        type <- c("crude", "valid")
+
         for (d in seq_along(single_dose)){
           for (t in seq_along(type)){
-            # this just makes a copy of the age variable for easy
-            # reading in the data editor; drop later
-            dat <- dat %>% mutate(!!paste0("age_",single_dose[d],"_",type[t]) := age)
 
-            minage <- get(paste0(single_dose[d],"_min_age_days"),envir = parent.frame())
-            #can we count the dose if it occurs in this visit?
-            dat <- dat %>% mutate(tempvar1 = if_else(age >= minage & no_card_visit_only %in% 0, 1, 0))
-            #would it be an MOV if not given at this visit?
-            dat <- dat %>% mutate(tempvar2 = if_else(age >= minage & no_card_visit_only %in% 0, 1, 0))
+            # Make a copy of the age variable for ease of use; drop later
+            dat <- dat |>
+              mutate(!!paste0("age_", single_dose[d], "_", type[t]) := age)
 
-            #if early doses count, then s/he is always eligible
-            if (type[t] == "crude"){
-              dat <- dat %>% mutate(tempvar1 = 1)
-            }
+            minage <- get(paste0(single_dose[d], "_min_age_days"), envir = parent.frame())
+
+            dat <- dat |>
+              mutate(
+                # Can we count the dose if it occurs in this visit?
+                tempvar1 = if_else(age >= minage, 1, 0),
+                # Would it be an MOV if not given at this visit?
+                tempvar2 = if_else(age >= minage, 1, 0)
+              )
 
             # Not eligible and no credit if rec'd by tick/history
-            tick <- rlang::sym(paste0("got_",single_dose[d],"_tick"))
-            dat <- dat %>% mutate(tempvar1 = ifelse(!!tick %in% 1, 0, tempvar1),
-                                  tempvar2 = ifelse(!!tick %in% 1, 0, tempvar2))
+            tick <- rlang::sym(paste0("got_", single_dose[d], "_tick"))
+            dat <- dat |>
+              mutate(tempvar1 = ifelse(!!tick %in% 1, 0, tempvar1),
+                     tempvar2 = ifelse(!!tick %in% 1, 0, tempvar2))
 
+            # TO DO - check this section - do we want to wipe out the credit flag here under crude analysis?
             # if user specified max age for valid doses using the scalar
             # `d'_max_age_days, then use it to clarify that they will not receive
             # credit nor are they eligible for the dose if they are too old
 
             if (vcqi_object_exists(paste0(single_dose[d],"_max_age_days"))){
-              minage <- get(paste0(single_dose[d],"_min_age_days"),envir = parent.frame())
-              maxage <- get(paste0(single_dose[d],"_max_age_days"),envir = parent.frame())
-              dat <- dat %>% mutate(tempvar1 = if_else((age >= minage & age <= maxage) %in% TRUE, 1, 0),
-                                    tempvar2 = if_else((age >= minage & age <= maxage) %in% TRUE, 1, 0))
+              maxage <- get(paste0(single_dose[d], "_max_age_days"), envir = globalenv())
+
+              dat <- dat |>
+                mutate(
+                  tempvar1 = if_else(age > maxage, 0, tempvar1), # credit
+                  tempvar2 = if_else(age > maxage, 0, tempvar2)  # elig
+                )
             }
 
-            # did s/he get a valid dose at this visit?
-            gotdose <- rlang::sym(paste0("got_",single_dose[d]))
-            dat <- dat %>% mutate(tempvar3 = if_else(tempvar1 %in% 1 & !!gotdose %in% 1, 1, 0))
-            #rm(credit,gotdose) %>% suppressWarnings()
+            # If early doses count, the subject is always eligible (credit = 1)
+            if (type[t] == "crude"){
+              dat <- dat |> mutate(tempvar1 = 1)
+            }
 
-            # only track the first valid dose; ignore later doses
-            dat <- dat %>% group_by(person) %>% arrange(person) %>% mutate(cum = cumsum(if_else(is.na(tempvar3), 0, tempvar3)) + tempvar3*0) %>% ungroup()
-            dat <- dat %>% mutate(tempvar3 = if_else((tempvar3 %in% 1 & cum %in% 1) %in% TRUE,1,0)) %>% select(-c(cum))
+            # Did s/he get a valid dose at this visit?
+            gotdose <- rlang::sym(paste0("got_", single_dose[d]))
+            dat <- dat |>
+              mutate(tempvar3 = if_else(tempvar1 %in% 1 & !!gotdose %in% 1, 1, 0))
 
-            # calculate and remember the age at which they got this dose
-            dat <- dat %>% mutate(drop = tempvar3 * age)
-            dat <- dat %>% group_by(person) %>% arrange(person) %>% mutate(tempvar4 = max(drop,na.rm = TRUE)) %>% ungroup() %>% suppressWarnings()
-            dat <- dat %>% mutate(tempvar4 = ifelse((tempvar4 == Inf | tempvar4 == -Inf) %in% TRUE, NA, tempvar4))
-            dat <- select(dat, -c(drop))
+            # Only track the first valid dose; ignore later doses
+            dat <- dat |>
+              group_by(person) |>
+              arrange(person) |>
+              mutate(cum = cumsum(if_else(is.na(tempvar3), 0, tempvar3)) + tempvar3*0) |>
+              ungroup() |>
+              mutate(tempvar3 = if_else((tempvar3 %in% 1 & cum %in% 1) %in% TRUE,1,0)) |>
+              select(-c(cum))
 
-            # later we will drop all rows but one for this person, so
-            # set a flag here in all rows indicating that they got a valid dose
-            dat <- dat %>%
-              group_by(person) %>%
-              arrange(person) %>%
-              mutate(tempvar5 = max(tempvar3, na.rm = TRUE)) %>%
-              ungroup() %>% suppressWarnings()
-            dat <- dat %>% mutate(tempvar5 = ifelse((tempvar5 == Inf | tempvar5 == -Inf) %in% TRUE, NA, tempvar5))
+            # Calculate and remember the age at which they got this dose
+            dat <- dat |>
+              mutate(drop = tempvar3 * age) |>
+              group_by(person) |>
+              arrange(person) |>
+              mutate(tempvar4 = max(drop,na.rm = TRUE)) |>
+              ungroup() |> suppressWarnings()
+
+            dat <- dat |>
+              mutate(tempvar4 = ifelse(
+                (tempvar4 == Inf | tempvar4 == -Inf) %in% TRUE, NA, tempvar4)
+              ) |>
+              select(-drop)
+
+            # Later we will drop all rows but one for this person, so set a flag
+            # here in all rows indicating that they got a valid dose
+            dat <- dat |>
+              group_by(person) |>
+              arrange(person) |>
+              mutate(tempvar5 = max(tempvar3, na.rm = TRUE)) |>
+              ungroup() |> suppressWarnings()
+
+            dat <- dat |>
+              mutate(tempvar5 = ifelse(
+                (tempvar5 == Inf | tempvar5 == -Inf) %in% TRUE, NA, tempvar5))
 
             # DAR: changing this to be true for both crude & valid
 
             # For crude doses, replace eligible with 0 if child got an early dose
 
-            dat <- dat %>%
+            dat <- dat |>
               mutate(tempvar2 = if_else((tempvar5 %in% 1 & (age > tempvar4)) %in% TRUE,
                                         0, tempvar2))
 
-            names(dat)[which(names(dat) == "tempvar1")] <- paste0(
-              "credit_", single_dose[d],"_",type[t])
-            names(dat)[which(names(dat) == "tempvar2")] <- paste0(
-              "elig_", single_dose[d], "_", type[t])
-            names(dat)[which(names(dat) == "tempvar3")] <- paste0(
-              "got_", single_dose[d], "_", type[t])
-            names(dat)[which(names(dat) == "tempvar4")] <- paste0(
-              "age_at_", single_dose[d], "_", type[t])
-            names(dat)[which(names(dat) == "tempvar5")] <- paste0(
-              "flag_got_", single_dose[d], "_", type[t])
+            dat <- dat |>
+              vcqi_rename("tempvar1", paste0("credit_", single_dose[d], "_", type[t])) |>
+              vcqi_rename("tempvar2", paste0("elig_", single_dose[d], "_", type[t])) |>
+              vcqi_rename("tempvar3", paste0("got_", single_dose[d], "_", type[t])) |>
+              vcqi_rename("tempvar4", paste0("age_at_", single_dose[d], "_", type[t])) |>
+              vcqi_rename("tempvar5", paste0("flag_got_", single_dose[d], "_", type[t]))
+
+            # Assign variable names
+            # names(dat)[which(names(dat) == "tempvar1")] <- paste0(
+            #   "credit_", single_dose[d], "_", type[t])
+            # names(dat)[which(names(dat) == "tempvar2")] <- paste0(
+            #   "elig_", single_dose[d], "_", type[t])
+            # names(dat)[which(names(dat) == "tempvar3")] <- paste0(
+            #   "got_", single_dose[d], "_", type[t])
+            # names(dat)[which(names(dat) == "tempvar4")] <- paste0(
+            #   "age_at_", single_dose[d], "_", type[t])
+            # names(dat)[which(names(dat) == "tempvar5")] <- paste0(
+            #   "flag_got_", single_dose[d], "_", type[t])
 
           } # end of type loop
         } # end of single dose loop
@@ -734,7 +793,7 @@ calculate_MOV_flags_MV <- function(VCP = "calculate_MOV_flags_MV"){
       }
 
       # *********************************************************
-      # Calculate the variables for the mov measures
+      # Calculate the variables for the MOV measures ----
       # *********************************************************
 
       type <- c("crude","valid")
@@ -744,67 +803,92 @@ calculate_MOV_flags_MV <- function(VCP = "calculate_MOV_flags_MV"){
           # how many rec'd up to and including this visit?
           got <- rlang::sym(paste0("got_", RI_DOSE_LIST[d], "_", type[t]))
 
-          dat <- dat %>%
-            group_by(person) %>%
+          dat <- dat |>
+            group_by(person) |>
             mutate(
               tempvar1 = cumsum(!!got)
             )
 
-          # #label variable cum_`d'_`t' "Cumulative doses of `d' received up-to-and-including this visit - `t'"
+          # label variable cum_`d'_`t' "Cumulative doses of `d' received up-to-and-including this visit - `t'"
 
-          # an mov is when s/he is eligible and doesn't receive it
+          # An MOV is when s/he is eligible and doesn't receive it
           elig <- rlang::sym(paste0("elig_", RI_DOSE_LIST[d], "_", type[t]))
-          dat <- dat %>%
-            mutate(tempvar2 = if_else((!!elig %in% 1 & tempvar1 %in% 0) %in% TRUE,1,0))
-          #label variable mov_`d'_`t' "Experienced an MOV for `d' in this visit - `t'"
+          dat <- dat |>
+            mutate(tempvar2 = if_else((!!elig %in% 1 & tempvar1 %in% 0) %in% TRUE, 1, 0))
+          # label variable mov_`d'_`t' "Experienced an MOV for `d' in this visit - `t'"
 
-          # cumulative movs up to and including this visit
-          dat <- dat %>% group_by(person) %>% arrange(person) %>% mutate(tempvar3 = cumsum(if_else(is.na(tempvar2), 0, tempvar2)) + tempvar2*0) %>% ungroup()
-          #label variable cum_mov_`d'_`t' "Cumulative MOVs for `d' thru this visit - `t'"
+          # Cumulative movs up to and including this visit
+          dat <- dat |>
+            group_by(person) |>
+            arrange(person) |>
+            mutate(tempvar3 = cumsum(
+              if_else(is.na(tempvar2), 0, tempvar2)) + tempvar2*0
+            ) |> ungroup()
+          # label variable cum_mov_`d'_`t' "Cumulative MOVs for `d' thru this visit - `t'"
 
-          # corrected mov is when they have had 1+ movs and then they get it
-          dat <- dat %>% mutate(tempvar4 = if_else((tempvar3 > 0 & !!got %in% 1) %in% TRUE, 1, 0))
-          #label variable cor_mov_`d'_`t' "Experienced a corrected MOV for `d' - `t'"
+          # Corrected MOV when they have had 1+ MOVs and then they get the dose
+          # Note 2026-06-08: Adding eligibility as a criterion here - don't
+          # count a cor_mov on visits when the child is older than maxage
+          dat <- dat |>
+            mutate(tempvar4 = if_else(
+              (!!elig %in% 1 & tempvar3 > 0 & !!got %in% 1) %in% TRUE, 1, 0))
+          # label variable cor_mov_`d'_`t' "Experienced a corrected MOV for `d' - `t'"
 
-          # set a flag (in all visits) if the child had a 1+ corrected movs
-          dat <- dat %>% group_by(person) %>% arrange(person) %>% mutate(tempvar5 = sum(tempvar4, na.rm = TRUE)) %>% ungroup()
-          dat <- dat %>% mutate(tempvar5 = if_else(tempvar5 > 0 ,1,0))
-          #label variable flag_cor_mov_`d'_`t' "Experienced 1+ corrected MOVs for `d' - `t'"
+          # Set a flag (in all visits) if the child had a 1+ corrected movs
+          dat <- dat |>
+            group_by(person) |>
+            arrange(person) |>
+            mutate(tempvar5 = sum(tempvar4, na.rm = TRUE)) |>
+            ungroup() |>
+            mutate(tempvar5 = if_else(tempvar5 > 0, 1, 0))
+          # label variable flag_cor_mov_`d'_`t' "Experienced 1+ corrected MOVs for `d' - `t'"
 
-          # record (in all visits) the child's total number of movs
-          dat <- dat %>% group_by(person) %>% arrange(person) %>% mutate(tempvar6 = sum(tempvar2, na.rm = TRUE)) %>% ungroup()
-          #label variable total_mov_`d'_`t' "Total MOVs for `d' - `t'"
+          # Record (in all visits) the child's total number of movs
+          dat <- dat |>
+            group_by(person) |>
+            arrange(person) |>
+            mutate(tempvar6 = sum(tempvar2, na.rm = TRUE)) |> ungroup()
+          # label variable total_mov_`d'_`t' "Total MOVs for `d' - `t'"
 
-          # set a counter (in all visits) of the number of eligible opportunities
-          dat <- dat %>%
-            group_by(person) %>%
+          # Set a counter (in all visits) of the number of eligible opportunities
+          dat <- dat |>
+            group_by(person) |>
             mutate(
               !!paste0("total_elig_", RI_DOSE_LIST[d],
-                       "_", type[t]) := sum(!!elig, na.rm = TRUE)) %>%
+                       "_", type[t]) := sum(!!elig, na.rm = TRUE)) |>
             ungroup()
 
-          #label variable total_elig_`d'_`t' "Total visits where eligible to receive `d' - `t'"
+          # label variable total_elig_`d'_`t' "Total visits where eligible to receive `d' - `t'"
 
-          # set a flag (in all visits) if the child had 1+ movs
-          dat <- dat %>% mutate(tempvar7 = if_else(tempvar6 > 0 ,1 ,0))
-          #label variable flag_had_mov_`d'_`t' "Had 1+ MOVs for `d' in any visit - `t'"
+          # Set a flag (in all visits) if the child had 1+ movs
+          dat <- dat |> mutate(tempvar7 = if_else(tempvar6 > 0, 1, 0))
+          # label variable flag_had_mov_`d'_`t' "Had 1+ MOVs for `d' in any visit - `t'"
 
-          # set a flag (in all visits) if the child had only uncorrected movs for this dose
-          flaggot <- rlang::sym(paste0("flag_got_",RI_DOSE_LIST[d],"_",type[t]))
-          dat <- dat %>%
+          # Set a flag (in all visits) if the child had only uncorrected movs for this dose
+          flag_got <- rlang::sym(paste0("flag_got_", RI_DOSE_LIST[d], "_", type[t]))
+          dat <- dat |>
             mutate(
               !!paste0("flag_uncor_mov_", RI_DOSE_LIST[d], "_", type[t]) :=
-                if_else((tempvar7 %in% 1 & !!flaggot %in% 0) %in% TRUE, 1 ,0))
+                if_else((tempvar7 %in% 1 & !!flag_got %in% 0) %in% TRUE, 1 ,0))
 
-          names(dat)[which(names(dat) == "tempvar1")] <- paste0("cum_", RI_DOSE_LIST[d], "_", type[t])
-          names(dat)[which(names(dat) == "tempvar2")] <- paste0("mov_", RI_DOSE_LIST[d], "_", type[t])
-          names(dat)[which(names(dat) == "tempvar3")] <- paste0("cum_mov_", RI_DOSE_LIST[d], "_", type[t])
-          names(dat)[which(names(dat) == "tempvar4")] <- paste0("cor_mov_", RI_DOSE_LIST[d], "_", type[t])
-          names(dat)[which(names(dat) == "tempvar5")] <- paste0("flag_cor_mov_", RI_DOSE_LIST[d], "_", type[t])
-          names(dat)[which(names(dat) == "tempvar6")] <- paste0("total_mov_", RI_DOSE_LIST[d], "_", type[t])
-          names(dat)[which(names(dat) == "tempvar7")] <- paste0("flag_had_mov_", RI_DOSE_LIST[d], "_", type[t])
+          dat <- dat |>
+            vcqi_rename("tempvar1", paste0("cum_", RI_DOSE_LIST[d], "_", type[t])) |>
+            vcqi_rename("tempvar2", paste0("mov_", RI_DOSE_LIST[d], "_", type[t])) |>
+            vcqi_rename("tempvar3", paste0("cum_mov_", RI_DOSE_LIST[d], "_", type[t])) |>
+            vcqi_rename("tempvar4", paste0("cor_mov_", RI_DOSE_LIST[d], "_", type[t])) |>
+            vcqi_rename("tempvar5", paste0("flag_cor_mov_", RI_DOSE_LIST[d], "_", type[t])) |>
+            vcqi_rename("tempvar6", paste0("total_mov_", RI_DOSE_LIST[d], "_", type[t])) |>
+            vcqi_rename("tempvar7", paste0("flag_had_mov_", RI_DOSE_LIST[d], "_", type[t]))
 
-          dat <- dat %>%
+          # names(dat)[which(names(dat) == "tempvar1")] <- paste0("cum_", RI_DOSE_LIST[d], "_", type[t])
+          # names(dat)[which(names(dat) == "tempvar2")] <- paste0("mov_", RI_DOSE_LIST[d], "_", type[t])
+          # names(dat)[which(names(dat) == "tempvar3")] <- paste0("cum_mov_", RI_DOSE_LIST[d], "_", type[t])
+          # names(dat)[which(names(dat) == "tempvar4")] <- paste0("cor_mov_", RI_DOSE_LIST[d], "_", type[t])
+          # names(dat)[which(names(dat) == "tempvar5")] <- paste0("flag_cor_mov_", RI_DOSE_LIST[d], "_", type[t])
+          # names(dat)[which(names(dat) == "tempvar6")] <- paste0("total_mov_", RI_DOSE_LIST[d], "_", type[t])
+          # names(dat)[which(names(dat) == "tempvar7")] <- paste0("flag_had_mov_", RI_DOSE_LIST[d], "_", type[t])
+
+          dat <- dat |>
             relocate(ends_with(paste0(RI_DOSE_LIST[d], "_", type[t])),
                      .after = last_col())
 
@@ -895,23 +979,25 @@ calculate_MOV_flags_MV <- function(VCP = "calculate_MOV_flags_MV"){
           doseage <- rlang::sym(paste0("age_at_", RI_DOSE_LIST[d], "_", type[t]))
 
           # Calculate days between this MOV and the date it was corrected
-          dat <- dat %>%
+          dat <- dat |>
             mutate(tempvar1 = ifelse((!!mov %in% 1 & !!flagcor %in% 1) %in% TRUE,
                                      (!!doseage - age), NA))
 
           # Save the max extra days (# of days from first MOV until it was corrected)
-          dat <- dat %>%
-            group_by(person) %>%
-            arrange(person) %>%
-            mutate(tempvar2 = max(tempvar1, na.rm = TRUE)) %>%
-            ungroup() %>% suppressWarnings()
+          dat <- dat |>
+            group_by(person) |>
+            arrange(person) |>
+            mutate(tempvar2 = max(tempvar1, na.rm = TRUE)) |>
+            ungroup() |> suppressWarnings()
 
-          dat <- dat %>%
+          dat <- dat |>
             mutate(tempvar2 = ifelse(tempvar2 == Inf | tempvar2 == -Inf,
                                      NA, tempvar2))
-          dat <- dat %>% select(-c(tempvar1))
-          names(dat)[which(names(dat) == "tempvar2")] <- paste0("days_until_cor_",RI_DOSE_LIST[d],"_",type[t])
-          #label variable days_until_cor_`d'_`t' "Days b/t 1st MOV & correction: `d' - `t'"
+          dat <- dat |> select(-c(tempvar1)) |>
+            vcqi_rename("tempvar2", paste0("days_until_cor_", RI_DOSE_LIST[d], "_", type[t]))
+
+          # names(dat)[which(names(dat) == "tempvar2")] <- paste0("days_until_cor_",RI_DOSE_LIST[d],"_",type[t])
+          # label variable days_until_cor_`d'_`t' "Days b/t 1st MOV & correction: `d' - `t'"
 
         } #end of type loop
       } #end of dose loop
@@ -935,7 +1021,7 @@ calculate_MOV_flags_MV <- function(VCP = "calculate_MOV_flags_MV"){
       # Note that if the user does not specify MOV_OUTPUT_DOSE_LIST, VCQI sets it
       # equal to RI_DOSE_LIST in the program check_RI_analysis_metadata
 
-      dat <- dat %>% mutate(elig_for_anydose_crude = 0,
+      dat <- dat |> mutate(elig_for_anydose_crude = 0,
                             elig_for_anydose_valid = 0,
                             mov_for_anydose_crude = 0,
                             mov_for_anydose_valid = 0,
@@ -976,27 +1062,27 @@ calculate_MOV_flags_MV <- function(VCP = "calculate_MOV_flags_MV"){
         elig <- rlang::sym(paste0("elig_for_anydose_", type[t]))
         mov <- rlang::sym(paste0("mov_for_anydose_", type[t]))
         total <- rlang::sym(paste0("total_visit_movs_", type[t]))
-        dat <- dat %>%
-          group_by(person) %>%
-          arrange(person) %>%
+        dat <- dat |>
+          group_by(person) |>
+          arrange(person) |>
           mutate(!!paste0("total_elig_visits_", type[t]) :=
                    sum(!!elig, na.rm = TRUE),
                  !!paste0("total_mov_visits_", type[t]) :=
                    sum(!!mov, na.rm = TRUE),
                  !!paste0("total_movs_", type[t]) :=
-                   sum(!!total, na.rm = TRUE)) %>% ungroup()
+                   sum(!!total, na.rm = TRUE)) |> ungroup()
 
         #label variable total_elig_visits_`t' "Total visits eligible for 1+ doses - `t'"
         #label variable total_mov_visits_`t'  "Total visits with MOVs - `t'"
         #label variable total_movs_`t'        "Total MOVs - `t'"
       }
 
-      dat <- dat %>% relocate(
+      dat <- dat |> relocate(
         c(elig_for_anydose_crude, mov_for_anydose_crude, total_visit_movs_crude,
           total_elig_visits_crude, total_mov_visits_crude, total_movs_crude,
           elig_for_anydose_valid, mov_for_anydose_valid, total_visit_movs_valid,
           total_elig_visits_valid, total_mov_visits_valid, total_movs_valid),
-        .after = last_col()) %>%
+        .after = last_col()) |>
         select(-c(starts_with("age_")))
 
       if (VCQI_TESTING_CODE %in% 1){
@@ -1024,7 +1110,7 @@ calculate_MOV_flags_MV <- function(VCP = "calculate_MOV_flags_MV"){
           flag_uncor_mov_var <- rlang::sym(paste0("flag_uncor_mov_", RI_DOSE_LIST[d], "_", type[ty]))
           days_until_cor_var <- rlang::sym(paste0("days_until_cor_", RI_DOSE_LIST[d], "_", type[ty]))
 
-          dat <- dat %>%
+          dat <- dat |>
             mutate(
               !!credit_var := haven::labelled(
                 as.numeric(!!credit_var),
@@ -1085,7 +1171,7 @@ calculate_MOV_flags_MV <- function(VCP = "calculate_MOV_flags_MV"){
         total_mov_visits_var <- rlang::sym(paste0("total_mov_visits_", type[ty]))
         total_movs_var <- rlang::sym(paste0("total_movs_", type[ty]))
 
-        dat <- dat %>%
+        dat <- dat |>
           mutate(
             !!total_elig_visits_var := haven::labelled(
               as.numeric(!!total_elig_visits_var),
@@ -1100,7 +1186,7 @@ calculate_MOV_flags_MV <- function(VCP = "calculate_MOV_flags_MV"){
 
       } # end type loop
 
-      dat <- dat %>%
+      dat <- dat |>
         mutate(
           elig_for_anydose_crude = haven::labelled(
             as.numeric(elig_for_anydose_crude),
@@ -1134,15 +1220,15 @@ calculate_MOV_flags_MV <- function(VCP = "calculate_MOV_flags_MV"){
       # Only keep one row per person
 
       dat <- vcqi_read(paste0(VCQI_OUTPUT_FOLDER,"/RI_MOV_long_form_data.rds"))
-      dat <- dat %>%
+      dat <- dat |>
         select(-c(age, starts_with("got"),
                   ends_with("str"),
-                  visitdate)) %>%
-        group_by(person) %>%
-        mutate(tempid = row_number()) %>%
+                  visitdate)) |>
+        group_by(person) |>
+        mutate(tempid = row_number()) |>
         ungroup()
       dat <- subset(dat, tempid == 1)
-      dat <- dat %>% select(-c(person, tempid))
+      dat <- dat |> select(-c(person, tempid))
 
       #label variable dob "Date of birth"
 
