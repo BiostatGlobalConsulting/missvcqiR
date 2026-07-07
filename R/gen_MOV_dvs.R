@@ -797,12 +797,12 @@ gen_MOV_dvs <- function(VCP = "gen_MOV_dvs"){
 
     for (v in seq_along(varlist1)){
       var <- rlang::sym(varlist1[v])
-      O2A <- rlang::sym(paste0("reasons_overview2_A_",stype[vc]))
-      O1A <- rlang::sym(paste0("reasons_overview1_A_",stype[vc]))
-      ei  <- rlang::sym(paste0("elig_indicator_",stype[vc]))
+      O2A <- rlang::sym(paste0("reasons_overview2_A_", stype[vc]))
+      O1A <- rlang::sym(paste0("reasons_overview1_A_", stype[vc]))
+      ei  <- rlang::sym(paste0("elig_indicator_", stype[vc]))
 
       var_dat <- get(varlist1[v],dat)
-      varlabel <- attr(var_dat,"label")
+      varlabel <- attr(var_dat, "label", exact = TRUE)
 
       dat <- dat %>% mutate(tempvar1 = ifelse(!!O2A %in% 1, !!var, NA_integer_)) %>%
         mutate(tempvar1 = ifelse(is.na(!!var) & !!O2A %in% 1, 0, tempvar1)) %>%
@@ -830,7 +830,7 @@ gen_MOV_dvs <- function(VCP = "gen_MOV_dvs"){
       ei  <- rlang::sym(paste0("elig_indicator_",stype[vc]))
 
       var_dat <- get(varlist2[v],dat)
-      varlabel <- attr(var_dat,"label")
+      varlabel <- attr(var_dat, "label", exact = TRUE)
 
       dat <- dat %>% mutate(tempvar1 = ifelse(!!O2B %in% 1, !!var, NA_integer_)) %>%
         mutate(tempvar1 = ifelse(is.na(!!var) & !!O2B %in% 1, 0, tempvar1)) %>%
@@ -857,7 +857,7 @@ gen_MOV_dvs <- function(VCP = "gen_MOV_dvs"){
       ei  <- rlang::sym(paste0("elig_indicator_",stype[vc]))
 
       var_dat <- get(varlist3[v],dat)
-      varlabel <- attr(var_dat,"label")
+      varlabel <- attr(var_dat, "label", exact = TRUE)
 
       dat <- dat %>% mutate(tempvar1 = ifelse(!!O2C %in% 1, !!var, NA_integer_)) %>%
         mutate(tempvar1 = ifelse(is.na(!!var) & !!O2C %in% 1, 0, tempvar1)) %>%

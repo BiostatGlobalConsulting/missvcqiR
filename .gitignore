@@ -1,1 +1,4 @@
 .Rproj.user
+.positai
+*.bak
+*.Rhistory

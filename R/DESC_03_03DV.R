@@ -74,7 +74,7 @@ DESC_03_03DV <- function(VCP = "DESC_03_03DV"){
   for (v in seq_along(DESC_03_VARIABLES)){
     va <- rlang::sym(DESC_03_VARIABLES[v])
     var <- get(DESC_03_VARIABLES[v], dat)
-    varlabel <- attr(var, "label")
+    varlabel <- attr(var, "label", exact = TRUE)
 
     if (is.null(varlabel)){
       varlabel <- DESC_03_VARIABLES[v]
@@ -169,7 +169,7 @@ DESC_03_03DV <- function(VCP = "DESC_03_03DV"){
         for (v in seq_along(sublevel)){
           va <- rlang::sym(sublevel[v])
           var <- get(sublevel[v], dat)
-          varlabel <- attr(var, "label")
+          varlabel <- attr(var, "label", exact = TRUE)
 
           var <- zap_labels(var)
           if (any(class(var) == "character")){
