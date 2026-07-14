@@ -240,7 +240,6 @@ calculate_MOV_flags_MV <- function(VCP = "calculate_MOV_flags_MV"){
       # the tick is not set, but the history is set...for MOV flags, we treat
       # a history report as the same as a card tick...we do not put a child
       # with either a card tick or a history report in the denominator for MOVs
-
       for (d in seq_along(RI_DOSE_LIST)){
         eval(parse_expr(paste0(
           "dat <- mutate(dat,", RI_DOSE_LIST[d],
@@ -864,12 +863,17 @@ calculate_MOV_flags_MV <- function(VCP = "calculate_MOV_flags_MV"){
           dat <- dat |> mutate(tempvar7 = if_else(tempvar6 > 0, 1, 0))
           # label variable flag_had_mov_`d'_`t' "Had 1+ MOVs for `d' in any visit - `t'"
 
-          # Set a flag (in all visits) if the child had only uncorrected movs for this dose
+          # Set a flag (in all visits) if the child had only uncorrected movs
+          # for this dose Note 20260714: reference tempvar5 (flag for corrected
+          # MOV) rather than flag_got - flag_got doesn't account for eligibility
+          # whereas flag_cor (tempvar5) does
           flag_got <- rlang::sym(paste0("flag_got_", RI_DOSE_LIST[d], "_", type[t]))
           dat <- dat |>
             mutate(
               !!paste0("flag_uncor_mov_", RI_DOSE_LIST[d], "_", type[t]) :=
-                if_else((tempvar7 %in% 1 & !!flag_got %in% 0) %in% TRUE, 1 ,0))
+                # if_else(tempvar7 %in% 1 & !!flag_got %in% 0, 1 ,0)
+                if_else(tempvar7 %in% 1 & tempvar5 %in% 0, 1, 0)
+              )
 
           dat <- dat |>
             vcqi_rename("tempvar1", paste0("cum_", RI_DOSE_LIST[d], "_", type[t])) |>

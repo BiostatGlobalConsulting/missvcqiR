@@ -22,6 +22,8 @@
 
 # Date 			  Version 	Name			      What Changed
 # 2023-08-29  1.00      Mia Yu          Original R package version
+# 2026-07-08  1.01      Caitlin Clary   Changing default NA values to avoid error
+#                                       when labeling if variable is empty/logical
 # *******************************************************************************
 
 gen_MOV_dvs <- function(VCP = "gen_MOV_dvs"){
@@ -204,96 +206,161 @@ gen_MOV_dvs <- function(VCP = "gen_MOV_dvs"){
 
   for (vc in seq_along(stype)){
 
-    dat <- dat %>% mutate(tempvar1 = NA) %>% mutate(tempvar1 = ifelse(has_card_with_dob_and_dose %in% 1,0,tempvar1))
-    no_elig <- get(paste0("not_elig_",stype[vc],"_list"))
+    dat <- dat %>% mutate(tempvar1 = NA_integer_) %>%
+      mutate(tempvar1 = ifelse(has_card_with_dob_and_dose %in% 1, 0, tempvar1))
+
+    no_elig <- get(paste0("not_elig_", stype[vc], "_list"))
     conditions <- paste0("(has_card_with_dob_and_dose==1 & ", no_elig, ") %in% TRUE")
-    dat <- dat %>% mutate(tempvar1 = ifelse(eval(rlang::parse_expr(conditions)),1,tempvar1)) %>%
+    dat <- dat %>%
+      mutate(tempvar1 = ifelse(eval(rlang::parse_expr(conditions)), 1, tempvar1)) %>%
       mutate(tempvar1 = as.numeric(tempvar1))
 
-    dat <- dat %>% mutate(tempvar2 = NA) %>% mutate(tempvar2 = ifelse(has_card_with_dob_and_dose %in% 1,0,tempvar2))
-    elig <- get(paste0("elig_",stype[vc],"_list"))
-    conditions <- paste0("(has_card_with_dob_and_dose==1 & ", elig, ") %in% TRUE")
-    dat <- dat %>% mutate(tempvar2 = ifelse(eval(rlang::parse_expr(conditions)),1,tempvar2)) %>%
-      mutate(tempvar2 = as.numeric(tempvar2))
+    dat <- dat %>% mutate(tempvar2 = NA_integer_) %>%
+      mutate(tempvar2 = ifelse(has_card_with_dob_and_dose %in% 1, 0, tempvar2))
 
-    dat <- dat %>% mutate(tempvar3 = NA) %>% mutate(tempvar3 = ifelse(has_card_with_dob_and_dose %in% 1,0,tempvar3))
+    elig <- get(paste0("elig_", stype[vc], "_list"))
+    conditions <- paste0("(has_card_with_dob_and_dose==1 & ", elig, ") %in% TRUE")
+    dat <- dat %>%
+      mutate(tempvar2 = ifelse(eval(rlang::parse_expr(conditions)), 1, tempvar2),
+             tempvar2 = as.numeric(tempvar2))
+
+    dat <- dat %>% mutate(tempvar3 = NA_integer_) %>%
+      mutate(tempvar3 = ifelse(has_card_with_dob_and_dose %in% 1, 0, tempvar3))
+
     got_none <- get(paste0("got_none_",stype[vc],"_list"))
     conditions <- paste0("(has_card_with_dob_and_dose==1 & ", got_none, ") %in% TRUE")
-    dat <- dat %>% mutate(tempvar3 = ifelse(eval(rlang::parse_expr(conditions)),1,tempvar3)) %>%
+    dat <- dat %>%
+      mutate(tempvar3 = ifelse(eval(rlang::parse_expr(conditions)),1,tempvar3)) %>%
       mutate(tempvar3 = as.numeric(tempvar3))
 
-    dat <- dat %>% mutate(tempvar4 = NA) %>% mutate(tempvar4 = ifelse(has_card_with_dob_and_dose %in% 1,0,tempvar4))
+    dat <- dat %>% mutate(tempvar4 = NA_integer_) %>%
+      mutate(tempvar4 = ifelse(has_card_with_dob_and_dose %in% 1, 0, tempvar4))
+
     got_one <- get(paste0("got_at_least_one_",stype[vc],"_list"))
     conditions <- paste0("(has_card_with_dob_and_dose==1 & ", got_one, ") %in% TRUE")
     dat <- dat %>% mutate(tempvar4 = ifelse(eval(rlang::parse_expr(conditions)),1,tempvar4)) %>%
       mutate(tempvar4 = as.numeric(tempvar4))
 
-    dat <- dat %>% mutate(tempvar5 = NA) %>% mutate(tempvar5 = ifelse(has_card_with_dob_and_dose %in% 1,0,tempvar5))
-    no_more <- get(paste0("got_all_elig_no_more_",stype[vc],"_list"))
+    dat <- dat %>% mutate(tempvar5 = NA_integer_) %>%
+      mutate(tempvar5 = ifelse(has_card_with_dob_and_dose %in% 1, 0, tempvar5))
+
+    no_more <- get(paste0("got_all_elig_no_more_", stype[vc], "_list"))
     conditions <- paste0("(has_card_with_dob_and_dose==1 & ", no_more, ") %in% TRUE")
-    dat <- dat %>% mutate(tempvar5 = ifelse(eval(rlang::parse_expr(conditions)),1,tempvar5)) %>%
-      mutate(tempvar5 = as.numeric(tempvar5))
+    dat <- dat %>%
+      mutate(tempvar5 = ifelse(eval(rlang::parse_expr(conditions)), 1, tempvar5),
+             tempvar5 = as.numeric(tempvar5))
 
-    dat <- dat %>% mutate(tempvar6 = NA) %>% mutate(tempvar6 = ifelse(has_card_with_dob_and_dose %in% 1,0,tempvar6))
-    correct <- get(paste0("correct_validdose_",stype[vc],"_list"))
+    dat <- dat %>%
+      mutate(tempvar6 = NA_integer_,
+             tempvar6 = ifelse(has_card_with_dob_and_dose %in% 1, 0, tempvar6))
+
+    correct <- get(paste0("correct_validdose_", stype[vc], "_list"))
     conditions <- paste0("(has_card_with_dob_and_dose==1 & ", correct, ") %in% TRUE")
-    dat <- dat %>% mutate(tempvar6 = ifelse(eval(rlang::parse_expr(conditions)),1,tempvar6)) %>%
-      mutate(tempvar6 = as.numeric(tempvar6))
+    dat <- dat %>%
+      mutate(tempvar6 = ifelse(eval(rlang::parse_expr(conditions)), 1, tempvar6),
+             tempvar6 = as.numeric(tempvar6))
 
-    dat <- dat %>% mutate(tempvar7 = NA) %>% mutate(tempvar7 = ifelse(has_card_with_dob_and_dose %in% 1,0,tempvar7))
-    mov <- get(paste0("mov_",stype[vc],"_list"))
+    dat <- dat %>%
+      mutate(tempvar7 = NA_integer_,
+             tempvar7 = ifelse(has_card_with_dob_and_dose %in% 1, 0, tempvar7))
+
+    mov <- get(paste0("mov_", stype[vc], "_list"))
     conditions <- paste0("(has_card_with_dob_and_dose==1 & ", mov, ") %in% TRUE")
-    dat <- dat %>% mutate(tempvar7 = ifelse(eval(rlang::parse_expr(conditions)),1,tempvar7)) %>%
-      mutate(tempvar7 = as.numeric(tempvar7))
+    dat <- dat %>%
+      mutate(tempvar7 = ifelse(eval(rlang::parse_expr(conditions)), 1, tempvar7),
+             tempvar7 = as.numeric(tempvar7))
 
-    dat <- dat %>% mutate(tempvar8 = NA) %>% mutate(tempvar8 = ifelse(has_card_with_dob_and_dose %in% 1,0,tempvar8))
-    no_invalid <- get(paste0("no_invalid_",stype[vc],"_list"))
+    dat <- dat %>%
+      mutate(tempvar8 = NA_integer_,
+             tempvar8 = ifelse(has_card_with_dob_and_dose %in% 1, 0, tempvar8))
+
+    no_invalid <- get(paste0("no_invalid_", stype[vc], "_list"))
     conditions <- paste0("(has_card_with_dob_and_dose==1 & ", no_invalid, ") %in% TRUE")
-    dat <- dat %>% mutate(tempvar8 = ifelse(eval(rlang::parse_expr(conditions)),1,tempvar8)) %>%
-      mutate(tempvar8 = as.numeric(tempvar8))
+    dat <- dat %>%
+      mutate(tempvar8 = ifelse(eval(rlang::parse_expr(conditions)), 1, tempvar8),
+             tempvar8 = as.numeric(tempvar8))
 
-    dat <- dat %>% mutate(tempvar9 = NA) %>% mutate(tempvar9 = ifelse(has_card_with_dob_and_dose %in% 1,0,tempvar9))
-    one_invalid <- get(paste0("at_least_one_invalid_",stype[vc],"_list"))
+    dat <- dat %>%
+      mutate(tempvar9 = NA_integer_,
+             tempvar9 = ifelse(has_card_with_dob_and_dose %in% 1, 0, tempvar9))
+    one_invalid <- get(paste0("at_least_one_invalid_", stype[vc], "_list"))
     conditions <- paste0("(has_card_with_dob_and_dose==1 & ", one_invalid, ") %in% TRUE")
-    dat <- dat %>% mutate(tempvar9 = ifelse(eval(rlang::parse_expr(conditions)),1,tempvar9)) %>%
-      mutate(tempvar9 = as.numeric(tempvar9))
+    dat <- dat %>%
+      mutate(tempvar9 = ifelse(eval(rlang::parse_expr(conditions)), 1, tempvar9),
+             tempvar9 = as.numeric(tempvar9))
 
-    dat <- dat %>% mutate(tempvar10 = NA) %>% mutate(tempvar10 = ifelse(has_card_with_dob_and_dose %in% 1,0,tempvar10))
-    no_correct <- get(paste0("no_correct_validdose_",stype[vc],"_list"))
+    dat <- dat %>%
+      mutate(tempvar10 = NA_integer_,
+             tempvar10 = ifelse(has_card_with_dob_and_dose %in% 1, 0, tempvar10))
+
+    no_correct <- get(paste0("no_correct_validdose_", stype[vc], "_list"))
     conditions <- paste0("(has_card_with_dob_and_dose==1 & ", no_correct, ") %in% TRUE")
-    dat <- dat %>% mutate(tempvar10 = ifelse(eval(rlang::parse_expr(conditions)),1,tempvar10)) %>%
-      mutate(tempvar10 = as.numeric(tempvar10))
+    dat <- dat %>%
+      mutate(tempvar10 = ifelse(eval(rlang::parse_expr(conditions)), 1, tempvar10),
+             tempvar10 = as.numeric(tempvar10))
 
-    dat <- dat %>% mutate(tempvar11 = NA) %>% mutate(tempvar11 = ifelse(has_card_with_dob_and_dose %in% 1,0,tempvar11))
-    got_all <- get(paste0("got_all_elig_",stype[vc],"_list"))
+    dat <- dat %>%
+      mutate(tempvar11 = NA_integer_,
+             tempvar11 = ifelse(has_card_with_dob_and_dose %in% 1, 0, tempvar11))
+
+    got_all <- get(paste0("got_all_elig_", stype[vc], "_list"))
     conditions <- paste0("(has_card_with_dob_and_dose==1 & ", got_all, ") %in% TRUE")
-    dat <- dat %>% mutate(tempvar11 = ifelse(eval(rlang::parse_expr(conditions)),1,tempvar11)) %>%
-      mutate(tempvar11 = as.numeric(tempvar11))
+    dat <- dat %>%
+      mutate(tempvar11 = ifelse(eval(rlang::parse_expr(conditions)), 1, tempvar11),
+             tempvar11 = as.numeric(tempvar11))
 
 
-    dat$tempvar1 <- haven::labelled(dat$tempvar1, label = paste0("Not eligible for any vaccine (",stype[vc],")"))
-    dat$tempvar2 <- haven::labelled(dat$tempvar2, label = paste0("Eligible for 1+ vaccines (",stype[vc],")"))
-    dat$tempvar3 <- haven::labelled(dat$tempvar3, label = paste0("Rec'd no doses (",stype[vc],")"))
-    dat$tempvar4 <- haven::labelled(dat$tempvar4, label = paste0("Rec'd 1+ doses (",stype[vc],")"))
-    dat$tempvar5 <- haven::labelled(dat$tempvar5, label = paste0("Rec'd all doses elig for & no others (no errors) (",stype[vc],")"))
-    dat$tempvar6 <- haven::labelled(dat$tempvar6, label = paste0("Rec'd 1+ correct valid doses (elig for & got dose) (",stype[vc],")"))
-    dat$tempvar7 <- haven::labelled(dat$tempvar7, label = paste0("Had at least one MOV (elig for & didn't get dose) (",stype[vc],")"))
-    dat$tempvar8 <- haven::labelled(dat$tempvar8, label = paste0("Had no invalid doses (if not elig, didn't receive it) (",stype[vc],")"))
-    dat$tempvar9 <- haven::labelled(dat$tempvar9, label = paste0("Had at least 1 invalid dose (not elig but rec'd it) (",stype[vc],")"))
-    dat$tempvar10 <- haven::labelled(dat$tempvar10, label = paste0("Had no correct valid doses (did not receive any doses elig for) (",stype[vc],")"))
-    dat$tempvar11 <- haven::labelled(dat$tempvar11, label = paste0("Got all doses elig for (may or may not have also rec'd invalid dose) (",stype[vc],")"))
+    dat$tempvar1 <- haven::labelled(
+      dat$tempvar1, label = paste0("Not eligible for any vaccine (", stype[vc], ")"))
 
-    names(dat)[which(names(dat) == "tempvar1")] <- paste0("not_elig_",stype[vc])
-    names(dat)[which(names(dat) == "tempvar2")] <- paste0("elig_",stype[vc])
-    names(dat)[which(names(dat) == "tempvar3")] <- paste0("got_none_",stype[vc])
-    names(dat)[which(names(dat) == "tempvar4")] <- paste0("got_at_least_one_",stype[vc])
-    names(dat)[which(names(dat) == "tempvar5")] <- paste0("got_all_elig_no_more_",stype[vc])
-    names(dat)[which(names(dat) == "tempvar6")] <- paste0("correct_validdose_",stype[vc])
-    names(dat)[which(names(dat) == "tempvar7")] <- paste0("mov_",stype[vc])
-    names(dat)[which(names(dat) == "tempvar8")] <- paste0("no_invalid_",stype[vc])
-    names(dat)[which(names(dat) == "tempvar9")] <- paste0("at_least_one_invalid_",stype[vc])
-    names(dat)[which(names(dat) == "tempvar10")] <- paste0("no_correct_validdose_",stype[vc])
-    names(dat)[which(names(dat) == "tempvar11")] <- paste0("got_all_elig_",stype[vc])
+    dat$tempvar2 <- haven::labelled(
+      dat$tempvar2, label = paste0("Eligible for 1+ vaccines (", stype[vc], ")"))
+
+    dat$tempvar3 <- haven::labelled(
+      dat$tempvar3, label = paste0("Rec'd no doses (", stype[vc], ")"))
+
+    dat$tempvar4 <- haven::labelled(
+      dat$tempvar4, label = paste0("Rec'd 1+ doses (", stype[vc], ")"))
+
+    dat$tempvar5 <- haven::labelled(
+      dat$tempvar5,
+      label = paste0("Rec'd all doses elig for & no others (no errors) (", stype[vc], ")"))
+
+    dat$tempvar6 <- haven::labelled(
+      dat$tempvar6,
+      label = paste0("Rec'd 1+ correct valid doses (elig for & got dose) (", stype[vc], ")"))
+
+    dat$tempvar7 <- haven::labelled(
+      dat$tempvar7,
+      label = paste0("Had at least one MOV (elig for & didn't get dose) (", stype[vc], ")"))
+
+    dat$tempvar8 <- haven::labelled(
+      dat$tempvar8,
+      label = paste0("Had no invalid doses (if not elig, didn't receive it) (", stype[vc], ")"))
+
+    dat$tempvar9 <- haven::labelled(
+      dat$tempvar9,
+      label = paste0("Had at least 1 invalid dose (not elig but rec'd it) (", stype[vc], ")"))
+
+    dat$tempvar10 <- haven::labelled(
+      dat$tempvar10,
+      label = paste0("Had no correct valid doses (did not receive any doses elig for) (", stype[vc], ")"))
+
+    dat$tempvar11 <- haven::labelled(
+      dat$tempvar11,
+      label = paste0("Got all doses elig for (may or may not have also rec'd invalid dose) (", stype[vc], ")"))
+
+    names(dat)[which(names(dat) == "tempvar1")] <- paste0("not_elig_", stype[vc])
+    names(dat)[which(names(dat) == "tempvar2")] <- paste0("elig_", stype[vc])
+    names(dat)[which(names(dat) == "tempvar3")] <- paste0("got_none_", stype[vc])
+    names(dat)[which(names(dat) == "tempvar4")] <- paste0("got_at_least_one_", stype[vc])
+    names(dat)[which(names(dat) == "tempvar5")] <- paste0("got_all_elig_no_more_", stype[vc])
+    names(dat)[which(names(dat) == "tempvar6")] <- paste0("correct_validdose_", stype[vc])
+    names(dat)[which(names(dat) == "tempvar7")] <- paste0("mov_", stype[vc])
+    names(dat)[which(names(dat) == "tempvar8")] <- paste0("no_invalid_", stype[vc])
+    names(dat)[which(names(dat) == "tempvar9")] <- paste0("at_least_one_invalid_", stype[vc])
+    names(dat)[which(names(dat) == "tempvar10")] <- paste0("no_correct_validdose_", stype[vc])
+    names(dat)[which(names(dat) == "tempvar11")] <- paste0("got_all_elig_", stype[vc])
 
   } #end of stype vc loop
 
@@ -403,23 +470,23 @@ gen_MOV_dvs <- function(VCP = "gen_MOV_dvs"){
     } #end of MOV_OUTPUT_DOSE_LIST d loop
 
     # Children with cards category (N) & (%)
-    dat <- dat %>% mutate(tempvar2 = NA)
+    dat <- dat %>% mutate(tempvar2 = NA_integer_)
 
-    table1 <- rlang::sym(paste0("table1_dv_",stype[vc]))
-    got_none <- rlang::sym(paste0("got_none_",stype[vc]))
-    got_one <- rlang::sym(paste0("got_at_least_one_",stype[vc]))
-    got_all <- rlang::sym(paste0("got_all_elig_",stype[vc]))
-    no_more <- rlang::sym(paste0("got_all_elig_no_more_",stype[vc]))
-    one_invalid <- rlang::sym(paste0("at_least_one_invalid_",stype[vc]))
-    correct <- rlang::sym(paste0("correct_validdose_",stype[vc]))
-    no_correct <- rlang::sym(paste0("no_correct_validdose_",stype[vc]))
-    mov <- rlang::sym(paste0("mov_",stype[vc]))
-    no_invalid <- rlang::sym(paste0("no_invalid_",stype[vc]))
+    table1 <- rlang::sym(paste0("table1_dv_", stype[vc]))
+    got_none <- rlang::sym(paste0("got_none_", stype[vc]))
+    got_one <- rlang::sym(paste0("got_at_least_one_", stype[vc]))
+    got_all <- rlang::sym(paste0("got_all_elig_", stype[vc]))
+    no_more <- rlang::sym(paste0("got_all_elig_no_more_", stype[vc]))
+    one_invalid <- rlang::sym(paste0("at_least_one_invalid_", stype[vc]))
+    correct <- rlang::sym(paste0("correct_validdose_", stype[vc]))
+    no_correct <- rlang::sym(paste0("no_correct_validdose_", stype[vc]))
+    mov <- rlang::sym(paste0("mov_", stype[vc]))
+    no_invalid <- rlang::sym(paste0("no_invalid_", stype[vc]))
 
     # eligible for 0
     # not elig; rec'd 0
-    dat <- dat %>% mutate(tempvar2 = ifelse((!!table1 == 0 & !!got_none ==1) %in% TRUE, 1, tempvar2))
-    dat <- dat %>% mutate(tempvar2 = ifelse((!!table1 == 0 & !!got_one ==1) %in% TRUE, 2, tempvar2))
+    dat <- dat %>% mutate(tempvar2 = ifelse((!!table1 == 0 & !!got_none == 1) %in% TRUE, 1, tempvar2))
+    dat <- dat %>% mutate(tempvar2 = ifelse((!!table1 == 0 & !!got_one == 1) %in% TRUE, 2, tempvar2))
 
     # eligible for 1
     # elig for 1+; rec'd 0
@@ -529,15 +596,20 @@ gen_MOV_dvs <- function(VCP = "gen_MOV_dvs"){
   # *** Table 4: Left-side of table by dose (loop over valid/crude) ***
   for (vc in seq_along(stype)){
 
-    dat <- dat %>% mutate(tempvar1 = NA) %>% mutate(tempvar1 = ifelse(has_card_with_dob_and_dose %in% 1, 0, tempvar1))
-    dat$tempvar1 <- haven::labelled(dat$tempvar1,
-                                    label = paste0("Children with cards who received 1+ doses they weren't eligible for (",stype[vc],")"))
+    dat <- dat %>%
+      mutate(tempvar1 = NA_integer_,
+             tempvar1 = ifelse(has_card_with_dob_and_dose %in% 1, 0, tempvar1))
+
+    dat$tempvar1 <- haven::labelled(
+      dat$tempvar1,
+      label = paste0("Children with cards who received 1+ doses they weren't eligible for (",
+                     stype[vc], ")"))
 
     for (d in seq_along(MOV_OUTPUT_DOSE_LIST)){
-      delig <- rlang::sym(paste0("elig_",MOV_OUTPUT_DOSE_LIST[d],"_",stype[vc]))
-      dgot <- rlang::sym(paste0("got_",MOV_OUTPUT_DOSE_LIST[d],"_",stype[vc]))
+      delig <- rlang::sym(paste0("elig_", MOV_OUTPUT_DOSE_LIST[d], "_", stype[vc]))
+      dgot <- rlang::sym(paste0("got_", MOV_OUTPUT_DOSE_LIST[d], "_", stype[vc]))
 
-      dat <- dat %>% mutate(tempvar2 = NA) %>%
+      dat <- dat %>% mutate(tempvar2 = NA_integer_) %>%
         mutate(tempvar2 = ifelse((has_card_with_dob_and_dose == 1 & !!delig == 0 & !!dgot == 1) %in% TRUE, 1, tempvar2)) %>% #invalid dose
         mutate(tempvar2 = ifelse((has_card_with_dob_and_dose == 1 & !!delig == 0 & !!dgot == 0) %in% TRUE, 0, tempvar2)) #correct no dose
       dat$tempvar2 <- haven::labelled(dat$tempvar2,
@@ -565,7 +637,7 @@ gen_MOV_dvs <- function(VCP = "gen_MOV_dvs"){
   # ******************************************************
 
   for (vc in seq_along(stype)){
-    dat <- dat %>% mutate(tempvar1 = NA, tempvar2 = 0, tempvar3 = 0, tempvar4 = NA)
+    dat <- dat %>% mutate(tempvar1 = NA_integer_, tempvar2 = 0, tempvar3 = 0, tempvar4 = NA_integer_)
 
     for (d in seq_along(MOV_OUTPUT_DOSE_LIST)){
       delig <- rlang::sym(paste0("elig_",MOV_OUTPUT_DOSE_LIST[d],"_",stype[vc]))
@@ -671,7 +743,7 @@ gen_MOV_dvs <- function(VCP = "gen_MOV_dvs"){
 
     # *** Reasons_1: child elig for 0 doses (shouldn't have been asked why not vac'd but was) (elig_indicator_`vc'==0)***
 		# Reasons related to health workers
-    dat <- dat %>% mutate(tempvar1 = NA) %>%
+    dat <- dat %>% mutate(tempvar1 = NA_integer_) %>%
       mutate(tempvar1 = ifelse((tempvar0 == 0 & !!AA == 2) %in% TRUE, 0, tempvar1)) %>%
       mutate(tempvar1 = ifelse((tempvar0 == 0 & !!AA == 2 &
                                   (ES08AA_1A_01==1 | ES08AA_1A_02==1 | ES08AA_1A_03==1)) %in% TRUE, 1, tempvar1))
@@ -680,7 +752,7 @@ gen_MOV_dvs <- function(VCP = "gen_MOV_dvs"){
                                     label = paste0(language_string(language_use = language_use, str = "OS_226")," (",vc2,")"))
 
     # Reasons related to caregivers
-    dat <- dat %>% mutate(tempvar2 = NA) %>%
+    dat <- dat %>% mutate(tempvar2 = NA_integer_) %>%
       mutate(tempvar2 = ifelse((tempvar0 == 0 & !!AA == 2) %in% TRUE, 0, tempvar2)) %>%
       mutate(tempvar2 = ifelse((tempvar0 == 0 & !!AA == 2 &
                                   (ES08AA_1B_01==1 | ES08AA_1B_02==1 | ES08AA_1B_03==1 | ES08AA_1B_04==1 | ES08AA_1B_05==1 |
@@ -691,7 +763,7 @@ gen_MOV_dvs <- function(VCP = "gen_MOV_dvs"){
                                     label = paste0(language_string(language_use = language_use, str = "OS_227")," (",vc2,")"))
 
     # Reasons related to health service
-    dat <- dat %>% mutate(tempvar3 = NA) %>%
+    dat <- dat %>% mutate(tempvar3 = NA_integer_) %>%
       mutate(tempvar3 = ifelse((tempvar0 == 0 & !!AA == 2) %in% TRUE, 0, tempvar3)) %>%
       mutate(tempvar3 = ifelse((tempvar0 == 0 & !!AA == 2 &
                                   (ES08AA_1C_01==1 | ES08AA_1C_02==1 | ES08AA_1C_03==1 | ES08AA_1C_04==1 | ES08AA_1C_05==1 |
@@ -703,7 +775,7 @@ gen_MOV_dvs <- function(VCP = "gen_MOV_dvs"){
 
     # Reason is missing
     #conditions <- paste0("(tempvar0 == 0 & !!AA == 2 & (", reasons_var_missing_list, ")) %in% TRUE")
-    dat <- dat %>% mutate(tempvar4 = NA) %>%
+    dat <- dat %>% mutate(tempvar4 = NA_integer_) %>%
       mutate(tempvar4 = ifelse((tempvar0 == 0 & !!AA == 2) %in% TRUE, 0, tempvar4)) %>%
       mutate(tempvar4 = ifelse(tempvar0 == 0 & !!AA == 2 & eval(rlang::parse_expr(reasons_var_missing_list)), 1, tempvar4))
     # label var reasons_overview1_D_`vc' "MOV: Reason missing (`vc')"
@@ -712,7 +784,7 @@ gen_MOV_dvs <- function(VCP = "gen_MOV_dvs"){
 
 		# *** Reasons_2: child elig for 1+ doses (elig_indicator_`vc'==1) ***
     # Reasons related to health workers
-    dat <- dat %>% mutate(tempvar5 = NA) %>%
+    dat <- dat %>% mutate(tempvar5 = NA_integer_) %>%
       mutate(tempvar5 = ifelse((tempvar0 == 1 & !!AA == 2) %in% TRUE, 0, tempvar5)) %>%
       mutate(tempvar5 = ifelse((tempvar0 == 1 & !!AA == 2 &
                                   (ES08AA_1A_01==1 | ES08AA_1A_02==1 | ES08AA_1A_03==1)) %in% TRUE, 1, tempvar5))
@@ -721,7 +793,7 @@ gen_MOV_dvs <- function(VCP = "gen_MOV_dvs"){
                                     label = paste0(language_string(language_use = language_use, str = "OS_226")," (",vc2,")"))
 
     # Reasons related to caregivers
-    dat <- dat %>% mutate(tempvar6 = NA) %>%
+    dat <- dat %>% mutate(tempvar6 = NA_integer_) %>%
       mutate(tempvar6 = ifelse((tempvar0 == 1 & !!AA == 2) %in% TRUE, 0, tempvar6)) %>%
       mutate(tempvar6 = ifelse((tempvar0 == 1 & !!AA == 2 &
                                   (ES08AA_1B_01==1 | ES08AA_1B_02==1 | ES08AA_1B_03==1 | ES08AA_1B_04==1 | ES08AA_1B_05==1 |
@@ -732,7 +804,7 @@ gen_MOV_dvs <- function(VCP = "gen_MOV_dvs"){
                                     label = paste0(language_string(language_use = language_use, str = "OS_227")," (",vc2,")"))
 
     # Reasons related to health service
-    dat <- dat %>% mutate(tempvar7 = NA) %>%
+    dat <- dat %>% mutate(tempvar7 = NA_integer_) %>%
       mutate(tempvar7 = ifelse((tempvar0 == 1 & !!AA == 2) %in% TRUE, 0, tempvar7)) %>%
       mutate(tempvar7 = ifelse((tempvar0 == 1 & !!AA == 2 &
                                   (ES08AA_1C_01==1 | ES08AA_1C_02==1 | ES08AA_1C_03==1 | ES08AA_1C_04==1 | ES08AA_1C_05==1 |
@@ -743,23 +815,26 @@ gen_MOV_dvs <- function(VCP = "gen_MOV_dvs"){
                                     label = paste0(language_string(language_use = language_use, str = "OS_228")," (",vc2,")"))
 
     # Reason is missing
-    #conditions <- paste0("(tempvar0 == 1 & !!AA == 2 & ", reasons_var_missing_list, ") %in% TRUE")
-    dat <- dat %>% mutate(tempvar8 = NA) %>%
-      mutate(tempvar8 = ifelse((tempvar0 == 1 & !!AA == 2) %in% TRUE, 0, tempvar8)) %>%
-      mutate(tempvar8 = ifelse(tempvar0 == 1 & !!AA == 2 & eval(rlang::parse_expr(reasons_var_missing_list)), 1, tempvar8))
-    # label var reasons_overview2_D_`vc' "MOV: Reason missing (`vc')"
-    dat$tempvar8 <- haven::labelled(dat$tempvar8,
-                                    label = paste0(language_string(language_use = language_use, str = "OS_229")," (",vc2,")"))
+    # conditions <- paste0("(tempvar0 == 1 & !!AA == 2 & ", reasons_var_missing_list, ") %in% TRUE")
+    dat <- dat %>%
+      mutate(tempvar8 = NA_integer_,
+             tempvar8 = ifelse((tempvar0 == 1 & !!AA == 2) %in% TRUE, 0, tempvar8),
+             tempvar8 = ifelse(tempvar0 == 1 & !!AA == 2 & eval(rlang::parse_expr(reasons_var_missing_list)), 1, tempvar8))
 
-    names(dat)[which(names(dat) == "tempvar0")] <- paste0("elig_indicator_",stype[vc])
-    names(dat)[which(names(dat) == "tempvar1")] <- paste0("reasons_overview1_A_",stype[vc])
-    names(dat)[which(names(dat) == "tempvar2")] <- paste0("reasons_overview1_B_",stype[vc])
-    names(dat)[which(names(dat) == "tempvar3")] <- paste0("reasons_overview1_C_",stype[vc])
-    names(dat)[which(names(dat) == "tempvar4")] <- paste0("reasons_overview1_D_",stype[vc])
-    names(dat)[which(names(dat) == "tempvar5")] <- paste0("reasons_overview2_A_",stype[vc])
-    names(dat)[which(names(dat) == "tempvar6")] <- paste0("reasons_overview2_B_",stype[vc])
-    names(dat)[which(names(dat) == "tempvar7")] <- paste0("reasons_overview2_C_",stype[vc])
-    names(dat)[which(names(dat) == "tempvar8")] <- paste0("reasons_overview2_D_",stype[vc])
+    # label var reasons_overview2_D_`vc' "MOV: Reason missing (`vc')"
+    dat$tempvar8 <- haven::labelled(
+      dat$tempvar8,
+      label = paste0(language_string(language_use = language_use, str = "OS_229")," (", vc2, ")"))
+
+    names(dat)[which(names(dat) == "tempvar0")] <- paste0("elig_indicator_", stype[vc])
+    names(dat)[which(names(dat) == "tempvar1")] <- paste0("reasons_overview1_A_", stype[vc])
+    names(dat)[which(names(dat) == "tempvar2")] <- paste0("reasons_overview1_B_", stype[vc])
+    names(dat)[which(names(dat) == "tempvar3")] <- paste0("reasons_overview1_C_", stype[vc])
+    names(dat)[which(names(dat) == "tempvar4")] <- paste0("reasons_overview1_D_", stype[vc])
+    names(dat)[which(names(dat) == "tempvar5")] <- paste0("reasons_overview2_A_", stype[vc])
+    names(dat)[which(names(dat) == "tempvar6")] <- paste0("reasons_overview2_B_", stype[vc])
+    names(dat)[which(names(dat) == "tempvar7")] <- paste0("reasons_overview2_C_", stype[vc])
+    names(dat)[which(names(dat) == "tempvar8")] <- paste0("reasons_overview2_D_", stype[vc])
   } # end of stype vc loop
 
   # Make variable "ES08AA_1A_03_12":
